@@ -12,10 +12,15 @@ var httpServer = http.Server(app)
 
 app.get('/', function(req, res) {
   res.render('index')
+}).get('/styles.css', function(req, res) {
+  res.sendFile('./styles.css', { root: __dirname })
 }).get('/client.js', browserify('./client/index.js'))
 
 io.on('connection', function(socket) {
   console.log('socket connection!')
+  socket.on('chat', function(chat) {
+    io.emit('chat', { text: chat.text })
+  })
 })
 
 httpServer.listen(process.env.PORT || 3456, function() {

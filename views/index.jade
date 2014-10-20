@@ -1,4 +1,12 @@
-extends layout
-
-block content
-  p Hello!
+doctype html
+html
+  head
+    title seat.camp
+    link(type='text/css', rel='stylesheet',
+      href='http://fonts.googleapis.com/css?family=Roboto:300,700,400')
+    link(type='text/css', rel='stylesheet', href='/styles.css')
+  body
+    ul#message-list
+    form
+      input#message(type='text')
+    script(type='text/javascript', src='/client.js')
