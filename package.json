@@ -1,0 +1,32 @@
+{
+  "name": "seatcamp",
+  "version": "1.0.0",
+  "description": "Web-based video chat with friends!",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tec27/seatcamp"
+  },
+  "keywords": [
+    "webrtc",
+    "video",
+    "chat"
+  ],
+  "author": "Travis Collins <travis@tec27.com> (http://tec27.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tec27/seatcamp/issues"
+  },
+  "homepage": "https://github.com/tec27/seatcamp",
+  "dependencies": {
+    "browserify-middleware": "^4.1.0",
+    "express": "^4.9.8",
+    "jade": "^1.7.0",
+    "socket.io": "^1.1.0",
+    "socket.io-client": "^1.1.0"
+  }
+}
