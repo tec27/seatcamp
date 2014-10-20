@@ -6,7 +6,14 @@ html
       href='http://fonts.googleapis.com/css?family=Roboto:300,700,400')
     link(type='text/css', rel='stylesheet', href='/styles.css')
   body
+    header
+      p seat.camp
     ul#message-list
-    form
-      input#message(type='text')
+    footer
+      div.preview-container
+          video
+      form
+        input#message(type='text')
+        p#char-counter 250
+        input(type='submit', value='Send')
     script(type='text/javascript', src='/client.js')
