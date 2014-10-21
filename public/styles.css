@@ -29,15 +29,33 @@ header p {
   margin: auto 1em;
 }
 
+#active-users {
+  flex: 0;
+  font-size: 16px;
+  margin: auto 4em;
+}
+
 #message-list {
   list-style-type: none;
-  margin: 56px 0 158px;
+  margin: 56px 0 162px;
   padding: 0;
 }
 
 #message-list li {
+  display: flex;
   font-size: 20px;
-  padding: 4px 16px;
+  padding: 0px 16px;
+}
+
+#message-list li video {
+  width: 200px;
+  height: 150px;
+}
+
+#message-list li p {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  flex: 1;
+  padding: 8px 16px;
 }
 
 footer {

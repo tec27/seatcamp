@@ -3,6 +3,8 @@ var express = require('express')
   , socketIo = require('socket.io')
   , browserify = require('browserify-middleware')
   , serveStatic = require('serve-static')
+  , userCounter = require('./lib/user-counter')
+  , chatSockets = require('./lib/chat-sockets')
 
 var app = express()
 app.set('x-powered-by', false)
@@ -17,11 +19,10 @@ app.get('/', function(req, res) {
 
 app.use(serveStatic('public'))
 
+userCounter(io)
+chatSockets(io, 15 /* server backscroll limit */, 10 * 60 * 1000 /* expiry time */)
 io.on('connection', function(socket) {
   console.log('socket connection!')
-  socket.on('chat', function(chat) {
-    io.emit('chat', { text: chat.text })
-  })
 })
 
 httpServer.listen(process.env.PORT || 3456, function() {
