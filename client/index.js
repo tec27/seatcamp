@@ -1,5 +1,6 @@
 var $ = require('jquery')
   , io = require('socket.io-client')()
+  , initWebrtc = require('./init-webrtc')
 
 io.on('connect', function() {
   console.log('connected!')
@@ -14,6 +15,15 @@ var messageInput = $('#message')
 $('form').on('submit', function(event) {
   event.preventDefault()
 
-  io.emit('chat', { text: messageInput.val() })
+  io.emit('chat', { text: messageInput.val(), binary: new ArrayBuffer(4) })
   messageInput.val('')
+})
+
+initWebrtc($('#preview')[0], 200, 150, function(err, stream) {
+  if (err) {
+    console.dir(err)
+    return
+  }
+
+  // TODO(tec27): save stream so it can be stopped later to allow for camera switches
 })

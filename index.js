@@ -2,6 +2,7 @@ var express = require('express')
   , http = require('http')
   , socketIo = require('socket.io')
   , browserify = require('browserify-middleware')
+  , serveStatic = require('serve-static')
 
 var app = express()
 app.set('x-powered-by', false)
@@ -12,9 +13,9 @@ var httpServer = http.Server(app)
 
 app.get('/', function(req, res) {
   res.render('index')
-}).get('/styles.css', function(req, res) {
-  res.sendFile('./styles.css', { root: __dirname })
 }).get('/client.js', browserify('./client/index.js'))
+
+app.use(serveStatic('public'))
 
 io.on('connection', function(socket) {
   console.log('socket connection!')

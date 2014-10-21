@@ -29,6 +29,7 @@
     "express": "^4.9.8",
     "jade": "^1.7.0",
     "jquery": "^2.1.1",
+    "serve-static": "^1.7.0",
     "socket.io": "^1.1.0",
     "socket.io-client": "^1.1.0",
     "waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239"
