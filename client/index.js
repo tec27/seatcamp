@@ -4,7 +4,8 @@ var $ = require('jquery')
   , captureFrames = require('./capture-frames')
 
 io.on('connect', function() {
-  console.log('connected!')
+  // TODO(tec27): Pick this based on browser/OS considerations
+  io.emit('join', 'webm')
 })
 
 var messageList = $('#message-list')
@@ -13,7 +14,7 @@ io.on('chat', function(chat) {
     , video = $('<video autoplay loop />')
     , chatText = $('<p/>')
 
-  var blob = new Blob([ chat.video ], { type: 'video/webm' })
+  var blob = new Blob([ chat.video ], { type: chat.videoMime })
     , url = window.URL.createObjectURL(blob)
   video.attr('src', url)
 

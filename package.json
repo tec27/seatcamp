@@ -32,6 +32,7 @@
     "express": "^4.9.8",
     "jade": "^1.7.0",
     "jquery": "^2.1.1",
+    "rimraf": "^2.2.8",
     "serve-static": "^1.7.0",
     "socket.io": "^1.1.0",
     "socket.io-client": "^1.1.0",

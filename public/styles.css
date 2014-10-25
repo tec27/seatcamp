@@ -145,5 +145,22 @@ form {
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.shadow-2 {
+  box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.shadow-2::before {
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: inherit;
+  pointer-events: none;
 }
