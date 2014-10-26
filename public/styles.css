@@ -52,6 +52,11 @@ header p {
   height: 150px;
 }
 
+#message-list li .color-id {
+  width: 4px;
+  height: 150px;
+}
+
 #message-list li p {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   flex: 1;

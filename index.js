@@ -6,6 +6,13 @@ var express = require('express')
   , userCounter = require('./lib/user-counter')
   , chatSockets = require('./lib/chat-sockets')
 
+var userIdKey = process.env.ID_KEY
+if (!userIdKey && process.env.NODE_ENV == 'production') {
+  throw new Error('ID_KEY must be specified in production')
+} else {
+  userIdKey = 'seatcamp'
+}
+
 var app = express()
 app.set('x-powered-by', false)
   .set('view engine', 'jade')
@@ -20,10 +27,7 @@ app.get('/', function(req, res) {
 app.use(serveStatic('public'))
 
 userCounter(io)
-chatSockets(io, 15 /* server backscroll limit */, 10 * 60 * 1000 /* expiry time */)
-io.on('connection', function(socket) {
-  console.log('socket connection!')
-})
+chatSockets(io, userIdKey, 15 /* server backscroll limit */, 10 * 60 * 1000 /* expiry time */)
 
 httpServer.listen(process.env.PORT || 3456, function() {
   var host = httpServer.address().address
