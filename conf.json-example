@@ -1,0 +1,5 @@
+{
+  "port": 3456,
+  "idKey": "seatcamp",
+  "meatspaceServer": "http://localhost:3000"
+}
