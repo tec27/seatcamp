@@ -10,7 +10,7 @@ module.exports = function(video, options, cb) {
     numFrames: options.numFrames || 10,
     fps: options.fps || 5,
     format: options.format || 'image/jpeg',
-    quality: options.quality || 0.85,
+    quality: options.quality || 0.9,
     width: options.width || video.videoWidth,
     height: options.height || video.videoHeight
   }
