@@ -5,6 +5,7 @@ var express = require('express')
   , serveStatic = require('serve-static')
   , userCounter = require('./lib/user-counter')
   , chatSockets = require('./lib/chat-sockets')
+  , meatspaceProxy = require('./lib/meatspace-proxy')
   , config = require('./conf.json')
 
 var userIdKey = config.idKey
@@ -26,7 +27,12 @@ app.get('/', function(req, res) {
 app.use(serveStatic('public'))
 
 userCounter(io)
-chatSockets(io, userIdKey, 15 /* server backscroll limit */, 10 * 60 * 1000 /* expiry time */)
+chatSockets(
+    io,
+    userIdKey,
+    meatspaceProxy(config.meatspaceServer),
+    15 /* server backscroll limit */,
+    10 * 60 * 1000 /* expiry time */)
 
 httpServer.listen(config.port, function() {
   var host = httpServer.address().address

@@ -29,6 +29,7 @@
     "concat-stream": "^1.4.6",
     "cuid": "^1.2.4",
     "data-uri-to-blob": "0.0.4",
+    "data-uri-to-buffer": "0.0.3",
     "express": "^4.9.8",
     "fingerprintjs": "^0.5.3",
     "jade": "^1.7.0",
