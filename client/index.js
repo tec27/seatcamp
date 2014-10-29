@@ -25,7 +25,13 @@ io.on('chat', function(chat) {
   colorId.css('background-color', '#' + chat.userId.substring(0, 6))
   chatText.text(chat.text)
   listItem.append(video).append(chatText).append(colorId)
+
+  var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
   messageList.append(listItem)
+
+  if (autoScroll) {
+    listItem[0].scrollIntoView()
+  }
 }).on('active', function(numActive) {
   $('#active-users').text(numActive)
 })
