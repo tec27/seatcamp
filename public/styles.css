@@ -74,15 +74,29 @@ header p {
 }
 
 .message-content .color-id {
-  width: 40px;
-  height: 40px;
+  position: relative;
+  width: 38px;
+  height: 38px;
+
+  border: 1px solid #000000;
+  margin: 2px;
 }
 
-.color-id .color-id-part {
+.color-id .block {
   display: inline-block;
   float: left;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
+}
+
+.color-id .middle {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 9px;
+  left: 9px;
+
+  border: 1px solid #000000;
 }
 
 footer {
