@@ -52,15 +52,37 @@ header p {
   height: 150px;
 }
 
-#message-list li .color-id {
-  width: 4px;
-  height: 150px;
+#message-list li .message-content {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex: 1;
+  padding: 8px;
 }
 
-#message-list li p {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+.message-content p {
   flex: 1;
-  padding: 8px 16px;
+  padding: 0 8px;
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.message-content time {
+  color: #B8B8B8;
+  font-size: 16px;
+  padding: 0 8px 0 0;
+}
+
+.message-content .color-id {
+  width: 40px;
+  height: 40px;
+}
+
+.color-id .color-id-part {
+  display: inline-block;
+  float: left;
+  width: 10px;
+  height: 10px;
 }
 
 footer {

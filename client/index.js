@@ -4,6 +4,8 @@ var $ = require('jquery')
   , captureFrames = require('./capture-frames')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
+  , moment = require('moment')
+  , createColorId = require('./color-id')
 
 var active = 0
   , meatspaceActive = 0
@@ -22,16 +24,25 @@ var messageList = $('#message-list')
 io.on('chat', function(chat) {
   var listItem = $('<li/>')
     , video = $('<video autoplay loop />')
+    , contentDiv = $('<div class="message-content" />')
     , chatText = $('<p/>')
-    , colorId = $('<div class="color-id" />')
+    , timestamp = $('<time />')
+    , colorId = createColorId(chat.userId)
 
   var blob = new Blob([ chat.video ], { type: chat.videoMime })
     , url = window.URL.createObjectURL(blob)
   video.attr('src', url)
 
-  colorId.css('background-color', '#' + chat.userId.substring(0, 6))
-  chatText.text(chat.text)
-  listItem.append(video).append(chatText).append(colorId)
+  if (chat.from == 'meatspace') {
+    chatText.html(chat.text)
+  } else {
+    chatText.text(chat.text)
+  }
+
+  var sentDate = moment(new Date(chat.sent))
+  timestamp.attr('datetime', sentDate.toISOString()).text(sentDate.format('LT'))
+  contentDiv.append(chatText).append(timestamp).append(colorId)
+  listItem.append(video).append(contentDiv)
 
   var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
   messageList.append(listItem)

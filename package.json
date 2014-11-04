@@ -35,12 +35,14 @@
     "fingerprintjs": "^0.5.3",
     "jade": "^1.7.0",
     "jquery": "^2.1.1",
+    "moment": "^2.8.3",
     "rimraf": "^2.2.8",
     "serve-static": "^1.7.0",
     "socket.io": "^1.1.0",
     "socket.io-client": "^1.1.0",
     "traceur": "0.0.72",
-    "waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239"
+    "waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239",
+    "xterm-colors": "^1.0.0"
   },
   "browserify": {
     "transform": [
