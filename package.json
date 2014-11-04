@@ -26,6 +26,7 @@
     "browserify": "^6.1.0",
     "browserify-middleware": "^4.1.0",
     "browserify-shim": "^3.8.0",
+    "canonical-host": "0.0.4",
     "concat-stream": "^1.4.6",
     "cuid": "^1.2.4",
     "data-uri-to-blob": "0.0.4",
