@@ -11,6 +11,8 @@ io.on('connect', function() {
   io.emit('join', 'webm')
 })
 
+var MESSAGE_LIMIT = 30
+
 var messageList = $('#message-list')
 io.on('chat', function(chat) {
   var listItem = $('<li/>')
@@ -30,6 +32,13 @@ io.on('chat', function(chat) {
   messageList.append(listItem)
 
   if (autoScroll) {
+    var children = messageList.children()
+    if (children.length > MESSAGE_LIMIT) {
+      children.slice(0, children.length - MESSAGE_LIMIT).each(function() {
+        $(this).remove()
+      })
+    }
+
     listItem[0].scrollIntoView()
   }
 }).on('active', function(numActive) {
