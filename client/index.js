@@ -5,14 +5,19 @@ var $ = require('jquery')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
 
+var active = 0
+  , meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
   // TODO(tec27): Pick this based on browser/OS considerations
   io.emit('join', 'webm')
+}).on('disconnect', function() {
+  active = 0
+  meatspaceActive = 0
+  updateActiveUsers()
 })
 
 var MESSAGE_LIMIT = 30
-
 var messageList = $('#message-list')
 io.on('chat', function(chat) {
   var listItem = $('<li/>')
@@ -42,8 +47,23 @@ io.on('chat', function(chat) {
     listItem[0].scrollIntoView()
   }
 }).on('active', function(numActive) {
-  $('#active-users').text(numActive)
+  active = numActive
+  updateActiveUsers()
+}).on('meatspaceActive', function(numActive) {
+  meatspaceActive = numActive
+  updateActiveUsers()
+}).on('meatspace', function(status) {
+  if (status != 'connected') {
+    meatspaceActive = 0
+    updateActiveUsers()
+  }
 })
+
+function updateActiveUsers() {
+  $('#active-users')
+    .text(active + meatspaceActive)
+    .attr('title', active + ' active seat.camp users, ' + meatspaceActive + ' meatspace')
+}
 
 var messageInput = $('#message')
   , awaitingAck = null
