@@ -7,14 +7,14 @@ module.exports = function createIdenticon(id) {
   // Last 8 characters are the foreground color
   var fg = objToHslStr({
     hue: Math.round((parseInt(hash.substr(-6), 16) / 0xffffff) * 360),
-    saturation: inRange(parseInt(hash.substr(-7, 1), 16) / 0xf, 40, 85),
-    lightness: inRange(parseInt(hash.substr(-8, 1), 16) / 0xf, 50, 80),
+    saturation: inRange(parseInt(hash.substr(-7, 1), 16) / 0xf, 50, 85),
+    lightness: inRange(parseInt(hash.substr(-8, 1), 16) / 0xf, 30, 70),
   })
   // Next 8 characters are the background color
   var bg = objToHslStr({
     hue: Math.round((parseInt(hash.substr(-14, 6), 16) / 0xffffff) * 360),
-    saturation: inRange(parseInt(hash.substr(-15, 1), 16) / 0xf, 2, 15),
-    lightness: inRange(parseInt(hash.substr(-16, 1), 16) / 0xf, 90, 100),
+    saturation: inRange(parseInt(hash.substr(-15, 1), 16) / 0xf, 10, 30),
+    lightness: inRange(parseInt(hash.substr(-16, 1), 16) / 0xf, 80, 100),
   })
 
   var blocks = []
