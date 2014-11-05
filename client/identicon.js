@@ -23,8 +23,9 @@ module.exports = function createIdenticon(id) {
     blocks.push([ false, false, false, false, false ])
   }
   for (let i = 0, y = 0; i < 15; i++, y++) {
-    let x = (i / 5) | 0
-    let color = parseInt(hash.charAt(i), 16) % 2 ? false : fg;
+    // start in middle, move outward
+    let x = 2 - ((i / 5) | 0)
+    let color = parseInt(hash.charAt(i), 16) % 2 ? false : fg
     y = y % 5
     blocks[x][y] = color
   }
