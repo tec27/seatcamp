@@ -13,6 +13,7 @@
 
     // Relaxing
     "asi": true,
+    "esnext": true,
     "funcscope": true,
     "laxbreak": true,
     "laxcomma": true,

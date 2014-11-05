@@ -1,3 +1,5 @@
+require('traceur/bin/traceur-runtime.js')
+
 var $ = require('jquery')
   , io = require('socket.io-client')()
   , initWebrtc = require('./init-webrtc')
@@ -5,7 +7,7 @@ var $ = require('jquery')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
   , moment = require('moment')
-  , createColorId = require('./color-id')
+  , createIdenticon = require('./identicon')
 
 var active = 0
   , meatspaceActive = 0
@@ -27,7 +29,7 @@ io.on('chat', function(chat) {
     , contentDiv = $('<div class="message-content" />')
     , chatText = $('<p/>')
     , timestamp = $('<time />')
-    , colorId = createColorId(chat.userId)
+    , identicon = createIdenticon(chat.userId)
 
   var blob = new Blob([ chat.video ], { type: chat.videoMime })
     , url = window.URL.createObjectURL(blob)
@@ -41,7 +43,7 @@ io.on('chat', function(chat) {
 
   var sentDate = moment(new Date(chat.sent))
   timestamp.attr('datetime', sentDate.toISOString()).text(sentDate.format('LT'))
-  contentDiv.append(chatText).append(timestamp).append(colorId)
+  contentDiv.append(chatText).append(timestamp).append(identicon)
   listItem.append(video).append(contentDiv)
 
   var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
