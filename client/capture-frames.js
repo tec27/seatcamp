@@ -79,7 +79,5 @@ function compatToBlob(canvas, format, opts, cb) {
     return canvas.toBlob(cb, format, opts)
   }
 
-  setTimeout(function() {
-    cb(toBlob(canvas.toDataURL(format, opts)))
-  }, 0)
+  setTimeout(() => cb(toBlob(canvas.toDataURL(format, opts))), 0)
 }

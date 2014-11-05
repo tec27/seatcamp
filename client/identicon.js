@@ -51,5 +51,5 @@ function inRange(percent, min, max) {
 }
 
 function objToHslStr({ hue, saturation, lightness }) {
-  return 'hsl(' + hue + ', ' + saturation + '%, ' + lightness + '%)'
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }

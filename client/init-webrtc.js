@@ -44,28 +44,30 @@ module.exports = function(video, width, height, cb) {
   }
 }
 
-function StreamResult(video, stream, url) {
-  this.video = video
-  this.stream = stream
-  this.url = url
-  this.stopped = false
-}
-
-StreamResult.prototype.stop = function() {
-  if (this.stopped) return
-
-  if (this.url && this.video.src == this.url) {
-    this.video.pause()
-    this.video.src = null
-    window.URL.revokeObjectURL(this.url)
-    this.url = null
-  } else if (this.video.mozSrcObject && this.video.mozSrcObject == this.stream) {
-    this.video.pause()
-    this.video.src = null
+class StreamResult {
+  constructor(video, stream, url) {
+    this.video = video
+    this.stream = stream
+    this.url = url
+    this.stopped = false
   }
 
-  this.stream.stop()
-  this.video = null
-  this.stream = null
-  this.stopped = true
+  stop() {
+    if (this.stopped) return
+
+    if (this.url && this.video.src == this.url) {
+      this.video.pause()
+      this.video.src = null
+      window.URL.revokeObjectURL(this.url)
+      this.url = null
+    } else if (this.video.mozSrcObject && this.video.mozSrcObject == this.stream) {
+      this.video.pause()
+      this.video.src = null
+    }
+
+    this.stream.stop()
+    this.video = null
+    this.stream = null
+    this.stopped = true
+  }
 }

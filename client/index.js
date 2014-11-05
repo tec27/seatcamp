@@ -75,7 +75,7 @@ io.on('chat', function(chat) {
 function updateActiveUsers() {
   $('#active-users')
     .text(active + meatspaceActive)
-    .attr('title', active + ' active seat.camp users, ' + meatspaceActive + ' meatspace')
+    .attr('title', `${active} active seat.camp users, ${meatspaceActive} meatspace`)
 }
 
 var messageInput = $('#message')
