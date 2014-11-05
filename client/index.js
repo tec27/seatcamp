@@ -81,7 +81,11 @@ var messageInput = $('#message')
 $('form').on('submit', function(event) {
   event.preventDefault()
 
-  captureFrames($('#preview')[0], { format: 'image/jpeg' }, function(err, frames) {
+  captureFrames($('#preview')[0], {
+    format: 'image/jpeg',
+    width: 200,
+    height: 150
+  }, function(err, frames) {
     if (err) {
       return console.error(err)
     }
