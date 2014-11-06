@@ -14,6 +14,15 @@ html
     footer
       div.preview-container.shadow-1
           video#preview
+      .progress.shadow-1
+        .circle
+          .mask.full
+            .fill
+          .mask.half
+            .fill
+            .fill.fix
+        .inset.shadow-1
+            p.text 0%
       form.shadow-1
         input#message(type='text', maxlength='250', autofocus='true')
         p#char-counter 250

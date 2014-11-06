@@ -8,6 +8,7 @@ var $ = require('jquery')
   , Fingerprint = require('fingerprintjs')
   , moment = require('moment')
   , createIdenticon = require('./identicon')
+  , progressSpinner = require('./progress')($('.progress'))
 
 var active = 0
   , meatspaceActive = 0
@@ -83,11 +84,16 @@ var messageInput = $('#message')
 $('form').on('submit', function(event) {
   event.preventDefault()
 
+  progressSpinner.setValue(0).show()
   captureFrames($('#preview')[0], {
     format: 'image/jpeg',
     width: 200,
     height: 150
   }, function(err, frames) {
+    setTimeout(() => {
+      progressSpinner.hide()
+      setTimeout(() => progressSpinner.setValue(0), 400)
+    }, 400)
     if (err) {
       return console.error(err)
     }
@@ -100,9 +106,7 @@ $('form').on('submit', function(event) {
     }
     io.emit('chat', message, frames)
     messageInput.val('')
-  }).on('progress', function(percentDone) {
-    console.log('progress: ' + percentDone)
-  })
+  }).on('progress', percentDone => progressSpinner.setValue(percentDone))
 })
 
 io.on('ack', function(ack) {

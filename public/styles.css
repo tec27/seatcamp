@@ -99,6 +99,10 @@ footer {
   right: 16px;
 }
 
+footer .progress {
+  position: absolute;
+}
+
 .preview-container {
   background: #000000;
 
@@ -161,6 +165,63 @@ form {
 
 #send:active {
   background-color: #0394d6;
+}
+
+.progress {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin: 8px;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+
+  transition: visibility .3s, opacity .3s;
+}
+
+.progress.visible {
+  visibility: visible;
+  opacity: 100;
+}
+
+.progress .circle .mask, .progress .circle .fill {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.progress .circle .mask, .progress .circle .fill {
+  backface-visibility: hidden;
+  transition: transform .3s;
+}
+
+.progress .circle .mask {
+  clip: rect(0px, 48px, 48px, 24px);
+}
+
+.progress .circle .mask .fill {
+  clip: rect(0px, 24px, 48px, 0px);
+  background-color: #03a9f4;
+}
+
+.progress .inset {
+  width: 36px;
+  height: 36px;
+  position: absolute;
+  margin-left: 6px; /* (circle size - inset size) / 2 */
+  margin-top: 6px;
+  border-radius: 50%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.progress .text {
+  color: rgba(0, 0, 0, 0.87);
+  overflow: hidden;
 }
 
 .shadow-1 {
