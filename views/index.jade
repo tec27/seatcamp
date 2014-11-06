@@ -10,7 +10,7 @@ html
     header.shadow-1
       p seat.camp
       p#active-users ?
-    ul#message-list
+    ul#message-list.shadow-1
     footer
       div.preview-container.shadow-1
           video#preview
@@ -25,7 +25,7 @@ html
             p.text 0%
       form.shadow-1
         input#message(type='text', maxlength='250', autofocus='true')
-        p#char-counter 250
+        p#char-counter 0 / 250
         button#send(type='submit')
           div.icon.icon-ic_send_white_24dp
     script(type='text/javascript', src='client.js')

@@ -5,6 +5,7 @@
 }
 
 body {
+  background-color: #ECECEC;
   color: #212121;
   font-family: 'Roboto', 'sans-serif';
   font-size: 13px;
@@ -41,41 +42,52 @@ header p {
 }
 
 #message-list {
+  background-color: #ffffff;
   list-style-type: none;
-  margin: 56px 0 162px;
+  margin: 56px auto 166px;
   padding: 0;
+  padding-bottom: 2px;
+  min-width: 640px;
+  width: 1400px;
 }
 
 #message-list li {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   font-size: 20px;
   padding: 0px 16px;
 }
 
+#message-list li:last-child {
+  border-bottom: none;
+}
+
 #message-list li video {
   width: 200px;
   height: 150px;
+  margin-bottom: -1px;
 }
 
-#message-list li .message-content {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  display: flex;
+#message-list li p {
   flex: 1;
   padding: 8px;
-}
-
-.message-content p {
-  flex: 1;
-  padding: 0 8px;
 
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
-.message-content time {
+#message-list li .message-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 8px 0;
+}
+
+.message-meta time {
   color: #B8B8B8;
   font-size: 16px;
-  padding: 0 8px 0 0;
+  margin-bottom: 8px;
+  padding: 0;
 }
 
 .identicon {
@@ -84,7 +96,7 @@ header p {
   border: 1px solid rgba(0, 0, 0, 0.26);
   border-radius: 2px;
   padding: 2px;
-  margin: 1px;
+  margin: 1px 0 1px 2px;
 }
 
 .identicon .block {
@@ -99,8 +111,12 @@ footer {
 
   position: fixed;
   bottom: 8px;
-  left: 16px;
-  right: 16px;
+  left: 0px;
+  right: 0px;
+
+  margin: auto;
+  padding: 0 16px;
+  width: 1400px;
 }
 
 footer .progress {
@@ -121,15 +137,16 @@ footer .progress {
 
 form {
   align-self: flex-end;
-  background: #eeeeee;
+  background-color: #ffffff;
   display: flex;
   flex: 1;
   margin-left: 8px;
 }
 
 #message {
-  background: #eeeeee;
-  border: 1px solid rgba(0, 0, 0, 0.26);
+  background: #ffffff;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.26);
   color: #212121;
   font-family: 'Roboto', 'sans-serif';
   font-size: 16px;
@@ -147,12 +164,26 @@ form {
 
 #message:active, #message:focus {
   border-color: #03a9f4;
+  border-width: 2px;
+  padding: 4px 2px 3px 2px; /* account for extra border size */
 }
 
 #char-counter {
   color: #727272;
-  padding: 0px 12px;
+  padding: 0px 8px;
   margin: auto;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+
+  transition: visiblity .3s, opacity .3s;
+}
+
+#message:active + #char-counter, #message:focus + #char-counter {
+  visibility: visible;
+  opacity: 1;
 }
 
 #send {
@@ -186,7 +217,7 @@ form {
 
 .progress.visible {
   visibility: visible;
-  opacity: 100;
+  opacity: 1;
 }
 
 .progress .circle .mask, .progress .circle .fill {
@@ -217,7 +248,7 @@ form {
   margin-left: 6px; /* (circle size - inset size) / 2 */
   margin-top: 6px;
   border-radius: 50%;
-  background-color: white;
+  background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -260,4 +291,44 @@ form {
   right: 0;
   border-radius: inherit;
   pointer-events: none;
+}
+
+@media (max-width: 2000px) {
+  #message-list {
+    width: 70%;
+  }
+
+  footer {
+    width: 70%;
+  }
+}
+
+@media (max-width: 1460px) {
+  #message-list {
+    width: 80%;
+  }
+
+  footer {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1200px) {
+  #message-list {
+    width: 892px;
+  }
+
+  footer {
+    width: 892px;
+  }
+}
+
+@media (max-width: 920px) {
+  #message-list {
+    width: auto;
+  }
+
+  footer {
+    width: auto;
+  }
 }
