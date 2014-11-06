@@ -1,19 +1,20 @@
 var $ = require('jquery')
   , crypto = require('crypto')
 
-module.exports = function createIdenticon(id) {
+module.exports = function createIdenticon(id, internal) {
   var hash = crypto.createHash('md5').update(id).digest('hex')
     , container = $('<div class="identicon" />')
-  // Last 12 characters are the foreground color
+  // Last 16 characters are the foreground color
+  var fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
   var fg = objToHslStr({
-    hue: Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360),
-    saturation: inRange(parseInt(hash.substr(-11, 1), 16) / 0xf, 50, 85),
-    lightness: inRange(parseInt(hash.substr(-12, 1), 16) / 0xf, 30, 60),
+    hue: fgHue,
+    saturation: inRange(parseInt(hash.substr(-13, 3), 16) / 0xfff, 50, 90),
+    lightness: inRange(parseInt(hash.substr(-16, 3), 16) / 0xfff, 30, 60),
   })
-  // background is a light gray
+  // background is a light gray, opposite of the hue we're using for the foreground
   var bg = objToHslStr({
-    hue: 0,
-    saturation: 0,
+    hue: (180 + fgHue) % 360,
+    saturation: 20,
     lightness: 96,
   })
 
