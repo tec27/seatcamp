@@ -10,6 +10,10 @@ body {
   font-size: 13px;
 }
 
+a, a:visited, a:hover, a:focus, a:active {
+  color: #03A9F4;
+}
+
 header {
   background-color: #03a9f4;
   color: #ffffff;
