@@ -36,12 +36,7 @@ io.on('chat', function(chat) {
     , url = window.URL.createObjectURL(blob)
   video.attr('src', url)
 
-  if (chat.from == 'meatspace') {
-    chatText.html(chat.text)
-  } else {
-    chatText.text(chat.text)
-  }
-
+  chatText.html(chat.text)
   var sentDate = moment(new Date(chat.sent))
   timestamp.attr('datetime', sentDate.toISOString()).text(sentDate.format('LT'))
   contentDiv.append(chatText).append(timestamp).append(identicon)
