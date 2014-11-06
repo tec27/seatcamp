@@ -4,17 +4,17 @@ var $ = require('jquery')
 module.exports = function createIdenticon(id) {
   var hash = crypto.createHash('md5').update(id).digest('hex')
     , container = $('<div class="identicon" />')
-  // Last 8 characters are the foreground color
+  // Last 12 characters are the foreground color
   var fg = objToHslStr({
-    hue: Math.round((parseInt(hash.substr(-6), 16) / 0xffffff) * 360),
-    saturation: inRange(parseInt(hash.substr(-7, 1), 16) / 0xf, 50, 85),
-    lightness: inRange(parseInt(hash.substr(-8, 1), 16) / 0xf, 30, 70),
+    hue: Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360),
+    saturation: inRange(parseInt(hash.substr(-11, 1), 16) / 0xf, 50, 85),
+    lightness: inRange(parseInt(hash.substr(-12, 1), 16) / 0xf, 30, 60),
   })
-  // Next 8 characters are the background color
+  // background is a light gray
   var bg = objToHslStr({
-    hue: Math.round((parseInt(hash.substr(-14, 6), 16) / 0xffffff) * 360),
-    saturation: inRange(parseInt(hash.substr(-15, 1), 16) / 0xf, 10, 30),
-    lightness: inRange(parseInt(hash.substr(-16, 1), 16) / 0xf, 80, 100),
+    hue: 0,
+    saturation: 0,
+    lightness: 96,
   })
 
   var blocks = []
