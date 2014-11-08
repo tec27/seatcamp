@@ -7,7 +7,7 @@ var $ = require('jquery')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
   , progressSpinner = require('./progress')($('.progress'))
-  , retrieveMessage = require('./message')
+  , messageList = require('./message')($('#message-list'))
 
 var active = 0
   , meatspaceActive = 0
@@ -21,24 +21,11 @@ io.on('connect', function() {
   updateActiveUsers()
 })
 
-var MESSAGE_LIMIT = 30
-var messageList = $('#message-list')
 io.on('chat', function(chat) {
-  var msg = retrieveMessage()
-  msg.bind(chat)
-
   var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
-  messageList.append(msg.get())
-
+  var message = messageList.addMessage(chat, autoScroll)
   if (autoScroll) {
-    var children = messageList.children()
-    if (children.length > MESSAGE_LIMIT) {
-      children.slice(0, children.length - MESSAGE_LIMIT).each(function() {
-        $(this).remove()
-      })
-    }
-
-    msg.get()[0].scrollIntoView()
+    message.elem[0].scrollIntoView()
   }
 }).on('active', function(numActive) {
   active = numActive
