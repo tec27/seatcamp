@@ -172,9 +172,7 @@ class Message {
   }
 
   handleWaypoint(side, direction) {
-    console.log(`${this.chatText.text()} - ${side} - ${direction}`)
     if ((side == 'top' && direction == 'down') || (side == 'bottom' && direction == 'up')) {
-      console.log('displayed!')
       this.root.addClass('displayed')
       // Workaround for a bug in Chrome where calling play() on a looping video that is on or
       // around its last frame results in it thinking its playing, but actually being paused
@@ -183,7 +181,6 @@ class Message {
       }
       this.video[0].play()
     } else {
-      console.log('hidden!')
       this.root.removeClass('displayed')
       this.video[0].pause()
     }
