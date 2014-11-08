@@ -45,7 +45,7 @@ header p {
   background-color: #ffffff;
   border-radius: 2px;
   list-style-type: none;
-  margin: 56px auto 166px;
+  margin: 56px auto 116px;
   padding: 0;
   padding-bottom: 2px;
   min-width: 640px;
@@ -127,8 +127,8 @@ footer .progress {
 .preview-container {
   background: #000000;
 
-  height: 150px;
-  width: 200px;
+  height: 102px;
+  width: 136px;
 }
 
 .preview-container video {
@@ -191,6 +191,8 @@ form {
 #send {
   border: 0;
   background-color: #03a9f4;
+  /* match the form's border radius on the outer corners */
+  border-radius: 0 2px 2px 0;
   margin: 0 0 0 4px;
   padding-left: 16px;
   padding-right: 16px;
