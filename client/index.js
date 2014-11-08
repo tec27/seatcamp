@@ -6,9 +6,8 @@ var $ = require('jquery')
   , captureFrames = require('./capture-frames')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
-  , moment = require('moment')
-  , createIdenticon = require('./identicon')
   , progressSpinner = require('./progress')($('.progress'))
+  , retrieveMessage = require('./message')
 
 var active = 0
   , meatspaceActive = 0
@@ -25,25 +24,11 @@ io.on('connect', function() {
 var MESSAGE_LIMIT = 30
 var messageList = $('#message-list')
 io.on('chat', function(chat) {
-  var listItem = $('<li/>')
-    , video = $('<video autoplay loop />')
-    , metaDiv = $('<div class="message-meta" />')
-    , chatText = $('<p/>')
-    , timestamp = $('<time />')
-    , identicon = createIdenticon(chat.userId)
-
-  var blob = new Blob([ chat.video ], { type: chat.videoMime })
-    , url = window.URL.createObjectURL(blob)
-  video.attr('src', url)
-
-  chatText.html(chat.text)
-  var sentDate = moment(new Date(chat.sent))
-  timestamp.attr('datetime', sentDate.toISOString()).text(sentDate.format('LT'))
-  metaDiv.append(timestamp).append(identicon)
-  listItem.append(video).append(chatText).append(metaDiv)
+  var msg = retrieveMessage()
+  msg.bind(chat)
 
   var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
-  messageList.append(listItem)
+  messageList.append(msg.get())
 
   if (autoScroll) {
     var children = messageList.children()
@@ -53,7 +38,7 @@ io.on('chat', function(chat) {
       })
     }
 
-    listItem[0].scrollIntoView()
+    msg.get()[0].scrollIntoView()
   }
 }).on('active', function(numActive) {
   active = numActive

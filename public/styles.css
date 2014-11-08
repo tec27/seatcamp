@@ -107,6 +107,37 @@ header p {
   height: 8px;
 }
 
+.meatspac-logo {
+  display: none;
+  width: 24px;
+  height: 24px;
+  margin: 4px 8px 4px 0;
+  -webkit-filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.26));
+  filter: drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.26));
+}
+
+.meatspac .meatspac-logo {
+  display: block;
+}
+
+.mute {
+  background-color: #e0e0e0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+  margin: 2px 0;
+  outline: none;
+  padding: 2px 4px;
+}
+
+.mute:hover {
+  background-color: #EF9A9A;
+  border: 1px solid rgba(0, 0, 0, 0.54);
+}
+
+.mute:active {
+  background-color: #E57373;
+}
+
 footer {
   display: flex;
 
@@ -261,6 +292,13 @@ form {
 .progress .text {
   color: rgba(0, 0, 0, 0.87);
   overflow: hidden;
+}
+
+.flex-grow {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
 }
 
 .shadow-1 {
