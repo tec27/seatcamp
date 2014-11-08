@@ -176,7 +176,8 @@ class Message {
       this.root.addClass('displayed')
       // Workaround for a bug in Chrome where calling play() on a looping video that is on or
       // around its last frame results in it thinking its playing, but actually being paused
-      if (Math.abs(this.video[0].currentTime - this.video[0].duration) < 0.2) {
+      if (this.video[0].duration &&
+          Math.abs(this.video[0].currentTime - this.video[0].duration) < 0.2) {
         this.video[0].currentTime = 0
       }
       this.video[0].play()
