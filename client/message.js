@@ -28,7 +28,7 @@ class MessageList {
     message.bind(chat)
     this.messages.push(message)
     this.elem.append(message.elem)
-    Waypoint.refreshAll()
+    this._refreshWaypoints()
     return message
   }
 
@@ -45,7 +45,7 @@ class MessageList {
 
     this._recycle(userMessages)
     this.messages = nonUserMessages
-    Waypoint.refreshAll()
+    this._refreshWaypoints()
   }
 
   _recycle(messages) {
@@ -60,6 +60,15 @@ class MessageList {
     for (let message of messages.slice(toRecycle, messages.length)) {
       message.elem.remove()
       message.dispose()
+    }
+  }
+
+  _refreshWaypoints() {
+    if (!this._waypointTimeout) {
+      this._waypointTimeout = setTimeout(() => {
+        Waypoint.refreshAll()
+        this._waypointTimeout = null
+      }, 0)
     }
   }
 }
