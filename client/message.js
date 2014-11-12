@@ -86,8 +86,8 @@ class Message {
     this.timestamp = $('<time />')
     // placeholder div so it can be replaced with the real thing when bound
     this.identicon = $('<div class="identicon" />')
-    var bottomRow = $('<div class="flex-grow" />')
     this.meatspacLogo = $('<img class="meatspac-logo" src="meatspac.png" alt="meatspace user" />')
+    var bottomRow = $('<div class="flex-grow" />')
     this.muteButton = $('<button class="mute shadow-1" title="mute user">' +
         '<div class="icon icon-ic_block_white_24dp" /></button>')
 
@@ -107,12 +107,11 @@ class Message {
       waypoint.disable()
     }
 
-    bottomRow
-      .append(this.meatspacLogo)
-      .append(this.muteButton)
+    bottomRow.append(this.muteButton)
     this.metaDiv
       .append(this.timestamp)
       .append(this.identicon)
+      .append(this.meatspacLogo)
       .append(bottomRow)
     this.root
       .append(this.video)
