@@ -19,7 +19,7 @@ header {
   background-color: #03a9f4;
   color: #ffffff;
   display: flex;
-  height: 56px;
+  height: 48px;
   opacity: 0.95;
   z-index: 10;
 
@@ -45,7 +45,7 @@ header p {
   background-color: #ffffff;
   border-radius: 2px;
   list-style-type: none;
-  margin: 56px auto 116px;
+  margin: 48px auto 116px;
   padding: 0;
   padding-bottom: 2px;
   min-width: 640px;
