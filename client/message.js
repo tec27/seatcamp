@@ -86,7 +86,6 @@ class Message {
     this.timestamp = $('<time />')
     // placeholder div so it can be replaced with the real thing when bound
     this.identicon = $('<div class="identicon" />')
-    this.meatspacLogo = $('<img class="meatspac-logo" src="meatspac.png" alt="meatspace user" />')
     var bottomRow = $('<div class="flex-grow" />')
     this.muteButton = $('<button class="mute shadow-1" title="mute user">' +
         '<div class="icon icon-ic_block_white_24dp" /></button>')
@@ -111,7 +110,6 @@ class Message {
     this.metaDiv
       .append(this.timestamp)
       .append(this.identicon)
-      .append(this.meatspacLogo)
       .append(bottomRow)
     this.root
       .append(this.video)
@@ -133,12 +131,6 @@ class Message {
 
     var sentDate = moment(new Date(sent))
     this.timestamp.attr('datetime', sentDate.toISOString()).text(sentDate.format('LT'))
-
-    if (from == 'meatspace') {
-      this.root.addClass('meatspac')
-    } else {
-      this.root.removeClass('meatspac')
-    }
 
     var newIdenticon = createIdenticon(userId)
     this.identicon.replaceWith(newIdenticon)

@@ -92,11 +92,12 @@ header p {
 }
 
 .identicon {
-  width: 31px;
-  height: 31px;
+  width: 38px;
+  height: 38px;
   border: 1px solid rgba(0, 0, 0, 0.26);
   border-radius: 2px;
-  padding: 2px;
+  margin: 1px;
+  padding: 3px;
 }
 
 .identicon .block {
@@ -104,17 +105,6 @@ header p {
   float: left;
   width: 20%;
   height: 20%;
-}
-
-.meatspac-logo {
-  display: none;
-  width: 24px;
-  height: 24px;
-  margin: 8px 0;
-}
-
-.meatspac .meatspac-logo {
-  display: block;
 }
 
 .mute {
