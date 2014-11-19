@@ -3,7 +3,7 @@ var $ = require('jquery')
 
 module.exports = function createIdenticon(id, internal) {
   var hash = crypto.createHash('md5').update(id).digest('hex')
-    , container = $('<div class="identicon" />')
+    , html = ['<div class="identicon">']
   // Last 16 characters are the foreground color
   var fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
   var fg = objToHslStr({
@@ -36,14 +36,16 @@ module.exports = function createIdenticon(id, internal) {
     for (let x = 0; x < 5; x++) {
       // mirror the last 2 columns from the first 2
       let srcX = x >= 3 ? 4 - x : x
-      let elem = $('<div class="block" />')
+      let elemHtml = ['<div class="block"']
       if (blocks[srcX][y]) {
-        elem.css('background-color', blocks[srcX][y])
+        elemHtml.push(` style="background-color: ${blocks[srcX][y]};"`)
       }
-      container.append(elem)
+      elemHtml.push('></div>')
+      html = html.concat(elemHtml)
     }
   }
 
+  var container = $(html.join('') + '</div>')
   container.css('background-color', bg)
   return container
 }

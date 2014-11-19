@@ -75,25 +75,42 @@ class MessageList {
   }
 }
 
+var MESSAGE_HTML = [
+  '<li>',
+    '<div class="video-container">',
+      '<video autoplay loop />',
+      '<button class="save shadow-1" title="save as GIF">',
+        '<div class="icon icon-ic_save_white_24dp" />',
+      '</button>',
+    '</div>',
+    '<p>',
+    '<div class="message-meta">',
+      '<time/>',
+      '<div class="identicon"/>',
+      '<div class="flex-grow">',
+        '<button class="mute shadow-1" title="mute user">',
+          '<div class="icon icon-ic_block_white_24dp" />',
+        '</button>',
+      '</div>',
+    '</div>',
+  '</li>',
+].join('')
+
+
 class Message {
   constructor(owner) {
     this._disposed = false
     this._userId = null
     this.owner = owner
 
-    this.root = $('<li/>')
-    var videoContainer = $('<div class="video-container" />')
-    this.video = $('<video autoplay loop />')
-    this.saveButton = $('<button class="save shadow-1" title="Save as GIF">' +
-      '<div class="icon icon-ic_save_white_24dp" /></button>')
-    this.chatText = $('<p/>')
-    this.metaDiv = $('<div class="message-meta" />')
-    this.timestamp = $('<time />')
+    this.root = $(MESSAGE_HTML)
+    this.video = this.root.find('video')
+    this.saveButton = this.root.find('.save')
+    this.chatText = this.root.find('>p')
+    this.timestamp = this.root.find('time')
     // placeholder div so it can be replaced with the real thing when bound
-    this.identicon = $('<div class="identicon" />')
-    var bottomRow = $('<div class="flex-grow" />')
-    this.muteButton = $('<button class="mute shadow-1" title="mute user">' +
-        '<div class="icon icon-ic_block_white_24dp" /></button>')
+    this.identicon = this.root.find('.identicon')
+    this.muteButton = this.root.find('.mute')
 
     this.waypoints = [
       new Waypoint({
@@ -110,19 +127,6 @@ class Message {
     for (let waypoint of this.waypoints) {
       waypoint.disable()
     }
-
-    bottomRow.append(this.muteButton)
-    this.metaDiv
-      .append(this.timestamp)
-      .append(this.identicon)
-      .append(bottomRow)
-    videoContainer
-      .append(this.video)
-      .append(this.saveButton)
-    this.root
-      .append(videoContainer)
-      .append(this.chatText)
-      .append(this.metaDiv)
 
     this.saveButton.on('click', () => this.saveGif())
     this.muteButton.on('click', () => this.mute())
