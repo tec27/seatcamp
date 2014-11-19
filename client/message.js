@@ -76,7 +76,7 @@ class MessageList {
 }
 
 var MESSAGE_HTML = [
-  '<li>',
+  '<li class="shadow-1">',
     '<div class="video-container">',
       '<video autoplay loop />',
       '<button class="save shadow-1" title="save as GIF">',
