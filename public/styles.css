@@ -63,10 +63,50 @@ header p {
   border-bottom: none;
 }
 
-#message-list li video {
+#message-list li .video-container {
   width: 200px;
   height: 150px;
   margin-bottom: -1px;
+  position: relative;
+}
+
+.video-container video {
+  width: 100%;
+  height: 100%;
+}
+
+.video-container .save, .video-container .save:focus {
+  position: absolute;
+  display: block;
+  padding: 4px 8px;
+  bottom: 8px;
+  left: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.54);
+  outline: none;
+  border-radius: 2px;
+  background-color: #03a9f4;
+  opacity: 0;
+  visiblity: hidden;
+
+  transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+}
+
+.video-container:hover .save {
+  visibility: visible;
+  opacity: 0.95;
+}
+
+.save:hover {
+  background-color: #039ee4;
+  cursor: pointer;
+}
+
+.save:active {
+  background-color: #0394d6;
+}
+
+.save[disabled] {
+  background-color: #01579B;
 }
 
 #message-list li p {
@@ -96,7 +136,7 @@ header p {
   height: 38px;
   border: 1px solid rgba(0, 0, 0, 0.26);
   border-radius: 2px;
-  margin: 1px;
+  margin: 1px 0px 1px 2px;
   padding: 3px;
 }
 
@@ -217,6 +257,7 @@ form {
 
 #send:hover {
   background-color: #039ee4;
+  cursor: pointer;
 }
 
 #send:active {

@@ -1,6 +1,7 @@
 var $ = require('jquery')
   , moment = require('moment')
   , Waypoint = require('jquery-waypoints')
+  , vid2gif = require('vid2gif')
   , createIdenticon = require('./identicon')
 
 module.exports = function(listElem) {
@@ -9,6 +10,7 @@ module.exports = function(listElem) {
 
 var MESSAGE_LIMIT = 30
   , MAX_RECYCLED = 6
+  , NUM_VIDEO_FRAMES = 10
 
 class MessageList {
   constructor(listElem) {
@@ -80,7 +82,10 @@ class Message {
     this.owner = owner
 
     this.root = $('<li/>')
+    var videoContainer = $('<div class="video-container" />')
     this.video = $('<video autoplay loop />')
+    this.saveButton = $('<button class="save shadow-1" title="Save as GIF">' +
+      '<div class="icon icon-ic_save_white_24dp" /></button>')
     this.chatText = $('<p/>')
     this.metaDiv = $('<div class="message-meta" />')
     this.timestamp = $('<time />')
@@ -111,11 +116,15 @@ class Message {
       .append(this.timestamp)
       .append(this.identicon)
       .append(bottomRow)
-    this.root
+    videoContainer
       .append(this.video)
+      .append(this.saveButton)
+    this.root
+      .append(videoContainer)
       .append(this.chatText)
       .append(this.metaDiv)
 
+    this.saveButton.on('click', () => this.saveGif())
     this.muteButton.on('click', () => this.mute())
   }
 
@@ -164,6 +173,31 @@ class Message {
       waypoint.destroy()
     }
     this.waypoints.length = 0
+  }
+
+  saveGif() {
+    this._throwIfDisposed()
+    this.saveButton.prop('disabled', true)
+    vid2gif(this.video[0], NUM_VIDEO_FRAMES, (err, gifBlob) => {
+      this.saveButton.prop('disabled', false)
+      if (err) {
+        // TODO(tec27): need a good way to display this error to users
+        console.error('Error creating GIF:')
+        return console.dir(err)
+      }
+
+      var url = window.URL.createObjectURL(gifBlob)
+        , link = $('<a />')
+        , click = document.createEvent('MouseEvents')
+
+      link
+        .attr('href', url)
+        .attr('download', Date.now() + '.gif')
+      click.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0,
+          false, false, false, false, 0, null)
+      link[0].dispatchEvent(click)
+      window.URL.revokeObjectURL(url)
+    })
   }
 
   mute() {
