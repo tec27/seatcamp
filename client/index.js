@@ -6,8 +6,11 @@ var $ = require('jquery')
   , captureFrames = require('./capture-frames')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
+  , StoredSet = require('./stored-set')
+  , createDropdown = require('./dropdown')
   , progressSpinner = require('./progress')($('.progress'))
-  , messageList = require('./message')($('#message-list'))
+  , muteSet = new StoredSet('mutes')
+  , messageList = require('./message')($('#message-list'), muteSet)
 
 var active = 0
   , meatspaceActive = 0
@@ -24,7 +27,7 @@ io.on('connect', function() {
 io.on('chat', function(chat) {
   var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
   var message = messageList.addMessage(chat, autoScroll)
-  if (autoScroll) {
+  if (message && autoScroll) {
     message.elem[0].scrollIntoView()
   }
 }).on('active', function(numActive) {
@@ -45,6 +48,10 @@ function updateActiveUsers() {
     .text(active + meatspaceActive)
     .attr('title', `${active} active seat.camp users, ${meatspaceActive} meatspace`)
 }
+
+var mainDropdown = createDropdown($('header .dropdown'), {
+  unmute: () => muteSet.clear()
+})
 
 var messageInput = $('#message')
   , awaitingAck = null

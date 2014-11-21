@@ -5,11 +5,18 @@ html
     link(type='text/css', rel='stylesheet',
       href='//fonts.googleapis.com/css?family=Roboto:300,700,400')
     link(type='text/css', rel='stylesheet', href='sprite-content-white.css')
+    link(type='text/css', rel='stylesheet', href='sprite-navigation-white.css')
     link(type='text/css', rel='stylesheet', href='styles.css')
   body
     header.shadow-1
       p seat.camp
-      p#active-users ?
+      .actions
+        p#active-users ?
+        div.dropdown
+          button.toggle(title="Options")
+            div.nav-icon.icon-ic_more_vert_white_24dp
+          div.menu.shadow-2
+            button(data-action='unmute') Unmute all
     ul#message-list
     footer
       div.preview-container.shadow-1
@@ -26,6 +33,6 @@ html
       form.shadow-1
         input#message(type='text', maxlength='250', autofocus='true')
         p#char-counter 0 / 250
-        button#send(type='submit')
+        button#send(type='submit', title="Send")
           div.icon.icon-ic_send_white_24dp
     script(type='text/javascript', src='client.js')

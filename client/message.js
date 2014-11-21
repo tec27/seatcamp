@@ -4,8 +4,8 @@ var $ = require('jquery')
   , vid2gif = require('vid2gif')
   , createIdenticon = require('./identicon')
 
-module.exports = function(listElem) {
-  return new MessageList(listElem)
+module.exports = function(listElem, muteSet) {
+  return new MessageList(listElem, muteSet)
 }
 
 var MESSAGE_LIMIT = 30
@@ -13,13 +13,19 @@ var MESSAGE_LIMIT = 30
   , NUM_VIDEO_FRAMES = 10
 
 class MessageList {
-  constructor(listElem) {
+  constructor(listElem, muteSet) {
     this.elem = listElem
     this.messages = []
     this._recycled = []
+
+    this._mutes = muteSet
   }
 
   addMessage(chat, removeOverLimit = true) {
+    if (this._mutes.has(chat.userId)) {
+      return
+    }
+
     var newCount = this.messages.length + 1
     if (removeOverLimit && newCount > MESSAGE_LIMIT) {
       let removed = this.messages.splice(0, newCount - MESSAGE_LIMIT)
@@ -35,6 +41,8 @@ class MessageList {
   }
 
   muteUser(userId) {
+    this._mutes.add(userId)
+
     var userMessages = []
       , nonUserMessages = []
     for (let message of this.messages) {
@@ -79,7 +87,7 @@ var MESSAGE_HTML = [
   '<li class="shadow-1">',
     '<div class="video-container">',
       '<video autoplay loop />',
-      '<button class="save shadow-1" title="save as GIF">',
+      '<button class="save shadow-1" title="Save as GIF">',
         '<div class="icon icon-ic_save_white_24dp" />',
       '</button>',
     '</div>',
@@ -88,7 +96,7 @@ var MESSAGE_HTML = [
       '<time/>',
       '<div class="identicon"/>',
       '<div class="flex-grow">',
-        '<button class="mute shadow-1" title="mute user">',
+        '<button class="mute shadow-1" title="Mute user">',
           '<div class="icon icon-ic_block_white_24dp" />',
         '</button>',
       '</div>',
