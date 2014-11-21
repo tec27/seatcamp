@@ -34,6 +34,7 @@ module.exports = function(video, options, cb) {
     canvas.height = opts.height
     context = canvas.getContext('2d')
 
+    emitter.emit('progress', 0.1)
     captureFrame()
   }
 
@@ -44,8 +45,9 @@ module.exports = function(video, options, cb) {
     }
 
     (function(i) {
-      // TODO(tec27): handle letterboxing
+
       try {
+        // TODO(tec27): handle letterboxing
         context.drawImage(video, 0, 0, canvas.width, canvas.height)
       } catch (err) {
         if (t) clearTimeout(t)
@@ -54,7 +56,10 @@ module.exports = function(video, options, cb) {
         else return emitter.emit('error', err)
       }
 
-      emitter.emit('progress', index / opts.numFrames)
+      // + 2 because we want the progress to indicate what frame we are *taking*
+      if (i + 1 < opts.numFrames) {
+        emitter.emit('progress', (i + 2) / opts.numFrames)
+      }
       compatToBlob(canvas, opts.format, opts.quality, function(blob) {
         frames[i] = blob
         awaitingSave--
