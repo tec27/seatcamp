@@ -6,6 +6,7 @@ var $ = require('jquery')
   , captureFrames = require('./capture-frames')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
+  , NotificationCounter = require('./notification-counter')
   , StoredSet = require('./stored-set')
   , createCharCounter = require('./char-counter')
   , createDropdown = require('./dropdown')
@@ -25,11 +26,17 @@ io.on('connect', function() {
   updateActiveUsers()
 })
 
+var unreadMessages = 0
 io.on('chat', function(chat) {
   var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
   var message = messageList.addMessage(chat, autoScroll)
   if (message && autoScroll) {
     message.elem[0].scrollIntoView()
+  }
+
+  if (message && document.hidden) {
+    unreadMessages++
+    updateNotificationCount()
   }
 }).on('active', function(numActive) {
   active = numActive
@@ -106,3 +113,19 @@ initWebrtc($('#preview')[0], 200, 150, function(err, stream) {
 
   // TODO(tec27): save stream so it can be stopped later to allow for camera switches
 })
+
+$(document).on('visibilitychange', () => {
+  if (!document.hidden) {
+    unreadMessages = 0
+    updateNotificationCount()
+  }
+})
+
+var notificationCounter = new NotificationCounter()
+function updateNotificationCount() {
+  if (!unreadMessages) {
+    notificationCounter.clear()
+  } else {
+    notificationCounter.setCount(unreadMessages)
+  }
+}
