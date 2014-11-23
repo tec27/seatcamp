@@ -7,6 +7,7 @@ var $ = require('jquery')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
   , StoredSet = require('./stored-set')
+  , createCharCounter = require('./char-counter')
   , createDropdown = require('./dropdown')
   , progressSpinner = require('./progress')($('.progress'))
   , muteSet = new StoredSet('mutes')
@@ -49,12 +50,15 @@ function updateActiveUsers() {
     .attr('title', `${active} active seat.camp users, ${meatspaceActive} meatspace`)
 }
 
-var mainDropdown = createDropdown($('header .dropdown'), {
+createDropdown($('header .dropdown'), {
   unmute: () => muteSet.clear()
 })
 
 var messageInput = $('#message')
   , awaitingAck = null
+
+createCharCounter(messageInput, $('#char-counter'), 250)
+
 $('form').on('submit', function(event) {
   event.preventDefault()
 
@@ -79,7 +83,7 @@ $('form').on('submit', function(event) {
       ack: awaitingAck
     }
     io.emit('chat', message, frames)
-    messageInput.val('')
+    messageInput.val('').change()
   }).on('progress', percentDone => progressSpinner.setValue(percentDone))
 })
 

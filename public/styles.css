@@ -312,6 +312,8 @@ form {
   margin-top: 4px;
   outline: none;
   padding: 4px 2px;
+
+  transition: border-color .3s;
 }
 
 #message:hover {
@@ -324,6 +326,10 @@ form {
   padding: 4px 2px 3px 2px; /* account for extra border size */
 }
 
+#message.full:active, #message.full:focus {
+  border-color: #F44336;
+}
+
 #char-counter {
   color: #727272;
   padding: 0px 8px;
@@ -334,7 +340,11 @@ form {
   visibility: hidden;
   opacity: 0;
 
-  transition: visiblity .3s, opacity .3s;
+  transition: visiblity .3s, opacity .3s, color .3s;
+}
+
+#char-counter.full {
+  color: #F44336;
 }
 
 #message:active + #char-counter, #message:focus + #char-counter {
