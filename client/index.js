@@ -13,13 +13,16 @@ var $ = require('jquery')
   , progressSpinner = require('./progress')($('.progress'))
   , muteSet = new StoredSet('mutes')
   , messageList = require('./message')($('#message-list'), muteSet)
+  , detectVideoSupport = require('./detect-video-support')
+
+var supportedVideoTypes = detectVideoSupport()
 
 var active = 0
   , meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
-  // TODO(tec27): Pick this based on browser/OS considerations
-  io.emit('join', 'webm')
+  // TODO(tec27): detect cases where video isn't supported at all
+  io.emit('join', supportedVideoTypes.webm ? 'webm' : 'x264')
 }).on('disconnect', function() {
   active = 0
   meatspaceActive = 0
