@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/tec27/seatcamp",
   "dependencies": {
+    "autoprefixer-core": "^4.0.1",
     "browserify": "^6.1.0",
     "browserify-middleware": "^4.1.0",
     "browserify-shim": "^3.8.0",
@@ -38,6 +39,7 @@
     "jquery": "^2.1.1",
     "jquery-waypoints": "imakewebthings/jquery-waypoints.git#922fa1a5b4435e8aba032fadbe009a2647b32239",
     "moment": "^2.8.3",
+    "prepare-response": "^1.1.2",
     "rimraf": "^2.2.8",
     "serve-static": "^1.7.0",
     "socket.io": "^1.1.0",

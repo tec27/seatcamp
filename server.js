@@ -6,6 +6,7 @@ var express = require('express')
   , socketIo = require('socket.io')
   , browserify = require('browserify-middleware')
   , serveStatic = require('serve-static')
+  , serveCss = require('./lib/serve-css')
   , canonicalHost = require('canonical-host')
   , userCounter = require('./lib/user-counter')
   , chatSockets = require('./lib/chat-sockets')
@@ -71,6 +72,7 @@ var io = socketIo(httpServer)
 app
   .get('/', (req, res) => res.render('index'))
   .get('/client.js', browserify('./client/index.js'))
+  .get('/styles.css', serveCss('./css/styles.css'))
 
 app.use(serveStatic('public'))
 
