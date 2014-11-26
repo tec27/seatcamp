@@ -21,7 +21,7 @@ var active = 0
   , meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
-  // TODO(tec27): detect cases where video isn't supported at all
+  // TODO(tec27): detect cases where video isn't supported at all and pick based on performance?
   io.emit('join', supportedVideoTypes.webm ? 'webm' : 'x264')
 }).on('disconnect', function() {
   active = 0
@@ -72,7 +72,12 @@ createCharCounter(messageInput, $('#char-counter'), 250)
 $('form').on('submit', function(event) {
   event.preventDefault()
 
+  if (awaitingAck) return
+
+  messageInput.prop('readonly', true)
+  awaitingAck = cuid()
   progressSpinner.setValue(0).show()
+
   captureFrames($('#preview')[0], {
     format: 'image/jpeg',
     width: 200,
@@ -83,10 +88,12 @@ $('form').on('submit', function(event) {
       setTimeout(() => progressSpinner.setValue(0), 400)
     }, 400)
     if (err) {
+      messageInput.prop('readonly', false)
+      awaitingAck = null
+      // TODO(tec27): show to user
       return console.error(err)
     }
 
-    awaitingAck = cuid()
     var message = {
       text: messageInput.val(),
       format: 'image/jpeg',
@@ -99,6 +106,7 @@ $('form').on('submit', function(event) {
 
 io.on('ack', function(ack) {
   if (awaitingAck && awaitingAck == ack.key) {
+    messageInput.prop('readonly', false)
     awaitingAck = null
     if (ack.err) {
       // TODO(tec27): display to user
