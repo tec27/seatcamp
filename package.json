@@ -45,7 +45,7 @@
     "socket.io": "^1.1.0",
     "socket.io-client": "^1.1.0",
     "tokenthrottle": "^1.1.0",
-    "traceur": "0.0.72",
+    "traceur": "0.0.74",
     "twitter-text": "^1.10.0",
     "vid2gif": "^1.0.1"
   },
