@@ -55,9 +55,15 @@ io.on('chat', function(chat) {
 })
 
 function updateActiveUsers() {
-  $('#active-users')
-    .text(active + meatspaceActive)
-    .attr('title', `${active} active seat.camp users, ${meatspaceActive} meatspace`)
+  if (active + meatspaceActive > 0) {
+    $('#active-users')
+      .text(active + meatspaceActive)
+      .attr('title', `${active} active seat.camp users, ${meatspaceActive} meatspace`)
+  } else {
+    $('#active-users')
+      .text('?')
+      .attr('title', 'not connected')
+  }
 }
 
 createDropdown($('header .dropdown'), {
