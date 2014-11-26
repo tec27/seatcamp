@@ -16,6 +16,7 @@ class MessageList {
   constructor(listElem, muteSet) {
     this.elem = listElem
     this.messages = []
+    this.messageKeys = new Set()
     this._recycled = []
 
     this._mutes = muteSet
@@ -23,6 +24,9 @@ class MessageList {
 
   addMessage(chat, removeOverLimit = true) {
     if (this._mutes.has(chat.userId)) {
+      return
+    }
+    if (this.messageKeys.has(chat.key)) {
       return
     }
 
@@ -35,6 +39,7 @@ class MessageList {
     var message = this._recycled.length ? this._recycled.pop() : new Message(this)
     message.bind(chat)
     this.messages.push(message)
+    this.messageKeys.add(message.key)
     this.elem.append(message.elem)
     this._refreshWaypoints()
     return message
@@ -60,6 +65,7 @@ class MessageList {
 
   _recycle(messages) {
     for (let message of messages) {
+      this.messageKeys.delete(message.key)
       message.elem.detach()
       message.unbind()
     }
@@ -158,6 +164,7 @@ class Message {
     this.identicon = newIdenticon
 
     this._userId = userId
+    this._key = key
     for (let waypoint of this.waypoints) {
       waypoint.enable()
     }
@@ -166,6 +173,7 @@ class Message {
   unbind() {
     this._throwIfDisposed()
     this._userId = null
+    this._key = null
 
     if(this.video.attr('src')) {
       let src = this.video.attr('src')
@@ -240,6 +248,10 @@ class Message {
 
   get userId() {
     return this._userId
+  }
+
+  get key() {
+    return this._key
   }
 
   _throwIfDisposed() {
