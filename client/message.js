@@ -86,7 +86,7 @@ class MessageList {
 var MESSAGE_HTML = [
   '<li class="shadow-1">',
     '<div class="video-container">',
-      '<video autoplay loop />',
+      '<video autoplay loop webkit-playsinline />',
       '<button class="save shadow-1" title="Save as GIF">',
         '<div class="icon icon-ic_save_white_24dp" />',
       '</button>',
