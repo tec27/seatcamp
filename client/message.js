@@ -86,7 +86,7 @@ class MessageList {
 var MESSAGE_HTML = [
   '<li class="shadow-1">',
     '<div class="video-container">',
-      '<video autoplay loop webkit-playsinline />',
+      '<video loop webkit-playsinline />',
       '<button class="save shadow-1" title="Save as GIF">',
         '<div class="icon icon-ic_save_white_24dp" />',
       '</button>',
@@ -226,7 +226,7 @@ class Message {
           Math.abs(this.video[0].currentTime - this.video[0].duration) < 0.2) {
         this.video[0].currentTime = 0
       }
-      this.video[0].play()
+      playVideo(this.video[0])
     } else {
       this.root.removeClass('displayed')
       this.video[0].pause()
@@ -244,5 +244,16 @@ class Message {
 
   _throwIfDisposed() {
     if (this._disposed) throw new Error('Message already disposed!')
+  }
+}
+
+// wish there was a better way to detect the "must watch videos in fullscreen only" restriction, but
+// as of yet this is all I know
+var isSmallIos = /iPhone|iPod/.test(navigator.userAgent)
+function playVideo(video) {
+  // don't actually call play on small iOS devices since this will cause an annoying video popup
+  // for them
+  if (!isSmallIos) {
+    setTimeout(() => video.play(), 0)
   }
 }
