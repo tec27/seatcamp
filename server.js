@@ -9,6 +9,7 @@ var express = require('express')
   , serveCss = require('./lib/serve-css')
   , canonicalHost = require('canonical-host')
   , userCounter = require('./lib/user-counter')
+  , createFfmpegRunner = require('./lib/ffmpeg-runner')
   , chatSockets = require('./lib/chat-sockets')
   , meatspaceProxy = require('./lib/meatspace-proxy')
   , config = require('./conf.json')
@@ -77,15 +78,25 @@ app
 app.use(serveStatic('public'))
 
 userCounter(io)
-chatSockets(
-    io,
-    userIdKey,
-    meatspaceProxy(config.meatspaceServer),
-    15 /* server backscroll limit */,
-    10 * 60 * 1000 /* expiry time */)
+createFfmpegRunner((err, runner) => {
+  if (err) {
+    throw err
+  }
 
-httpServer.listen(listenPort, function() {
-  var host = httpServer.address().address
-    , port = httpServer.address().port
-  console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
+  chatSockets(
+      io,
+      userIdKey,
+      meatspaceProxy(config.meatspaceServer),
+      runner,
+      15 /* server backscroll limit */,
+      10 * 60 * 1000 /* expiry time */)
+
+  httpServer.listen(listenPort, function() {
+    var host = httpServer.address().address
+      , port = httpServer.address().port
+    console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
+  })
 })
+
+
+
