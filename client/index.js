@@ -17,12 +17,20 @@ var $ = require('jquery')
 
 var supportedVideoTypes = detectVideoSupport()
 
+function selectVideoType() {
+  // TODO(tec27): detect cases where video isn't supported at all and pick based on performance?
+  if (location.search == '?x264' && supportedVideoTypes.x264) {
+    return 'x264'
+  }
+
+  return supportedVideoTypes.webm ? 'webm' : 'x264'
+}
+
 var active = 0
   , meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
-  // TODO(tec27): detect cases where video isn't supported at all and pick based on performance?
-  io.emit('join', supportedVideoTypes.webm ? 'webm' : 'x264')
+  io.emit('join', selectVideoType())
 }).on('disconnect', function() {
   active = 0
   meatspaceActive = 0
