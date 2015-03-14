@@ -130,7 +130,7 @@ header .actions {
 
 #message-list {
   list-style-type: none;
-  margin: 48px auto 116px;
+  margin: 56px auto 116px;
   padding: 0;
   min-width: 640px;
   width: 1400px;
@@ -147,6 +147,7 @@ header .actions {
 #message-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
+  padding-top: 2px;
 }
 
 #message-list li:last-child {
