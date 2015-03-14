@@ -38,9 +38,9 @@ periods of time.
 
 ## Running a server
 ### Required software
-seatcamp requires [node](http://nodejs.org) (0.10.x) and ffmpeg/libav in order to work. Node can be
-downloaded from the official site. ffmpeg or libav can generally be installed from your OS's
-package manager, or from source. Examples of installing it:
+seatcamp requires [io.js](http://iojs.org) or [node](http://nodejs.org) (0.12.x+) and ffmpeg/libav
+in order to work. io.js/Node can be downloaded from the official site. ffmpeg or libav can generally
+be installed from your OS's package manager, or from source. Examples of installing it:
 
 **OSX**
 ```bash
