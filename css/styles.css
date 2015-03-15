@@ -532,6 +532,10 @@ form {
     height: 32px;
     width: 32px;
   }
+
+  footer {
+    padding: 0 8px;
+  }
 }
 
 @keyframes filmstrip {
