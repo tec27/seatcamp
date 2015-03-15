@@ -510,6 +510,7 @@ form {
   }
 
   #message-list li {
+    font-size: 14px;
     padding: 0 8px;
   }
 
@@ -523,6 +524,7 @@ form {
   }
 
   .message-meta time {
+    font-size: 12px;
     margin-bottom: 4px;
   }
 
