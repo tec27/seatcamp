@@ -504,6 +504,34 @@ form {
   }
 }
 
+@media screen and (max-device-width: 500px) and (orientation: portrait) {
+  #message-list {
+    min-width: 0px;
+  }
+
+  #message-list li {
+    padding: 0 8px;
+  }
+
+  #message-list li .video-container {
+    height: 102px;
+    width: 136px;
+  }
+
+  #message-list li .message-meta {
+    padding: 4px 0;
+  }
+
+  .message-meta time {
+    margin-bottom: 4px;
+  }
+
+  .identicon {
+    height: 32px;
+    width: 32px;
+  }
+}
+
 @keyframes filmstrip {
   0% {
     background-position: 0 -0%;
