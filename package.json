@@ -34,6 +34,7 @@
     "data-uri-to-buffer": "0.0.3",
     "es6ify": "^1.5.1",
     "express": "^4.9.8",
+    "filmstrip2gif": "^1.0.1",
     "fingerprintjs": "^0.5.3",
     "jade": "^1.7.0",
     "jquery": "^2.1.1",

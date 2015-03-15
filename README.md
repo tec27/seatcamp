@@ -22,9 +22,9 @@ The offical server can be found at [https://seat.camp](https://seat.camp)
 
 ## Features
 - Send a message to anyone connected to the same seatcamp server
-- Provides both webm and h264 videos alongside chats, allowing clients to
-request whichever they wish to use (video transcoding is done using ffmpeg
-or avconv, whichever is available)
+- Provides jpeg (filmstrip-style), webm and h264 videos alongside chats,
+allowing clients to request whichever they wish to use (video transcoding is
+done using ffmpeg or avconv, whichever is available)
 - Proxies to a [meatspace](https://github.com/meatspaces/meatspace-chat-v2)
 server, sending any seatcamp user's messages to that server as well as
 displaying meatspace users' messages to seatcamp users
@@ -50,6 +50,12 @@ $ brew install ffmpeg --with-ffplay --with-freetype --with-frei0r --with-libass 
 **Ubuntu/Debian**
 ```bash
 $ sudo apt-get install libav-tools
+```
+
+ImageMagick (or GraphicsMagick with IM compatibility) is also required, and is also generally
+available from your OS's package manager, e.g.:
+```bash
+$ sudo apt-get install imagemagick
 ```
 
 ### Configuring your server

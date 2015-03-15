@@ -1,6 +1,7 @@
 var $ = require('jquery')
   , moment = require('moment')
   , Waypoint = require('jquery-waypoints')
+  , filmstrip2gif = require('filmstrip2gif')
   , vid2gif = require('vid2gif')
   , createIdenticon = require('./identicon')
 
@@ -11,6 +12,8 @@ module.exports = function(listElem, muteSet) {
 var MESSAGE_LIMIT = 30
   , MAX_RECYCLED = 6
   , NUM_VIDEO_FRAMES = 10
+  , FILMSTRIP_DURATION = 0.92
+  , FILMSTRIP_HORIZONTAL = false
 
 class MessageList {
   constructor(listElem, muteSet) {
@@ -93,6 +96,7 @@ var MESSAGE_HTML = [
   '<li>',
     '<div class="video-container">',
       '<video loop webkit-playsinline />',
+      '<div class="filmstrip" />',
       '<button class="save shadow-1" title="Save as GIF">',
         '<div class="icon icon-ic_save_white_24dp" />',
       '</button>',
@@ -115,10 +119,14 @@ class Message {
   constructor(owner) {
     this._disposed = false
     this._userId = null
+    this._isFilmstrip = false
+    this._srcUrl = null
     this.owner = owner
 
     this.root = $(MESSAGE_HTML)
+    this.videoContainer = this.root.find('.video-container')
     this.video = this.root.find('video')
+    this.filmstrip = this.root.find('.filmstrip')
     this.saveButton = this.root.find('.save')
     this.chatText = this.root.find('>p')
     this.timestamp = this.root.find('time')
@@ -151,8 +159,15 @@ class Message {
     this.unbind()
 
     var blob = new Blob([ video ], { type: videoMime })
-      , url = window.URL.createObjectURL(blob)
-    this.video.attr('src', url)
+    this._srcUrl = window.URL.createObjectURL(blob)
+    // TODO(tec27): make this hack more general/less of a hack?
+    this._isFilmstrip = videoMime == 'image/jpeg'
+    if (!this._isFilmstrip) {
+      this.video.attr('src', this._srcUrl)
+    } else {
+      this.videoContainer.addClass('use-filmstrip')
+      this.filmstrip.css('background-image', `url('${this._srcUrl}')`)
+    }
 
     this.chatText.html(text)
 
@@ -174,12 +189,17 @@ class Message {
     this._throwIfDisposed()
     this._userId = null
     this._key = null
+    this._isFilmstrip = false
 
-    if(this.video.attr('src')) {
-      let src = this.video.attr('src')
-      this.video.attr('src', '')
-      window.URL.revokeObjectURL(src)
+    this.video.attr('src', '')
+    this.videoContainer.removeClass('use-filmstrip')
+    this.filmstrip.css('background-image', '')
+
+    if(this._srcUrl) {
+      window.URL.revokeObjectURL(this._srcUrl)
+      this._srcUrl = null
     }
+
     for (let waypoint of this.waypoints) {
       waypoint.disable()
     }
@@ -198,7 +218,8 @@ class Message {
   saveGif() {
     this._throwIfDisposed()
     this.saveButton.prop('disabled', true)
-    vid2gif(this.video[0], NUM_VIDEO_FRAMES, (err, gifBlob) => {
+
+    let cb = (err, gifBlob) => {
       this.saveButton.prop('disabled', false)
       if (err) {
         // TODO(tec27): need a good way to display this error to users
@@ -217,7 +238,13 @@ class Message {
           false, false, false, false, 0, null)
       link[0].dispatchEvent(click)
       window.URL.revokeObjectURL(url)
-    })
+    }
+
+    if (this._isFilmstrip) {
+      filmstrip2gif(this._srcUrl, FILMSTRIP_DURATION, NUM_VIDEO_FRAMES, FILMSTRIP_HORIZONTAL, cb)
+    } else {
+      vid2gif(this.video[0], NUM_VIDEO_FRAMES, cb)
+    }
   }
 
   mute() {
@@ -228,6 +255,7 @@ class Message {
   handleWaypoint(side, direction) {
     if ((side == 'top' && direction == 'down') || (side == 'bottom' && direction == 'up')) {
       this.root.addClass('displayed')
+      if (this._isFilmstrip) return
       // Workaround for a bug in Chrome where calling play() on a looping video that is on or
       // around its last frame results in it thinking its playing, but actually being paused
       if (this.video[0].duration &&
@@ -237,7 +265,9 @@ class Message {
       playVideo(this.video[0])
     } else {
       this.root.removeClass('displayed')
-      this.video[0].pause()
+      if (!this.isFilmstrip) {
+        this.video[0].pause()
+      }
     }
     // TODO(tec27): tell owner about this so it can recycle on scrolling?
   }

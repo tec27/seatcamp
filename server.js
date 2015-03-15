@@ -86,7 +86,7 @@ createFfmpegRunner((err, runner) => {
   chatSockets(
       io,
       userIdKey,
-      meatspaceProxy(config.meatspaceServer),
+      meatspaceProxy(config.meatspaceServer, runner),
       runner,
       15 /* server backscroll limit */,
       10 * 60 * 1000 /* expiry time */)

@@ -21,9 +21,13 @@ function selectVideoType() {
   // TODO(tec27): detect cases where video isn't supported at all and pick based on performance?
   if (location.search == '?x264' && supportedVideoTypes.x264) {
     return 'x264'
+  } else if (location.search == '?webm' && supportedVideoTypes.webm) {
+    return 'webm'
+  } else if (location.search == '?jpg') {
+    return 'jpg'
   }
 
-  return supportedVideoTypes.webm ? 'webm' : 'x264'
+  return 'jpg'
 }
 
 var active = 0

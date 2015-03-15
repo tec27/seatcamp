@@ -23,6 +23,7 @@ module.exports = function(video, width, height, cb) {
 
   function success(stream) {
     var url
+    video.autoplay = true
     if (video.mozSrcObject) {
       video.mozSrcObject = stream
     } else {
@@ -31,7 +32,6 @@ module.exports = function(video, width, height, cb) {
     }
 
     video.addEventListener('loadeddata', dataLoaded)
-    video.play()
 
     function dataLoaded() {
       video.removeEventListener('loadeddata', dataLoaded)

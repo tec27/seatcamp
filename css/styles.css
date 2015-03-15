@@ -165,8 +165,29 @@ header .actions {
 }
 
 .video-container video {
+  display: block;
   width: 100%;
   height: 100%;
+}
+
+.video-container .filmstrip {
+  display: none;
+}
+
+.video-container.use-filmstrip video {
+  display: none;
+}
+
+.video-container.use-filmstrip .filmstrip {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 1000%;
+  backface-visibility: hidden;
+}
+
+.displayed .video-container.use-filmstrip .filmstrip {
+  animation: filmstrip 0.92s infinite;
 }
 
 .video-container .save, .video-container .save:focus {
@@ -480,5 +501,48 @@ form {
 
   footer {
     width: auto;
+  }
+}
+
+@keyframes filmstrip {
+  0% {
+    background-position: 0 -0%;
+    animation-timing-function: steps(1);
+  }
+  10% {
+    background-position: 0 -100%;
+    animation-timing-function: steps(1);
+  }
+  20% {
+    background-position: 0 -200%;
+    animation-timing-function: steps(1);
+  }
+  30% {
+    background-position: 0 -300%;
+    animation-timing-function: steps(1);
+  }
+  40% {
+    background-position: 0 -400%;
+    animation-timing-function: steps(1);
+  }
+  50% {
+    background-position: 0 -500%;
+    animation-timing-function: steps(1);
+  }
+  60% {
+    background-position: 0 -600%;
+    animation-timing-function: steps(1);
+  }
+  70% {
+    background-position: 0 -700%;
+    animation-timing-function: steps(1);
+  }
+  80% {
+    background-position: 0 -800%;
+    animation-timing-function: steps(1);
+  }
+  90% {
+    background-position: 0 -900%;
+    animation-timing-function: steps(1);
   }
 }
