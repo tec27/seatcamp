@@ -24,6 +24,9 @@
   "homepage": "https://github.com/tec27/seatcamp",
   "dependencies": {
     "autoprefixer-core": "^5.1.7",
+    "babel": "^4.7.12",
+    "babel-runtime": "^4.7.12",
+    "babelify": "^5.0.4",
     "browserify": "^9.0.3",
     "browserify-middleware": "^5.0.2",
     "browserify-shim": "^3.8.0",
@@ -32,7 +35,6 @@
     "cuid": "^1.2.4",
     "data-uri-to-blob": "0.0.4",
     "data-uri-to-buffer": "0.0.3",
-    "es6ify": "^1.5.1",
     "express": "^4.9.8",
     "filmstrip2gif": "^1.0.1",
     "fingerprintjs": "^0.5.3",
@@ -45,7 +47,6 @@
     "socket.io": "^1.1.0",
     "socket.io-client": "^1.1.0",
     "tokenthrottle": "^1.1.0",
-    "traceur": "0.0.87",
     "twitter-text": "^1.10.0",
     "vid2gif": "^1.0.1",
     "waypoints": "^3.1.1"
@@ -55,7 +56,13 @@
   },
   "browserify": {
     "transform": [
-      "es6ify",
+      [
+        "babelify",
+        {
+          "loose": "all",
+          "optional": [ "runtime" ]
+        }
+      ],
       "browserify-shim"
     ]
   },

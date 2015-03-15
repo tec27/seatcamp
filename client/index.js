@@ -1,5 +1,3 @@
-require('traceur/bin/traceur-runtime.js')
-
 var $ = require('jquery')
   , io = require('socket.io-client')()
   , initWebrtc = require('./init-webrtc')
