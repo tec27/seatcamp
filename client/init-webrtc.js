@@ -14,10 +14,11 @@ module.exports = function(video, width, height, cb) {
   getUserMedia({
     audio: false,
     video: {
-      mandatory: {
-        minWidth: width,
-        minHeight: height
-      }
+      optional: [
+        { minWidth: width },
+        { minHeight: height },
+        { minAspectRatio: width / height },
+      ]
     }
   }, success, failure)
 
