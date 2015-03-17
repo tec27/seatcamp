@@ -1,5 +1,3 @@
-
-
 class NotificationCounter {
   constructor() {
     var link = document.querySelector('link[rel=icon]')
@@ -58,12 +56,14 @@ class NotificationCounter {
   }
 
   _setIcon(iconHref) {
-    var link = document.querySelector('link[rel=icon]')
-    if (link && link.href == iconHref) {
-      return
-    }
-    if (link) {
-      link.parentNode.removeChild(link)
+    let link = document.querySelector('link[rel=icon]')
+    while (link) {
+      if (link.href == iconHref) {
+        return
+      } else {
+        link.parentNode.removeChild(link)
+      }
+      link = document.querySelector('link[rel=icon]')
     }
 
     link = document.createElement('link')
