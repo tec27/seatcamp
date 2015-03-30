@@ -1,8 +1,8 @@
 var $ = require('jquery')
-  , crypto = require('crypto')
+  , sha1 = require('sha1')
 
 module.exports = function createIdenticon(id, internal) {
-  var hash = crypto.createHash('md5').update(id).digest('hex')
+  var hash = sha1(id)
     , html = ['<div class="identicon">']
   // Last 16 characters are the foreground color
   var fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
