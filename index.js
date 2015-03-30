@@ -1,4 +1,3 @@
-// TODO(tec27): detect if in iojs and disable options that transpile things supported natively
 function isIojs() {
   try {
     eval("(function*(){})");

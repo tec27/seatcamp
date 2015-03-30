@@ -4,6 +4,8 @@ var $ = require('jquery')
   , filmstrip2gif = require('filmstrip2gif')
   , vid2gif = require('vid2gif')
   , createIdenticon = require('./identicon')
+  , svgIcons = require('./svg-icons')
+  , createDropdown = require('./dropdown')
 
 module.exports = function(listElem, muteSet) {
   return new MessageList(listElem, muteSet)
@@ -98,18 +100,18 @@ var MESSAGE_HTML = [
       '<video loop webkit-playsinline />',
       '<div class="filmstrip" />',
       '<button class="save shadow-1" title="Save as GIF">',
-        '<div class="icon icon-ic_save_white_24dp" />',
       '</button>',
     '</div>',
     '<p>',
     '<div class="message-meta">',
-      '<time/>',
-      '<div class="identicon"/>',
-      '<div class="flex-grow">',
-        '<button class="mute shadow-1" title="Mute user">',
-          '<div class="icon icon-ic_block_white_24dp" />',
-        '</button>',
+      '<div class="dropdown">',
+        '<button class="toggle message-overflow" title="Message options"></button>',
+        '<div class="menu shadow-2">',
+          '<button data-action="mute">Mute user</button>',
+        '</div>',
       '</div>',
+      '<div class="identicon"/>',
+      '<time/>',
     '</div>',
   '</li>',
 ].join('')
@@ -132,7 +134,11 @@ class Message {
     this.timestamp = this.root.find('time')
     // placeholder div so it can be replaced with the real thing when bound
     this.identicon = this.root.find('.identicon')
-    this.muteButton = this.root.find('.mute')
+    this.messageOverflow = this.root.find('.message-overflow')
+
+    // generate icons where needed
+    this.saveButton.append(svgIcons.save('white'))
+    this.messageOverflow.append(svgIcons.moreVert('grey600'))
 
     this.waypoints = [
       new Waypoint({
@@ -151,7 +157,9 @@ class Message {
     }
 
     this.saveButton.on('click', () => this.saveGif())
-    this.muteButton.on('click', () => this.mute())
+    this.dropdown = createDropdown(this.messageOverflow.parent(), {
+      mute: () => this.mute()
+    })
   }
 
   bind({ key, text, sent, userId, from, video, videoMime, videoType }) {
@@ -190,6 +198,7 @@ class Message {
     this._userId = null
     this._key = null
     this._isFilmstrip = false
+    this.dropdown.close()
 
     this.video.attr('src', '')
     this.videoContainer.removeClass('use-filmstrip')

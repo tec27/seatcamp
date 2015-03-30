@@ -4,8 +4,6 @@ html
     title seat.camp
     link(type='text/css', rel='stylesheet',
       href='//fonts.googleapis.com/css?family=Roboto:300,700,400')
-    link(type='text/css', rel='stylesheet', href='sprite-content-white.css')
-    link(type='text/css', rel='stylesheet', href='sprite-navigation-white.css')
     link(type='text/css', rel='stylesheet', href='styles.css')
     link(type='image/x-icon', rel='icon', href='favicon.ico')
     meta(name='theme-color', content='#212121')
@@ -20,8 +18,8 @@ html
       .actions
         p#active-users ?
         div.dropdown
-          button.toggle(title="Options")
-            div.nav-icon.icon-ic_more_vert_white_24dp
+          button.toggle.icon-white(title="Options")
+            include ../svg/ic_more_vert_24px.svg
           div.menu.shadow-2
             button(data-action='unmute') Unmute all
     ul#message-list.shadow-1
@@ -40,6 +38,6 @@ html
       form.shadow-1
         input#message(type='text', maxlength='250', autofocus='true')
         p#char-counter 0 / 250
-        button#send(type='submit', title="Send")
-          div.icon.icon-ic_send_white_24dp
+        button#send.icon-white(type='submit', title="Send")
+          include ../svg/ic_send_24px.svg
     script(type='text/javascript', src='client.js')

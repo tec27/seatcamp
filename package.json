@@ -27,7 +27,7 @@
     "babel": "^4.7.12",
     "babel-runtime": "^4.7.12",
     "babelify": "^5.0.4",
-    "browserify": "^9.0.3",
+    "brfs": "^1.4.0",
     "browserify-middleware": "^5.0.2",
     "browserify-shim": "^3.8.0",
     "canonical-host": "0.0.4",
@@ -61,9 +61,12 @@
         "babelify",
         {
           "loose": "all",
-          "optional": [ "runtime" ]
+          "optional": [
+            "runtime"
+          ]
         }
       ],
+      "brfs",
       "browserify-shim"
     ]
   },

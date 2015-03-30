@@ -45,6 +45,14 @@ header .actions {
   display: flex;
 }
 
+.icon-white {
+  fill: #ffffff;
+}
+
+.icon-grey600 {
+  fill: rgba(0, 0, 0, 0.54);
+}
+
 #active-users {
   font-size: 16px;
   margin: auto;
@@ -102,7 +110,7 @@ header .actions {
   height: 48px;
   outline: none;
   border: none;
-  background-color: #fafafa;
+  background-color: #ffffff;
   color: rgba(0, 0, 0, 0.87);
   font-size: 16px;
   padding-left: 16px;
@@ -138,25 +146,34 @@ header .actions {
 }
 
 #message-list li {
-  background-color: #ffffff;
+  background-color: #fafafa;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   font-size: 20px;
-  padding: 0px 16px;
+  padding: 0px;
 }
 
 #message-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  padding-top: 2px;
+}
+
+#message-list li:first-child .video-container {
+  border-top-left-radius: 2px;
+  overflow: hidden;
 }
 
 #message-list li:last-child {
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   border-bottom: none;
-  padding-bottom: 2px;
 }
+
+#message-list li:last-child .video-container {
+  border-bottom-left-radius: 2px;
+  overflow: hidden;
+}
+
 
 #message-list li .video-container {
   width: 200px;
@@ -237,14 +254,42 @@ header .actions {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 8px 0;
+  justify-content: space-between;
+  padding: 0 0 4px;
 }
 
-.message-meta time {
-  color: #B8B8B8;
-  font-size: 16px;
-  margin-bottom: 8px;
+.message-overflow {
+  display: inline-block;
+}
+
+.message-meta .dropdown {
+  /* compensate for the icon being higher and not looking like it occupies the lower space */
+  margin-bottom: -24px;
+}
+
+.dropdown .toggle.message-overflow {
   padding: 0;
+}
+
+.dropdown .toggle.message-overflow:hover {
+  background-color: transparent;
+}
+
+.dropdown .toggle.message-overflow:active {
+  background-color: transparent;
+}
+
+.message-overflow > .icon {
+  margin-left: 24px;
+  margin-bottom: 8px;
+}
+
+.message-overflow:hover {
+  cursor: pointer;
+}
+
+.message-overflow:hover .icon, .message-overflow:active .icon {
+  fill: rgba(0, 0, 0, 0.87);
 }
 
 .identicon {
@@ -252,7 +297,7 @@ header .actions {
   height: 38px;
   border: 1px solid rgba(0, 0, 0, 0.26);
   border-radius: 2px;
-  margin: 1px 0px 1px 2px;
+  margin: 1px 8px 1px 2px;
   padding: 3px;
 }
 
@@ -263,22 +308,11 @@ header .actions {
   height: 20%;
 }
 
-.mute {
-  background-color: #e0e0e0;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 2px;
-  outline: none;
-  padding: 2px 4px;
-}
-
-.mute:hover {
-  background-color: #EF9A9A;
-  border: 1px solid rgba(0, 0, 0, 0.54);
-  cursor: pointer;
-}
-
-.mute:active {
-  background-color: #E57373;
+.message-meta time {
+  color: #B8B8B8;
+  font-size: 16px;
+  padding: 0;
+  margin-right: 8px;
 }
 
 footer {
@@ -290,7 +324,7 @@ footer {
   right: 0px;
 
   margin: auto;
-  padding: 0 16px;
+  padding: 0;
   width: 1400px;
 }
 
@@ -312,15 +346,15 @@ footer .progress {
 
 form {
   align-self: flex-end;
-  background-color: #ffffff;
+  background-color: #fafafa;
   border-radius: 2px;
   display: flex;
   flex: 1;
-  margin-left: 8px;
+  margin: 0 8px;
 }
 
 #message {
-  background: #ffffff;
+  background: #fafafa;
   border: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.26);
   color: #212121;
@@ -391,6 +425,10 @@ form {
   background-color: #0394d6;
 }
 
+#send > svg {
+  vertical-align: middle;
+}
+
 .progress {
   display: block;
   width: 48px;
@@ -437,7 +475,7 @@ form {
   margin-left: 6px; /* (circle size - inset size) / 2 */
   margin-top: 6px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: #fafafa;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -505,14 +543,14 @@ form {
   }
 }
 
-@media screen and (max-device-width: 500px) and (orientation: portrait) {
+@media screen and (max-device-width: 500px) and (orientation: portrait),
+    screen and (max-device-height: 500px) and (orientation: landscape) {
   #message-list {
     min-width: 0px;
   }
 
   #message-list li {
     font-size: 14px;
-    padding: 0 8px;
   }
 
   #message-list li .video-container {
@@ -520,22 +558,13 @@ form {
     width: 136px;
   }
 
-  #message-list li .message-meta {
-    padding: 4px 0;
-  }
-
   .message-meta time {
     font-size: 12px;
-    margin-bottom: 4px;
   }
 
   .identicon {
-    height: 32px;
-    width: 32px;
-  }
-
-  footer {
-    padding: 0 8px;
+    height: 28px;
+    width: 28px;
   }
 }
 
