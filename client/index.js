@@ -1,5 +1,4 @@
-var $ = require('jquery')
-  , io = require('socket.io-client')()
+let io = require('socket.io-client')()
   , initWebrtc = require('./init-webrtc')
   , captureFrames = require('./capture-frames')
   , cuid = require('cuid')
@@ -8,31 +7,15 @@ var $ = require('jquery')
   , StoredSet = require('./stored-set')
   , createCharCounter = require('./char-counter')
   , createDropdown = require('./dropdown')
-  , progressSpinner = require('./progress')($('.progress'))
+  , progressSpinner = require('./progress')(document.querySelector('.progress'))
   , muteSet = new StoredSet('mutes')
-  , messageList = require('./message')($('#message-list'), muteSet)
-  , detectVideoSupport = require('./detect-video-support')
-
-var supportedVideoTypes = detectVideoSupport()
-
-function selectVideoType() {
-  // TODO(tec27): detect cases where video isn't supported at all and pick based on performance?
-  if (location.search == '?x264' && supportedVideoTypes.x264) {
-    return 'x264'
-  } else if (location.search == '?webm' && supportedVideoTypes.webm) {
-    return 'webm'
-  } else if (location.search == '?jpg') {
-    return 'jpg'
-  }
-
-  return 'jpg'
-}
+  , messageList = require('./message')(document.querySelector('#message-list'), muteSet)
 
 var active = 0
   , meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
-  io.emit('join', selectVideoType())
+  io.emit('join', 'jpg')
 }).on('disconnect', function() {
   active = 0
   meatspaceActive = 0
@@ -41,7 +24,7 @@ io.on('connect', function() {
 
 var unreadMessages = 0
 io.on('chat', function(chat) {
-  var autoScroll = $(window).scrollTop() + $(window).height() + 32 > $(document).height()
+  var autoScroll = window.pageYOffset + window.innerHeight + 32 > document.height
   var message = messageList.addMessage(chat, autoScroll)
   if (message && autoScroll) {
     message.elem[0].scrollIntoView()
@@ -65,36 +48,35 @@ io.on('chat', function(chat) {
 })
 
 function updateActiveUsers() {
+  let elem = document.querySelector('#active-users')
   if (active + meatspaceActive > 0) {
-    $('#active-users')
-      .text(active + meatspaceActive)
-      .attr('title', `${active} active seat.camp users, ${meatspaceActive} meatspace`)
+    elem.innerHTML = '' + (active + meatspaceActive)
+    elem.title = `${active} active seat.camp users, ${meatspaceActive} meatspace`
   } else {
-    $('#active-users')
-      .text('?')
-      .attr('title', 'not connected')
+    elem.innerHTML = '?'
+    elem.title = 'not connected'
   }
 }
 
-createDropdown($('header .dropdown'), {
+createDropdown(document.querySelector('header .dropdown'), {
   unmute: () => muteSet.clear()
 })
 
-var messageInput = $('#message')
+var messageInput = document.querySelector('#message')
   , awaitingAck = null
 
-createCharCounter(messageInput, $('#char-counter'), 250)
+createCharCounter(messageInput, document.querySelector('#char-counter'), 250)
 
-$('form').on('submit', function(event) {
+document.querySelector('form').addEventListener('submit', function(event) {
   event.preventDefault()
 
   if (awaitingAck) return
 
-  messageInput.prop('readonly', true)
+  messageInput.readonly = true
   awaitingAck = cuid()
   progressSpinner.setValue(0).show()
 
-  captureFrames($('#preview')[0], {
+  captureFrames(document.querySelector('#preview'), {
     format: 'image/jpeg',
     width: 200,
     height: 150
@@ -104,25 +86,29 @@ $('form').on('submit', function(event) {
       setTimeout(() => progressSpinner.setValue(0), 400)
     }, 400)
     if (err) {
-      messageInput.prop('readonly', false)
+      messageInput.readonly = false
       awaitingAck = null
       // TODO(tec27): show to user
       return console.error(err)
     }
 
     var message = {
-      text: messageInput.val(),
+      text: messageInput.value,
       format: 'image/jpeg',
       ack: awaitingAck
     }
     io.emit('chat', message, frames)
-    messageInput.val('').change()
+    messageInput.value = ''
+    // fire 'change'
+    let event = document.createEvent('HTMLEvents')
+    event.initEvent('change', false, true)
+    messageInput.dispatchEvent(event)
   }).on('progress', percentDone => progressSpinner.setValue(percentDone))
 })
 
 io.on('ack', function(ack) {
   if (awaitingAck && awaitingAck == ack.key) {
-    messageInput.prop('readonly', false)
+    messageInput.readonly = false
     awaitingAck = null
     if (ack.err) {
       // TODO(tec27): display to user
@@ -131,7 +117,7 @@ io.on('ack', function(ack) {
   }
 })
 
-initWebrtc($('#preview')[0], 200, 150, function(err, stream) {
+initWebrtc(document.querySelector('#preview'), 200, 150, function(err, stream) {
   if (err) {
     // TODO(tec27): display something to user depending on error type
     console.dir(err)
@@ -141,7 +127,7 @@ initWebrtc($('#preview')[0], 200, 150, function(err, stream) {
   // TODO(tec27): save stream so it can be stopped later to allow for camera switches
 })
 
-$(document).on('visibilitychange', () => {
+document.addEventListener('visibilitychange', () => {
   if (!document.hidden) {
     unreadMessages = 0
     updateNotificationCount()

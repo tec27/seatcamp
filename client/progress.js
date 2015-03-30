@@ -1,34 +1,32 @@
-var $ = require('jquery')
-
 module.exports = function(elem) {
-  if (!$(elem).hasClass('progress')) {
+  if (!elem.classList.contains('progress')) {
     throw new Error('Must be used on a progress element')
   }
-  return new ProgressSpinner($(elem))
+  return new ProgressSpinner(elem)
 }
 
 class ProgressSpinner {
   constructor(elem) {
     this.elem = elem
-    this.fill = elem.find('.fill, .mask.full')
-    this.fix = elem.find('.fill.fix')
-    this.textElem = elem.find('.text')
+    this.fill = Array.from(elem.querySelectorAll('.fill, .mask.full'))
+    this.fix = elem.querySelector('.fill.fix')
+    this.textElem = elem.querySelector('.text')
     this._value = 0
   }
 
   show() {
-    this.elem.addClass('visible')
+    this.elem.classList.add('visible')
     return this
   }
 
   hide() {
-    this.elem.removeClass('visible')
+    this.elem.classList.remove('visible')
     return this
   }
 
   setValue(value) {
     this._value = value
-    this.textElem.text((value * 100 | 0) + '%')
+    this.textElem.innerHTML = ((value * 100 | 0) + '%')
     this._updateRotation()
     return this
   }
@@ -38,13 +36,12 @@ class ProgressSpinner {
       , fixRotation = fillRotation * 2
       , fillCss = `rotate(${fillRotation}deg)`
       , fixCss = `rotate(${fixRotation}deg)`
-    this.fill.css({
-      '-webkit-transform': fillCss,
-      transform: fillCss,
-    })
-    this.fix.css({
-      '-webkit-transform': fixCss,
-      transform: fixCss,
-    })
+    for (let f of this.fill) {
+      f.style['-webkit-transform'] = fillCss
+      f.style.transform = fillCss
+    }
+
+    this.fix.style['-webkit-transform'] = fixCss
+    this.fix.style.transform = fixCss
   }
 }

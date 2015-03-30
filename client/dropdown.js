@@ -1,19 +1,37 @@
-var $ = require('jquery')
-
 class Dropdown {
   constructor(elem, actions) {
     this.elem = elem
     this.actions = actions
-    if (Object.keys(actions).length != elem.find('.menu button').length) {
+    if (Object.keys(actions).length != elem.querySelectorAll('.menu button').length) {
       throw new Error('provided actions don\'t match the number of buttons in the dropdown');
     }
 
-    elem.on('click', '.toggle', evt => {
+    this.closeListener = () => this.close()
+    elem.addEventListener('click', evt => {
+      // Handle clicks for the toggle
+      let t = evt.target
+      while (true) {
+        if (t.classList.contains('toggle')) break
+        if (t == evt.currentTarget) return
+        t = t.parentElement
+      }
+
       if (this.open()) {
         evt.stopPropagation()
       }
     })
-    elem.on('click', '.menu button', evt => this.onAction($(evt.target).data('action')))
+    elem.addEventListener('click', evt => {
+      // Handle clicks for all `.menu button` elements
+      if (evt.target.tagName != 'BUTTON') return
+      let p = evt.target.parentElement
+      while (true) {
+        if (p.classList.contains('menu')) break
+        if (p == evt.currentTarget) return
+        p = p.parentElement
+      }
+
+      this.onAction(evt.target.dataset.action)
+    })
   }
 
   onAction(action) {
@@ -29,18 +47,19 @@ class Dropdown {
       Dropdown._opened.close()
     }
 
-    if (this.elem.hasClass('active')) {
+    if (this.elem.classList.contains('active')) {
       return false
     }
 
-    this.elem.addClass('active')
-    $('html').one('click', () => this.close())
+    this.elem.classList.add('active')
+    document.addEventListener('click', this.closeListener)
     Dropdown._opened = this
     return true
   }
 
   close() {
-    this.elem.removeClass('active')
+    document.removeEventListener('click', this.closeListener)
+    this.elem.classList.remove('active')
     if (Dropdown._opened == this) {
       Dropdown._opened = null
     }

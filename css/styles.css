@@ -182,21 +182,11 @@ header .actions {
   position: relative;
 }
 
-.video-container video {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
 .video-container .filmstrip {
   display: none;
 }
 
-.video-container.use-filmstrip video {
-  display: none;
-}
-
-.video-container.use-filmstrip .filmstrip {
+.video-container .filmstrip {
   display: block;
   width: 100%;
   height: 100%;
@@ -204,7 +194,7 @@ header .actions {
   backface-visibility: hidden;
 }
 
-.displayed .video-container.use-filmstrip .filmstrip {
+.displayed .video-container .filmstrip {
   animation: filmstrip 0.92s infinite;
 }
 

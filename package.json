@@ -39,8 +39,6 @@
     "filmstrip2gif": "^1.0.1",
     "fingerprintjs": "^0.5.3",
     "jade": "^1.7.0",
-    "jquery": "^2.1.1",
-    "moment": "^2.8.3",
     "prepare-response": "^1.1.2",
     "rimraf": "^2.2.8",
     "serve-static": "^1.7.0",
@@ -49,11 +47,10 @@
     "socket.io-client": "^1.1.0",
     "tokenthrottle": "^1.1.0",
     "twitter-text": "^1.10.0",
-    "vid2gif": "^1.0.1",
     "waypoints": "^3.1.1"
   },
   "browser": {
-    "jquery-waypoints": "./node_modules/waypoints/lib/noframework.waypoints.js"
+    "waypoints": "./node_modules/waypoints/lib/noframework.waypoints.js"
   },
   "browserify": {
     "transform": [
@@ -71,6 +68,6 @@
     ]
   },
   "browserify-shim": {
-    "jquery-waypoints": "Waypoint"
+    "waypoints": "Waypoint"
   }
 }

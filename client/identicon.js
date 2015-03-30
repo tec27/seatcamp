@@ -1,24 +1,25 @@
-var $ = require('jquery')
-  , sha1 = require('sha1')
+let sha1 = require('sha1')
 
 module.exports = function createIdenticon(id, internal) {
-  var hash = sha1(id)
-    , html = ['<div class="identicon">']
+  let hash = sha1(id)
+    , container = document.createElement('div')
+    , html = []
+  container.className = 'identicon'
   // Last 16 characters are the foreground color
-  var fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
-  var fg = objToHslStr({
+  let fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
+  let fg = objToHslStr({
     hue: fgHue,
     saturation: inRange(parseInt(hash.substr(-13, 3), 16) / 0xfff, 50, 90),
     lightness: inRange(parseInt(hash.substr(-16, 3), 16) / 0xfff, 30, 60),
   })
   // background is a light gray, opposite of the hue we're using for the foreground
-  var bg = objToHslStr({
+  let bg = objToHslStr({
     hue: (180 + fgHue) % 360,
     saturation: 20,
     lightness: 96,
   })
 
-  var blocks = []
+  let blocks = []
   // we only construct 3 columns (not 5) because we mirror the last two columns from the first
   for (let i = 0; i < 3; i++) {
     blocks.push([ false, false, false, false, false ])
@@ -45,8 +46,8 @@ module.exports = function createIdenticon(id, internal) {
     }
   }
 
-  var container = $(html.join('') + '</div>')
-  container.css('background-color', bg)
+  container.innerHTML = html.join('')
+  container.style['background-color'] = bg
   return container
 }
 

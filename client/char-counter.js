@@ -6,13 +6,17 @@ class CharCounter {
 
     this.updateCounter()
 
-    input.on('keyup change input paste', () => this.updateCounter())
+    ;['keyup', 'change', 'input', 'paste'].forEach(event => {
+        input.addEventListener(event, () => this.updateCounter)
+    })
   }
 
   updateCounter() {
-    var len = this.input.val().length
-    this.counter.text(`${len} / ${this.limit}`)
-    this.counter.add(this.input).toggleClass('full', len >= this.limit)
+    let len = this.input.value.length
+    this.counter.innerHTML = `${len} / ${this.limit}`
+    let isFull = len >= this.limit
+    this.counter.classList.toggle('full', isFull)
+    this.input.classList.toggle('full', isFull)
   }
 }
 
