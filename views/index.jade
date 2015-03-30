@@ -2,6 +2,7 @@ doctype html
 html
   head
     title seat.camp
+    script(type='text/javascript', src='client.js', async, defer)
     link(type='text/css', rel='stylesheet',
       href='//fonts.googleapis.com/css?family=Roboto:300,700,400')
     link(type='text/css', rel='stylesheet', href='styles.css')
@@ -40,4 +41,3 @@ html
         p#char-counter 0 / 250
         button#send.icon-white(type='submit', title="Send")
           include ../svg/ic_send_24px.svg
-    script(type='text/javascript', src='client.js')

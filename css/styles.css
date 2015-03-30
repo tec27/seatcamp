@@ -143,6 +143,7 @@ header .actions {
   padding: 0;
   min-width: 640px;
   width: 1400px;
+  border-radius: 2px;
 }
 
 #message-list li {
@@ -156,6 +157,7 @@ header .actions {
 #message-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
+  overflow: hidden;
 }
 
 #message-list li:first-child .video-container {
@@ -166,12 +168,14 @@ header .actions {
 #message-list li:last-child {
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+  overflow: hidden;
   border-bottom: none;
 }
 
 #message-list li:last-child .video-container {
   border-bottom-left-radius: 2px;
   overflow: hidden;
+  margin-bottom: 0;
 }
 
 
