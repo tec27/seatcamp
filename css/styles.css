@@ -198,6 +198,10 @@ header .actions {
   animation: filmstrip 0.92s infinite;
 }
 
+.backgrounded .displayed .video-container .filmstrip {
+  animation: none;
+}
+
 .video-container .save, .video-container .save:focus {
   position: absolute;
   display: block;

@@ -24,10 +24,10 @@ io.on('connect', function() {
 
 var unreadMessages = 0
 io.on('chat', function(chat) {
-  var autoScroll = window.pageYOffset + window.innerHeight + 32 > document.height
+  var autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
   var message = messageList.addMessage(chat, autoScroll)
   if (message && autoScroll) {
-    message.elem[0].scrollIntoView()
+    message.elem.scrollIntoView()
   }
 
   if (message && document.hidden) {
@@ -128,6 +128,7 @@ initWebrtc(document.querySelector('#preview'), 200, 150, function(err, stream) {
 })
 
 document.addEventListener('visibilitychange', () => {
+  document.body.classList.toggle('backgrounded', document.hidden)
   if (!document.hidden) {
     unreadMessages = 0
     updateNotificationCount()
