@@ -157,7 +157,6 @@ header .actions {
 #message-list li:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
-  overflow: hidden;
 }
 
 #message-list li:first-child .video-container {
