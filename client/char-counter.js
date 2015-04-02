@@ -7,7 +7,7 @@ class CharCounter {
     this.updateCounter()
 
     ;['keyup', 'change', 'input', 'paste'].forEach(event => {
-        input.addEventListener(event, () => this.updateCounter)
+        input.addEventListener(event, () => this.updateCounter())
     })
   }
 
