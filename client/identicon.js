@@ -1,4 +1,5 @@
 let sha1 = require('sha1')
+  , theme = require('./theme')
 
 module.exports = function createIdenticon(id, internal) {
   let hash = sha1(id)
@@ -12,11 +13,12 @@ module.exports = function createIdenticon(id, internal) {
     saturation: inRange(parseInt(hash.substr(-13, 3), 16) / 0xfff, 50, 90),
     lightness: inRange(parseInt(hash.substr(-16, 3), 16) / 0xfff, 30, 60),
   })
-  // background is a light gray, opposite of the hue we're using for the foreground
+  // background is a light (or dark if dark theme) grey, opposite of the hue we're using for the
+  // foreground color
   let bg = objToHslStr({
     hue: (180 + fgHue) % 360,
-    saturation: 20,
-    lightness: 96,
+    saturation: theme.isDark() ? 8 : 20,
+    lightness: theme.isDark() ? 28 : 96,
   })
 
   let blocks = []

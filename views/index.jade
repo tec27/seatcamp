@@ -13,16 +13,17 @@ html
         'maximum-scale=1.0, minimum-scale=1.0', name='viewport')
     meta(content='yes', name='mobile-web-app-capable')
     meta(content='yes', name='apple-mobile-web-app-capable')
-  body
+  body(class=theme == 'dark' ? 'dark' : '')
     header.shadow-1
       p seat.camp
       .actions
         p#active-users ?
         div.dropdown
-          button.toggle.icon-white(title="Options")
+          button.toggle.icon-invert(title="Options")
             include ../svg/ic_more_vert_24px.svg
           div.menu.shadow-2
             button(data-action='unmute') Unmute all
+            button#change-theme(data-action='changeTheme') Use dark theme
     ul#message-list.shadow-1
     footer
       div.preview-container.shadow-1
@@ -39,5 +40,5 @@ html
       form.shadow-1
         input#message(type='text', maxlength='250', autofocus='true')
         p#char-counter 0 / 250
-        button#send.icon-white(type='submit', title="Send")
+        button#send.icon-invert(type='submit', title="Send")
           include ../svg/ic_send_24px.svg

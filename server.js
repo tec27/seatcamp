@@ -70,8 +70,10 @@ if (config.sslCert) {
 
 var io = socketIo(httpServer)
 
+app.use(require('cookie-parser')())
+
 app
-  .get('/', (req, res) => res.render('index'))
+  .get('/', (req, res) => res.render('index', { theme: req.cookies.theme }))
   .get('/client.js', browserify('./client/index.js'))
   .get('/styles.css', serveCss('./css/styles.css'))
 

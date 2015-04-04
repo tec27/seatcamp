@@ -4,6 +4,7 @@ let Waypoint = require('waypoints')
   , svgIcons = require('./svg-icons')
   , createDropdown = require('./dropdown')
   , localeTime = require('./locale-time')
+  , theme = require('./theme')
 
 module.exports = function(listElem, muteSet) {
   return new MessageList(listElem, muteSet)
@@ -23,6 +24,8 @@ class MessageList {
     this._recycled = []
 
     this._mutes = muteSet
+
+    theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
   }
 
   addMessage(chat, removeOverLimit = true) {
@@ -90,6 +93,13 @@ class MessageList {
       }, 0)
     }
   }
+
+  _onThemeChange(newTheme) {
+    // Re-render identicons based on the new theme to update any inline styles
+    for (let message of this.messages) {
+      message.refreshIdenticon()
+    }
+  }
 }
 
 var MESSAGE_HTML = [
@@ -130,8 +140,8 @@ class Message {
     this.messageOverflow = this.root.querySelector('.message-overflow')
 
     // generate icons where needed
-    this.saveButton.appendChild(svgIcons.save('white'))
-    this.messageOverflow.appendChild(svgIcons.moreVert('grey600'))
+    this.saveButton.appendChild(svgIcons.save('invert'))
+    this.messageOverflow.appendChild(svgIcons.moreVert('normal'))
 
     this.waypoints = [
       new Waypoint({
@@ -169,15 +179,19 @@ class Message {
     this.timestamp.datetime = sentDate.toISOString()
     this.timestamp.innerHTML = localeTime(sentDate)
 
-    var newIdenticon = createIdenticon(userId)
-    this.identicon.parentElement.replaceChild(newIdenticon, this.identicon)
-    this.identicon = newIdenticon
-
     this._userId = userId
+    this.refreshIdenticon()
+
     this._key = key
     for (let waypoint of this.waypoints) {
       waypoint.enable()
     }
+  }
+
+  refreshIdenticon() {
+    var newIdenticon = createIdenticon(this._userId)
+    this.identicon.parentElement.replaceChild(newIdenticon, this.identicon)
+    this.identicon = newIdenticon
   }
 
   unbind() {

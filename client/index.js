@@ -10,6 +10,7 @@ let io = require('socket.io-client')()
   , progressSpinner = require('./progress')(document.querySelector('.progress'))
   , muteSet = new StoredSet('mutes')
   , messageList = require('./message')(document.querySelector('#message-list'), muteSet)
+  , theme = require('./theme')
 
 var active = 0
   , meatspaceActive = 0
@@ -59,8 +60,18 @@ function updateActiveUsers() {
 }
 
 createDropdown(document.querySelector('header .dropdown'), {
-  unmute: () => muteSet.clear()
+  unmute: () => muteSet.clear(),
+  changeTheme: () => theme.setTheme(theme.isDark() ? 'light' : 'dark')
 })
+
+let updateTheme = newTheme => {
+  document.body.classList.toggle('dark', newTheme == 'dark')
+  let otherTheme = newTheme == 'light' ? 'dark' : 'light'
+  document.querySelector('#change-theme').textContent = `Use ${otherTheme} theme`
+}
+
+theme.on('themeChange', updateTheme)
+updateTheme(theme.getTheme())
 
 var messageInput = document.querySelector('#message')
   , awaitingAck = null

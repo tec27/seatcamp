@@ -13,8 +13,17 @@ body {
   height: 100%;
 }
 
+body.dark {
+  background-color: #212121;
+  color: #ffffff;
+}
+
 a, a:visited, a:hover, a:focus, a:active {
   color: #03A9F4;
+}
+
+.dark a, .dark a:visited, .dark a:hover, .dark a:focus,  .dark a:active {
+  color: #0277BD;
 }
 
 button {
@@ -35,6 +44,10 @@ header {
   top: 0;
 }
 
+.dark header {
+  background-color: #0277BD;
+}
+
 header > p {
   flex: 1;
   font-size: 20px;
@@ -45,12 +58,16 @@ header .actions {
   display: flex;
 }
 
-.icon-white {
+.icon-invert {
   fill: #ffffff;
 }
 
-.icon-grey600 {
+.icon-normal {
   fill: rgba(0, 0, 0, 0.54);
+}
+
+.dark .icon-normal {
+  fill: #ffffff;
 }
 
 #active-users {
@@ -75,9 +92,18 @@ header .actions {
   outline: none;
 }
 
+.dark .dropdown .toggle {
+  /* necessary to be "more specific" than the dark dropdown button styles */
+  background-color: rgba(0, 0, 0, 0);
+}
+
 .dropdown .toggle:hover {
   background-color: rgba(0, 0, 0, 0.12);
   cursor: pointer;
+}
+
+.dark .dropdown .toggle:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .dropdown .menu {
@@ -118,6 +144,11 @@ header .actions {
   text-align: left;
 }
 
+.dark .dropdown button {
+  background-color: #424242;
+  color: #ffffff;
+}
+
 .dropdown button:first-child {
   border-top-left-radius: 2px;
   border-top-right-radius: 2px;
@@ -133,8 +164,16 @@ header .actions {
   cursor: pointer;
 }
 
+.dark .dropdown button:hover {
+  background-color: #525252;
+}
+
 .dropdown button:active {
   background-color: #dddddd;
+}
+
+.dark .dropdown button:active {
+  background-color: #616161;
 }
 
 #message-list {
@@ -152,6 +191,11 @@ header .actions {
   display: flex;
   font-size: 20px;
   padding: 0px;
+}
+
+.dark #message-list li {
+  background-color: #303030;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 #message-list li:first-child {
@@ -221,6 +265,10 @@ header .actions {
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
 }
 
+.dark .video-container .save, .dark .video-container .save:focus {
+  background-color: #0277BD;
+}
+
 .video-container:hover .save {
   visibility: visible;
   opacity: 0.95;
@@ -231,8 +279,16 @@ header .actions {
   cursor: pointer;
 }
 
+.dark .save:hover {
+  background-color: #0288D1;
+}
+
 .save:active {
   background-color: #0394d6;
+}
+
+.dark .save:active {
+  background-color: #039BE5;
 }
 
 .save[disabled] {
@@ -289,6 +345,10 @@ header .actions {
   fill: rgba(0, 0, 0, 0.87);
 }
 
+.dark .message-overflow:hover .icon, .dark .message-overflow:active .icon {
+  fill: rgba(255, 255, 255, 0.7);
+}
+
 .identicon {
   width: 38px;
   height: 38px;
@@ -296,6 +356,10 @@ header .actions {
   border-radius: 2px;
   margin: 1px 8px 1px 2px;
   padding: 3px;
+}
+
+.dark .identicon {
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .identicon .block {
@@ -306,10 +370,14 @@ header .actions {
 }
 
 .message-meta time {
-  color: #B8B8B8;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 16px;
   padding: 0;
   margin-right: 8px;
+}
+
+.dark .message-meta time {
+  color: rgba(255, 255, 255, 0.7)
 }
 
 footer {
@@ -350,6 +418,10 @@ form {
   margin: 0 8px;
 }
 
+.dark form {
+  background-color: #303030;
+}
+
 #message {
   background: #fafafa;
   border: none;
@@ -367,8 +439,18 @@ form {
   transition: border-color .3s;
 }
 
+.dark #message {
+  background: #303030;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
 #message:hover {
   border-color: rgba(0, 0, 0, 0.54);
+}
+
+.dark #message:hover {
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 #message:active, #message:focus {
@@ -377,12 +459,20 @@ form {
   padding: 4px 2px 3px 2px; /* account for extra border size */
 }
 
+.dark #message:active, .dark #message:focus {
+  border-color: #0277BD;
+}
+
 #message.full:active, #message.full:focus {
   border-color: #F44336;
 }
 
+.dark #message.full:active, #message.full:focus {
+  border-color: #C62828;
+}
+
 #char-counter {
-  color: #727272;
+  color: rgba(0, 0, 0, 0.54);
   padding: 0px 8px;
   margin: auto;
   font-size: 12px;
@@ -394,8 +484,16 @@ form {
   transition: visiblity .3s, opacity .3s, color .3s;
 }
 
+.dark #char-counter {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 #char-counter.full {
   color: #F44336;
+}
+
+.dark #char-counter.full {
+  #color: #C62828;
 }
 
 #message:active + #char-counter, #message:focus + #char-counter {
@@ -413,13 +511,25 @@ form {
   padding-right: 16px;
 }
 
+.dark #send {
+  background-color: #0277BD;
+}
+
 #send:hover {
   background-color: #039ee4;
   cursor: pointer;
 }
 
+.dark #send:hover {
+  background-color: #0288D1;
+}
+
 #send:active {
   background-color: #0394d6;
+}
+
+.dark #send:active {
+  background-color: #039BE5;
 }
 
 #send > svg {
@@ -465,6 +575,10 @@ form {
   background-color: #03a9f4;
 }
 
+.dark .progress .circle .mask .fill {
+  background-color: #0277BD;
+}
+
 .progress .inset {
   width: 36px;
   height: 36px;
@@ -478,9 +592,17 @@ form {
   align-items: center;
 }
 
+.dark .progress .inset {
+  background-color: #303030;
+}
+
 .progress .text {
   color: rgba(0, 0, 0, 0.87);
   overflow: hidden;
+}
+
+.dark .progress .text {
+  color: #ffffff;
 }
 
 .flex-grow {
