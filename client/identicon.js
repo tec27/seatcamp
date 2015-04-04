@@ -8,10 +8,12 @@ module.exports = function createIdenticon(id, internal) {
   container.className = 'identicon'
   // Last 16 characters are the foreground color
   let fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
+  let lightnessLow = theme.isDark() ? 42 : 30
+  let lightnessHigh = theme.isDark() ? 72 : 60
   let fg = objToHslStr({
     hue: fgHue,
     saturation: inRange(parseInt(hash.substr(-13, 3), 16) / 0xfff, 50, 90),
-    lightness: inRange(parseInt(hash.substr(-16, 3), 16) / 0xfff, 30, 60),
+    lightness: inRange(parseInt(hash.substr(-16, 3), 16) / 0xfff, lightnessLow, lightnessHigh),
   })
   // background is a light (or dark if dark theme) grey, opposite of the hue we're using for the
   // foreground color
