@@ -244,7 +244,7 @@ class Message {
       click.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0,
           false, false, false, false, 0, null)
       link.dispatchEvent(click)
-      window.URL.revokeObjectURL(url)
+      setTimeout(() => window.URL.revokeObjectURL(url), 100)
     }
 
     filmstrip2gif(this._srcUrl, FILMSTRIP_DURATION, NUM_VIDEO_FRAMES, FILMSTRIP_HORIZONTAL, cb)
