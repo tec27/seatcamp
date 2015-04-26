@@ -24,9 +24,9 @@
   "homepage": "https://github.com/tec27/seatcamp",
   "dependencies": {
     "autoprefixer-core": "^5.1.7",
-    "babel": "^4.7.12",
-    "babel-runtime": "^4.7.12",
-    "babelify": "^5.0.4",
+    "babel": "^5.1.13",
+    "babel-runtime": "^5.1.13",
+    "babelify": "^6.0.2",
     "brfs": "^1.4.0",
     "browserify-middleware": "^5.0.2",
     "browserify-shim": "^3.8.0",
