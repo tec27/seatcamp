@@ -1,5 +1,5 @@
 let io = require('socket.io-client')()
-  , initWebrtc = require('./init-webrtc')
+  , cameraPreview = require('./camera-preview')
   , captureFrames = require('./capture-frames')
   , cuid = require('cuid')
   , Fingerprint = require('fingerprintjs')
@@ -128,15 +128,7 @@ io.on('ack', function(ack) {
   }
 })
 
-initWebrtc(document.querySelector('#preview'), 200, 150, function(err, stream) {
-  if (err) {
-    // TODO(tec27): display something to user depending on error type
-    console.dir(err)
-    return
-  }
-
-  // TODO(tec27): save stream so it can be stopped later to allow for camera switches
-})
+cameraPreview(document.querySelector('#preview').parentNode)
 
 document.addEventListener('visibilitychange', () => {
   document.body.classList.toggle('backgrounded', document.hidden)

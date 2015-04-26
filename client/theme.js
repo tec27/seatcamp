@@ -6,7 +6,7 @@ class ThemeManager extends EventEmitter {
     this.theme = null
     this.loadTheme()
     window.addEventListener('storage', evt => {
-      if (evt.key = 'theme') {
+      if (evt.key == 'theme') {
         this.loadTheme()
       }
     })

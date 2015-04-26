@@ -30,6 +30,10 @@ button {
   font-family: 'Roboto', 'sans-serif';
 }
 
+button > .icon > svg {
+  vertical-align: middle;
+}
+
 header {
   background-color: #03a9f4;
   color: #ffffff;
@@ -407,6 +411,48 @@ footer .progress {
 .preview-container video {
   height: 100%;
   width: 100%;
+}
+
+.preview-container .switch-camera, .preview-container .switch-camera:focus {
+  position: absolute;
+  display: block;
+  padding: 4px 8px;
+  bottom: 8px;
+  left: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.54);
+  outline: none;
+  border-radius: 2px;
+  background-color: #03a9f4;
+  opacity: 0;
+  visibility: hidden;
+
+  transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+}
+
+.dark .preview-container .switch-camera, .dark .preview-container .switch-camera:focus {
+  background-color: #0277BD;
+}
+
+.preview-container:hover .switch-camera {
+  visibility: visible;
+  opacity: 0.95;
+}
+
+.switch-camera:hover {
+  background-color: #039ee4;
+  cursor: pointer;
+}
+
+.dark .switch-camera:hover {
+  background-color: #0288D1;
+}
+
+.switch-camera:active {
+  background-color: #0394d6;
+}
+
+.dark .switch-camera:active {
+  background-color: #039BE5;
 }
 
 form {
