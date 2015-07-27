@@ -49,7 +49,6 @@ module.exports = function(video, width, height, facing, cb) {
     for (let info of infos) {
       if (info.kind != 'video') continue
 
-      console.dir(info)
       if (equalsNormalizedFacing(facing, info.facing) && !found) {
         found = true
         requestedFacing = true

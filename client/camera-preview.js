@@ -20,7 +20,6 @@ class CameraPreview {
   }
 
   loadFacing() {
-    console.log('loading facing')
     let oldFacing = this.facing
     this.facing = localStorage.getItem('cameraFacing') || 'front'
     if (this.facing != oldFacing) {

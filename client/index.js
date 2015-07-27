@@ -11,6 +11,22 @@ let io = require('socket.io-client')()
   , muteSet = new StoredSet('mutes')
   , messageList = require('./message')(document.querySelector('#message-list'), muteSet)
   , theme = require('./theme')
+  , createAbout = require('./about')
+
+let possibleEvents = {
+  'transition': 'transitionend',
+  'OTransition': 'oTransitionEnd',
+  'MozTransition': 'transitionend',
+  'WebkitTransition': 'webkitTransitionEnd',
+}
+
+let transitionEvent
+for (let t in possibleEvents) {
+  if (document.body.style[t] !== undefined) {
+    transitionEvent = possibleEvents[t]
+    break
+  }
+}
 
 var active = 0
   , meatspaceActive = 0
@@ -61,7 +77,8 @@ function updateActiveUsers() {
 
 createDropdown(document.querySelector('header .dropdown'), {
   unmute: () => muteSet.clear(),
-  changeTheme: () => theme.setTheme(theme.isDark() ? 'light' : 'dark')
+  changeTheme: () => theme.setTheme(theme.isDark() ? 'light' : 'dark'),
+  about: () => showAbout(),
 })
 
 let updateTheme = newTheme => {
@@ -145,4 +162,33 @@ function updateNotificationCount() {
   } else {
     notificationCounter.setCount(unreadMessages)
   }
+}
+
+function showAbout() {
+  let { scrim, container, dialog } = createAbout()
+  document.body.appendChild(scrim)
+  document.body.appendChild(container)
+
+  setTimeout(() => {
+    scrim.classList.remove('entering')
+    dialog.classList.remove('entering')
+  }, 15);
+
+  let clickListener = e => {
+    if (e.target != container) return
+
+    container.removeEventListener('click', clickListener)
+    // remove the dialog
+    scrim.classList.add('will-leave')
+    dialog.classList.add('will-leave')
+
+    setTimeout(() => {
+      scrim.classList.add('leaving')
+      dialog.classList.add('leaving')
+
+      scrim.addEventListener(transitionEvent, () => document.body.removeChild(scrim))
+      dialog.addEventListener(transitionEvent, () => document.body.removeChild(container))
+    }, 15);
+  }
+  container.addEventListener('click', clickListener)
 }
