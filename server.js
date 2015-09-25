@@ -10,7 +10,7 @@ import serveCss from './lib/serve-css'
 import canonicalHost from 'canonical-host'
 import userCounter from './lib/user-counter'
 import createFfmpegRunner from './lib/ffmpeg-runner'
-import chatSockets from './lib/chat-sockets'
+import ChatSockets from './lib/chat-sockets'
 import meatspaceProxy from './lib/meatspace-proxy'
 import config from './conf.json'
 
@@ -85,13 +85,14 @@ createFfmpegRunner((err, runner) => {
     throw err
   }
 
-  chatSockets(
+  const chat = new ChatSockets(// eslint-disable-line no-unused-vars
       io,
       userIdKey,
       meatspaceProxy(config.meatspaceServer, runner),
       runner,
       15, /* server backscroll limit */
-      10 * 60 * 1000 /* expiry time */)
+      10 * 60 * 1000, /* expiry time */
+      1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */)
 
   httpServer.listen(listenPort, function() {
     const host = httpServer.address().address
