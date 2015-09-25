@@ -78,11 +78,11 @@ h6 {
 
 a, a:visited, a:hover, a:focus, a:active {
   font-weight: inherit;
-  color: #03A9F4;
+  color: #F06292;
 }
 
 .dark a, .dark a:visited, .dark a:hover, .dark a:focus,  .dark a:active {
-  color: #4FC3F7;
+  color: #F48FB1;
 }
 
 button {
@@ -94,7 +94,7 @@ button > .icon > svg {
 }
 
 header {
-  background-color: #03a9f4;
+  background-color: #F06292;
   color: #ffffff;
   display: flex;
   height: 48px;
@@ -104,10 +104,6 @@ header {
   left: 0px;
   right: 0px;
   top: 0;
-}
-
-.dark header {
-  background-color: #0277BD;
 }
 
 header > p {
@@ -287,7 +283,6 @@ header .actions {
   margin-bottom: 0;
 }
 
-
 #message-list li .video-container {
   width: 200px;
   height: 150px;
@@ -324,15 +319,11 @@ header .actions {
   border: 1px solid rgba(0, 0, 0, 0.54);
   outline: none;
   border-radius: 2px;
-  background-color: #03a9f4;
+  background-color: #F06292;
   opacity: 0;
   visibility: hidden;
 
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
-}
-
-.dark .video-container .save, .dark .video-container .save:focus {
-  background-color: #0277BD;
 }
 
 .video-container:hover .save {
@@ -341,24 +332,16 @@ header .actions {
 }
 
 .save:hover {
-  background-color: #039ee4;
+  background-color: #F86A9A;
   cursor: pointer;
 }
 
-.dark .save:hover {
-  background-color: #0288D1;
-}
-
 .save:active {
-  background-color: #0394d6;
-}
-
-.dark .save:active {
-  background-color: #039BE5;
+  background-color: #FF71A1;
 }
 
 .save[disabled] {
-  background-color: #01579B;
+  background-color: #E91E63;
 }
 
 #message-list li p {
@@ -491,30 +474,18 @@ footer .progress {
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
 }
 
-.dark .preview-container .switch-camera, .dark .preview-container .switch-camera:focus {
-  background-color: #0277BD;
-}
-
 .preview-container:hover .switch-camera {
   visibility: visible;
   opacity: 0.95;
 }
 
 .switch-camera:hover {
-  background-color: #039ee4;
+  background-color: #F86A9A;
   cursor: pointer;
 }
 
-.dark .switch-camera:hover {
-  background-color: #0288D1;
-}
-
 .switch-camera:active {
-  background-color: #0394d6;
-}
-
-.dark .switch-camera:active {
-  background-color: #039BE5;
+  background-color: #FF71A1;
 }
 
 form {
@@ -561,22 +532,14 @@ form {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-#message:active, #message:focus {
-  border-color: #03a9f4;
+#message:active:active, #message:focus:focus {
+  border-color: #F06292;
   border-width: 2px;
   padding: 4px 2px 3px 2px; /* account for extra border size */
 }
 
-.dark #message:active, .dark #message:focus {
-  border-color: #0277BD;
-}
-
-#message.full:active, #message.full:focus {
-  border-color: #F44336;
-}
-
-.dark #message.full:active, #message.full:focus {
-  border-color: #C62828;
+#message.full:active:active, body #message.full:focus:focus {
+  border-color: #D32F2F;
 }
 
 #char-counter {
@@ -611,7 +574,7 @@ form {
 
 #send {
   border: 0;
-  background-color: #03a9f4;
+  background-color: #F06292;
   /* match the form's border radius on the outer corners */
   border-radius: 0 2px 2px 0;
   margin: 0 0 0 4px;
@@ -619,25 +582,13 @@ form {
   padding-right: 16px;
 }
 
-.dark #send {
-  background-color: #0277BD;
-}
-
 #send:hover {
-  background-color: #039ee4;
+  background-color: #F86A9A;
   cursor: pointer;
 }
 
-.dark #send:hover {
-  background-color: #0288D1;
-}
-
 #send:active {
-  background-color: #0394d6;
-}
-
-.dark #send:active {
-  background-color: #039BE5;
+  background-color: #FF71A1;
 }
 
 #send > svg {
@@ -680,11 +631,7 @@ form {
 
 .progress .circle .mask .fill {
   clip: rect(0px, 24px, 48px, 0px);
-  background-color: #03a9f4;
-}
-
-.dark .progress .circle .mask .fill {
-  background-color: #0277BD;
+  background-color: #F06292;
 }
 
 .progress .inset {

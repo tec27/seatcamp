@@ -5,6 +5,7 @@ class ProgressSpinner {
     this.fix = elem.querySelector('.fill.fix')
     this.textElem = elem.querySelector('.text')
     this._value = 0
+    this._updateRotation()
   }
 
   show() {
