@@ -22,12 +22,9 @@ The offical server can be found at [https://seat.camp](https://seat.camp)
 
 ## Features
 - Send a message to anyone connected to the same seatcamp server
-- Provides jpeg (filmstrip-style), webm and h264 videos alongside chats,
-allowing clients to request whichever they wish to use (video transcoding is
-done using ffmpeg or avconv, whichever is available)
-- Proxies to a [meatspace](https://github.com/meatspaces/meatspace-chat-v2)
-server, sending any seatcamp user's messages to that server as well as
-displaying meatspace users' messages to seatcamp users
+- Provides jpeg (filmstrip-style) videos alongside chats, which tend to be
+more efficient to display than videos (h264 videos are provided for legacy
+clients)
 - No signup required, but users receive a unique ID based on browser
 characteristics (displayed to users as an identicon alongside messages).
 - Allows for muting users based on their ID, removing all their current
@@ -38,9 +35,10 @@ periods of time.
 
 ## Running a server
 ### Required software
-seatcamp requires [io.js](http://iojs.org) or [node](http://nodejs.org) (0.12.x+) and ffmpeg/libav
-in order to work. io.js/Node can be downloaded from the official site. ffmpeg or libav can generally
-be installed from your OS's package manager, or from source. Examples of installing it:
+seatcamp requires [node](http://nodejs.org) >=4.0.0 and ffmpeg/libav in order to
+work. io.js/Node can be downloaded from the official site. ffmpeg or libav can
+generally be installed from your OS's package manager, or from source. Examples
+of installing it:
 
 **OSX**
 ```bash
@@ -49,7 +47,7 @@ $ brew install ffmpeg --with-ffplay --with-freetype --with-frei0r --with-libass 
 
 **Ubuntu/Debian**
 ```bash
-$ sudo apt-get install libav-tools
+$ sudo apt-get install ffmpeg
 ```
 
 ImageMagick (or GraphicsMagick with IM compatibility) is also required, and is also generally

@@ -2,7 +2,7 @@ import createSocketIoClient from 'socket.io-client'
 import cameraPreview from './camera-preview'
 import captureFrames from './capture-frames'
 import cuid from 'cuid'
-import Fingerprint from 'fingerprintjs'
+import getFingerprint from './fingerprint'
 import NotificationCounter from './notification-counter'
 import StoredSet from './stored-set'
 import createCharCounter from './char-counter'
@@ -35,7 +35,7 @@ for (const t in possibleEvents) {
 let active = 0
 let meatspaceActive = 0
 io.on('connect', function() {
-  io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
+  io.emit('fingerprint', getFingerprint())
   io.emit('join', 'jpg')
 }).on('disconnect', function() {
   active = 0
