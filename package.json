@@ -75,7 +75,6 @@
       [
         "babelify",
         {
-          "loose": "all",
           "optional": [
             "runtime"
           ]
