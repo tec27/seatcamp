@@ -104,7 +104,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
   if (awaitingAck) return
 
-  messageInput.readonly = true
+  messageInput.readOnly = true
   awaitingAck = cuid()
   progressSpinner.setValue(0).show()
 
@@ -118,7 +118,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
       setTimeout(() => progressSpinner.setValue(0), 400)
     }, 400)
     if (err) {
-      messageInput.readonly = false
+      messageInput.readOnly = false
       awaitingAck = null
       // TODO(tec27): show to user
       return console.error(err)
@@ -140,7 +140,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
 io.on('ack', function(ack) {
   if (awaitingAck && awaitingAck === ack.key) {
-    messageInput.readonly = false
+    messageInput.readOnly = false
     awaitingAck = null
     if (ack.err) {
       // TODO(tec27): display to user
