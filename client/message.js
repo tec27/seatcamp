@@ -1,108 +1,19 @@
-let Waypoint = require('waypoints')
-  , filmstrip2gif = require('filmstrip2gif')
-  , createIdenticon = require('./identicon')
-  , svgIcons = require('./svg-icons')
-  , createDropdown = require('./dropdown')
-  , localeTime = require('./locale-time')
-  , theme = require('./theme')
+import Waypoint from 'waypoints'
+import filmstrip2gif from 'filmstrip2gif'
+import createIdenticon from './identicon'
+import svgIcons from './svg-icons'
+import createDropdown from './dropdown'
+import localeTime from './locale-time'
+import theme from './theme'
 
-module.exports = function(listElem, muteSet) {
-  return new MessageList(listElem, muteSet)
-}
-
-var MESSAGE_LIMIT = 30
+const MESSAGE_LIMIT = 30
   , MAX_RECYCLED = 6
   , NUM_VIDEO_FRAMES = 10
   , FILMSTRIP_DURATION = 0.92
   , FILMSTRIP_HORIZONTAL = false
 
-class MessageList {
-  constructor(listElem, muteSet) {
-    this.elem = listElem
-    this.messages = []
-    this.messageKeys = new Set()
-    this._recycled = []
-
-    this._mutes = muteSet
-
-    theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
-  }
-
-  addMessage(chat, removeOverLimit = true) {
-    if (this._mutes.has(chat.userId)) {
-      return
-    }
-    if (this.messageKeys.has(chat.key)) {
-      return
-    }
-
-    var newCount = this.messages.length + 1
-    if (removeOverLimit && newCount > MESSAGE_LIMIT) {
-      let removed = this.messages.splice(0, newCount - MESSAGE_LIMIT)
-      this._recycle(removed)
-    }
-
-    var message = this._recycled.length ? this._recycled.pop() : new Message(this)
-    message.bind(chat)
-    this.messages.push(message)
-    this.messageKeys.add(message.key)
-    this.elem.appendChild(message.elem)
-    this._refreshWaypoints()
-    return message
-  }
-
-  muteUser(userId) {
-    this._mutes.add(userId)
-
-    var userMessages = []
-      , nonUserMessages = []
-    for (let message of this.messages) {
-      if (message.userId == userId) {
-        userMessages.push(message)
-      } else {
-        nonUserMessages.push(message)
-      }
-    }
-
-    this._recycle(userMessages)
-    this.messages = nonUserMessages
-    this._refreshWaypoints()
-  }
-
-  _recycle(messages) {
-    for (let message of messages) {
-      this.messageKeys.delete(message.key)
-      message.elem.parentElement.removeChild(message.elem)
-      message.unbind()
-    }
-
-    var toRecycle = Math.max(MAX_RECYCLED - this._recycled.length, 0)
-    toRecycle = Math.min(toRecycle, messages.length)
-    this._recycled = this._recycled.concat(messages.slice(0, toRecycle))
-    for (let message of messages.slice(toRecycle, messages.length)) {
-      message.elem.parentElement.removeChild(message.elem)
-      message.dispose()
-    }
-  }
-
-  _refreshWaypoints() {
-    if (!this._waypointTimeout) {
-      this._waypointTimeout = setTimeout(() => {
-        Waypoint.refreshAll()
-        this._waypointTimeout = null
-      }, 0)
-    }
-  }
-
-  _onThemeChange(newTheme) {
-    // Re-render identicons based on the new theme to update any inline styles
-    for (let message of this.messages) {
-      message.refreshIdenticon()
-    }
-  }
-}
-
-var MESSAGE_HTML = [
+/* eslint-disable indent */ // indented for HTML clarity
+const MESSAGE_HTML = [
   '<div class="video-container">',
     '<div class="filmstrip"></div>',
     '<button class="save shadow-1" title="Save as GIF"></button>',
@@ -119,6 +30,7 @@ var MESSAGE_HTML = [
     '<time></time>',
   '</div>',
 ].join('')
+/* eslint-enable indent */
 
 class Message {
   constructor(owner) {
@@ -155,7 +67,7 @@ class Message {
         handler: direction => this.handleWaypoint('top', direction),
       }),
     ]
-    for (let waypoint of this.waypoints) {
+    for (const waypoint of this.waypoints) {
       waypoint.disable()
     }
 
@@ -169,13 +81,13 @@ class Message {
     this._throwIfDisposed()
     this.unbind()
 
-    var blob = new Blob([ video ], { type: videoMime })
+    const blob = new window.Blob([ video ], { type: videoMime })
     this._srcUrl = window.URL.createObjectURL(blob)
     this.filmstrip.style['background-image'] = `url('${this._srcUrl}')`
 
     this.chatText.innerHTML = text
 
-    var sentDate = new Date(sent)
+    const sentDate = new Date(sent)
     this.timestamp.datetime = sentDate.toISOString()
     this.timestamp.innerHTML = localeTime(sentDate)
 
@@ -183,13 +95,13 @@ class Message {
     this.refreshIdenticon()
 
     this._key = key
-    for (let waypoint of this.waypoints) {
+    for (const waypoint of this.waypoints) {
       waypoint.enable()
     }
   }
 
   refreshIdenticon() {
-    var newIdenticon = createIdenticon(this._userId)
+    const newIdenticon = createIdenticon(this._userId)
     this.identicon.parentElement.replaceChild(newIdenticon, this.identicon)
     this.identicon = newIdenticon
   }
@@ -203,12 +115,12 @@ class Message {
 
     delete this.filmstrip.style['background-image']
 
-    if(this._srcUrl) {
+    if (this._srcUrl) {
       window.URL.revokeObjectURL(this._srcUrl)
       this._srcUrl = null
     }
 
-    for (let waypoint of this.waypoints) {
+    for (const waypoint of this.waypoints) {
       waypoint.disable()
     }
   }
@@ -217,7 +129,7 @@ class Message {
     this._throwIfDisposed()
     this._disposed = true
 
-    for (let waypoint of this.waypoints) {
+    for (const waypoint of this.waypoints) {
       waypoint.destroy()
     }
     this.waypoints.length = 0
@@ -227,7 +139,7 @@ class Message {
     this._throwIfDisposed()
     this.saveButton.disabled = true
 
-    let cb = (err, gifBlob) => {
+    const cb = (err, gifBlob) => {
       this.saveButton.disabled = false
       if (err) {
         // TODO(tec27): need a good way to display this error to users
@@ -235,7 +147,7 @@ class Message {
         return console.dir(err)
       }
 
-      var url = window.URL.createObjectURL(gifBlob)
+      const url = window.URL.createObjectURL(gifBlob)
         , link = document.createElement('a')
         , click = document.createEvent('MouseEvents')
 
@@ -256,7 +168,7 @@ class Message {
   }
 
   handleWaypoint(side, direction) {
-    if ((side == 'top' && direction == 'down') || (side == 'bottom' && direction == 'up')) {
+    if ((side === 'top' && direction === 'down') || (side === 'bottom' && direction === 'up')) {
       this.root.className = 'displayed'
     } else {
       this.root.className = ''
@@ -279,4 +191,94 @@ class Message {
   _throwIfDisposed() {
     if (this._disposed) throw new Error('Message already disposed!')
   }
+}
+
+class MessageList {
+  constructor(listElem, muteSet) {
+    this.elem = listElem
+    this.messages = []
+    this.messageKeys = new Set()
+    this._recycled = []
+
+    this._mutes = muteSet
+
+    theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
+  }
+
+  addMessage(chat, removeOverLimit = true) {
+    if (this._mutes.has(chat.userId)) {
+      return null
+    }
+    if (this.messageKeys.has(chat.key)) {
+      return null
+    }
+
+    const newCount = this.messages.length + 1
+    if (removeOverLimit && newCount > MESSAGE_LIMIT) {
+      const removed = this.messages.splice(0, newCount - MESSAGE_LIMIT)
+      this._recycle(removed)
+    }
+
+    const message = this._recycled.length ? this._recycled.pop() : new Message(this)
+    message.bind(chat)
+    this.messages.push(message)
+    this.messageKeys.add(message.key)
+    this.elem.appendChild(message.elem)
+    this._refreshWaypoints()
+    return message
+  }
+
+  muteUser(userId) {
+    this._mutes.add(userId)
+
+    const userMessages = []
+    const nonUserMessages = []
+    for (const message of this.messages) {
+      if (message.userId === userId) {
+        userMessages.push(message)
+      } else {
+        nonUserMessages.push(message)
+      }
+    }
+
+    this._recycle(userMessages)
+    this.messages = nonUserMessages
+    this._refreshWaypoints()
+  }
+
+  _recycle(messages) {
+    for (const message of messages) {
+      this.messageKeys.delete(message.key)
+      message.elem.parentElement.removeChild(message.elem)
+      message.unbind()
+    }
+
+    let toRecycle = Math.max(MAX_RECYCLED - this._recycled.length, 0)
+    toRecycle = Math.min(toRecycle, messages.length)
+    this._recycled = this._recycled.concat(messages.slice(0, toRecycle))
+    for (const message of messages.slice(toRecycle, messages.length)) {
+      message.elem.parentElement.removeChild(message.elem)
+      message.dispose()
+    }
+  }
+
+  _refreshWaypoints() {
+    if (!this._waypointTimeout) {
+      this._waypointTimeout = setTimeout(() => {
+        Waypoint.refreshAll()
+        this._waypointTimeout = null
+      }, 0)
+    }
+  }
+
+  _onThemeChange(newTheme) {
+    // Re-render identicons based on the new theme to update any inline styles
+    for (const message of this.messages) {
+      message.refreshIdenticon()
+    }
+  }
+}
+
+export default function createMessageList(listElem, muteSet) {
+  return new MessageList(listElem, muteSet)
 }

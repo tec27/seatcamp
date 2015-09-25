@@ -2,8 +2,8 @@ class Dropdown {
   constructor(elem, actions) {
     this.elem = elem
     this.actions = actions
-    if (Object.keys(actions).length != elem.querySelectorAll('.menu button').length) {
-      throw new Error('provided actions don\'t match the number of buttons in the dropdown');
+    if (Object.keys(actions).length !== elem.querySelectorAll('.menu button').length) {
+      throw new Error('provided actions don\'t match the number of buttons in the dropdown')
     }
 
     this.closeListener = () => this.close()
@@ -12,7 +12,7 @@ class Dropdown {
       let t = evt.target
       while (true) {
         if (t.classList.contains('toggle')) break
-        if (t == evt.currentTarget) return
+        if (t === evt.currentTarget) return
         t = t.parentElement
       }
 
@@ -22,11 +22,11 @@ class Dropdown {
     })
     elem.addEventListener('click', evt => {
       // Handle clicks for all `.menu button` elements
-      if (evt.target.tagName != 'BUTTON') return
+      if (evt.target.tagName !== 'BUTTON') return
       let p = evt.target.parentElement
       while (true) {
         if (p.classList.contains('menu')) break
-        if (p == evt.currentTarget) return
+        if (p === evt.currentTarget) return
         p = p.parentElement
       }
 
@@ -60,7 +60,7 @@ class Dropdown {
   close() {
     document.removeEventListener('click', this.closeListener)
     this.elem.classList.remove('active')
-    if (Dropdown._opened == this) {
+    if (Dropdown._opened === this) {
       Dropdown._opened = null
     }
   }
@@ -68,6 +68,6 @@ class Dropdown {
 
 Dropdown._opened = null
 
-module.exports = function(elem, actions) {
+export default function(elem, actions) {
   return new Dropdown(elem, actions)
 }

@@ -1,10 +1,3 @@
-module.exports = function(elem) {
-  if (!elem.classList.contains('progress')) {
-    throw new Error('Must be used on a progress element')
-  }
-  return new ProgressSpinner(elem)
-}
-
 class ProgressSpinner {
   constructor(elem) {
     this.elem = elem
@@ -32,11 +25,11 @@ class ProgressSpinner {
   }
 
   _updateRotation() {
-    var fillRotation = this._value * 180 | 0
-      , fixRotation = fillRotation * 2
-      , fillCss = `rotate(${fillRotation}deg)`
-      , fixCss = `rotate(${fixRotation}deg)`
-    for (let f of this.fill) {
+    const fillRotation = this._value * 180 | 0
+    const fixRotation = fillRotation * 2
+    const fillCss = `rotate(${fillRotation}deg)`
+    const fixCss = `rotate(${fixRotation}deg)`
+    for (const f of this.fill) {
       f.style['-webkit-transform'] = fillCss
       f.style.transform = fillCss
     }
@@ -44,4 +37,11 @@ class ProgressSpinner {
     this.fix.style['-webkit-transform'] = fixCss
     this.fix.style.transform = fixCss
   }
+}
+
+export default function createSpinner(elem) {
+  if (!elem.classList.contains('progress')) {
+    throw new Error('Must be used on a progress element')
+  }
+  return new ProgressSpinner(elem)
 }

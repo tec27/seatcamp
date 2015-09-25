@@ -1,12 +1,12 @@
-var EventEmitter = require('events').EventEmitter
-  , toBlob = require('data-uri-to-blob')
+import { EventEmitter } from 'events'
+import toBlob from 'data-uri-to-blob'
 
-module.exports = function(video, options, cb) {
+export default function(video, options, cb) {
   if (typeof options == 'function') {
     cb = options
     options = {}
   }
-  var opts = {
+  const opts = {
     numFrames: options.numFrames || 10,
     fps: options.fps || 5,
     format: options.format || 'image/jpeg',
@@ -15,15 +15,15 @@ module.exports = function(video, options, cb) {
     height: options.height || video.videoHeight
   }
 
-  var frameDelay = 1000 / opts.fps
+  const frameDelay = 1000 / opts.fps
 
-  var canvas
-    , context
-    , frames = new Array(opts.numFrames)
-    , emitter = new EventEmitter()
-    , awaitingShot = opts.numFrames
-    , awaitingSave = opts.numFrames
-    , index = 0
+  let canvas
+  let context
+  const frames = new Array(opts.numFrames)
+  const emitter = new EventEmitter()
+  let awaitingShot = opts.numFrames
+  let awaitingSave = opts.numFrames
+  let index = 0
 
   setTimeout(begin, 0)
   return emitter
@@ -39,13 +39,13 @@ module.exports = function(video, options, cb) {
   }
 
   function captureFrame() {
+    let t
     awaitingShot--
     if (awaitingShot > 0) {
-      var t = setTimeout(captureFrame, frameDelay)
+      t = setTimeout(captureFrame, frameDelay)
     }
 
     (function(i) {
-
       try {
         // TODO(tec27): handle letterboxing
         context.drawImage(video, 0, 0, canvas.width, canvas.height)

@@ -13,16 +13,16 @@ class CameraPreview {
 
     this.loadFacing()
     window.addEventListener('storage', evt => {
-      if (evt.key == 'cameraFacing') {
+      if (evt.key === 'cameraFacing') {
         this.loadFacing()
       }
     })
   }
 
   loadFacing() {
-    let oldFacing = this.facing
-    this.facing = localStorage.getItem('cameraFacing') || 'front'
-    if (this.facing != oldFacing) {
+    const oldFacing = this.facing
+    this.facing = window.localStorage.getItem('cameraFacing') || 'front'
+    if (this.facing !== oldFacing) {
       this.initializeCamera()
     }
   }
@@ -56,10 +56,10 @@ class CameraPreview {
 
     this.switchButton = document.createElement('button')
     this.switchButton.classList.add('switch-camera', 'shadow-1')
-    let otherCameraTitle = this.videoStream.facing == 'front' ? 'rear' : 'front'
+    const otherCameraTitle = this.videoStream.facing === 'front' ? 'rear' : 'front'
     this.switchButton.setAttribute('title', `Switch to ${otherCameraTitle} camera`)
     this.switchButton.addEventListener('click', this.switchButtonListener)
-    if (this.videoStream.facing == 'front') {
+    if (this.videoStream.facing === 'front') {
       this.switchButton.appendChild(svgIcons.cameraRear('invert'))
     } else {
       this.switchButton.appendChild(svgIcons.cameraFront('invert'))
@@ -69,8 +69,8 @@ class CameraPreview {
   }
 
   onSwitchCamera() {
-    this.facing = this.facing == 'front' ? 'rear' : 'front'
-    localStorage.setItem('cameraFacing', this.facing)
+    this.facing = this.facing === 'front' ? 'rear' : 'front'
+    window.localStorage.setItem('cameraFacing', this.facing)
     this.initializeCamera()
   }
 }

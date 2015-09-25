@@ -1,6 +1,6 @@
-class NotificationCounter {
+export default class NotificationCounter {
   constructor() {
-    var link = document.querySelector('link[rel=icon]')
+    const link = document.querySelector('link[rel=icon]')
     this.origIcon = link ? link.href : '/favicon.ico'
     this.canvas = document.createElement('canvas')
     this.context = this.canvas.getContext('2d')
@@ -11,7 +11,7 @@ class NotificationCounter {
       return cb(this.image)
     }
 
-    var image = new Image()
+    const image = new window.Image()
     image.onload = () => {
       this.image = image
       this.canvas.width = image.width
@@ -27,8 +27,8 @@ class NotificationCounter {
 
   setCount(count) {
     this.getIcon(icon => {
-      var fontSize = this._rel16(11)
-        , c = this.context
+      const fontSize = this._rel16(11)
+      const c = this.context
 
       c.clearRect(0, 0, this.canvas.width, this.canvas.height)
       c.drawImage(icon, 0, 0, this.canvas.width, this.canvas.height)
@@ -38,9 +38,9 @@ class NotificationCounter {
       c.textBaseline = 'top'
       c.strokeStyle = 'rgba(244, 67, 54, 0.95)'
       c.lineWidth = this._rel16(4)
-      var startX = this._rel16(2)
-        , startY = this._rel16(1)
-        , countStr = count < 10 ? ('' + count) : '*'
+      const startX = this._rel16(2)
+      const startY = this._rel16(1)
+      const countStr = count < 10 ? ('' + count) : '*'
       c.strokeText(countStr, startX, startY)
       c.fillText(countStr, startX, startY)
       this._setIcon(this.canvas.toDataURL('image/png'))
@@ -58,7 +58,7 @@ class NotificationCounter {
   _setIcon(iconHref) {
     let link = document.querySelector('link[rel=icon]')
     while (link) {
-      if (link.href == iconHref) {
+      if (link.href === iconHref) {
         return
       } else {
         link.parentNode.removeChild(link)
@@ -77,5 +77,3 @@ class NotificationCounter {
     return Math.round((val * this.canvas.width) / 16)
   }
 }
-
-module.exports = NotificationCounter

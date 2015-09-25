@@ -1,43 +1,42 @@
-// V8/traceur don't support extending builtins yet, so we wrap :(
-class StoredSet {
+export default class StoredSet {
   constructor(key, iterable) {
     this._set = new Set(iterable)
     this.key = key
     this.reload()
     window.addEventListener('storage', evt => {
-      if (evt.key == this.key) {
+      if (evt.key === this.key) {
         this.reload()
       }
     })
   }
 
   reload() {
-    var array = JSON.parse(localStorage.getItem(this.key)) || []
+    const array = JSON.parse(window.localStorage.getItem(this.key)) || []
     this._set.clear()
-    for (let val of array) {
+    for (const val of array) {
       this._set.add(val)
     }
   }
 
   write() {
-    var array = Array.from(this._set.values())
-    localStorage.setItem(this.key, JSON.stringify(array))
+    const array = Array.from(this._set.values())
+    window.localStorage.setItem(this.key, JSON.stringify(array))
   }
 
   add(value) {
-    var ret = this._set.add(value)
+    const ret = this._set.add(value)
     this.write()
     return ret
   }
 
   clear() {
-    var ret = this._set.clear()
+    const ret = this._set.clear()
     this.write()
     return ret
   }
 
   delete(value) {
-    var ret = this._set.delete(value)
+    const ret = this._set.delete(value)
     this.write()
     return ret
   }
@@ -62,5 +61,3 @@ class StoredSet {
     return this._set.values()
   }
 }
-
-module.exports = StoredSet

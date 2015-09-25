@@ -1,31 +1,31 @@
-var express = require('express')
-  , http = require('http')
-  , https = require('https')
-  , path = require('path')
-  , fs = require('fs')
-  , socketIo = require('socket.io')
-  , browserify = require('browserify-middleware')
-  , serveStatic = require('serve-static')
-  , serveCss = require('./lib/serve-css')
-  , canonicalHost = require('canonical-host')
-  , userCounter = require('./lib/user-counter')
-  , createFfmpegRunner = require('./lib/ffmpeg-runner')
-  , chatSockets = require('./lib/chat-sockets')
-  , meatspaceProxy = require('./lib/meatspace-proxy')
-  , config = require('./conf.json')
+import express from 'express'
+import http from 'http'
+import https from 'https'
+import path from 'path'
+import fs from 'fs'
+import socketIo from 'socket.io'
+import browserify from 'browserify-middleware'
+import serveStatic from 'serve-static'
+import serveCss from './lib/serve-css'
+import canonicalHost from 'canonical-host'
+import userCounter from './lib/user-counter'
+import createFfmpegRunner from './lib/ffmpeg-runner'
+import chatSockets from './lib/chat-sockets'
+import meatspaceProxy from './lib/meatspace-proxy'
+import config from './conf.json'
 
-var userIdKey = config.idKey
+const userIdKey = config.idKey
 if (!userIdKey) {
   throw new Error('idKey must be specified in conf.json!')
 }
 
-var app = express()
+const app = express()
 app
   .set('x-powered-by', false)
   .set('view engine', 'jade')
 
-var httpServer
-  , listenPort
+let httpServer
+let listenPort
 
 if (config.sslCert) {
   if (!config.sslKey || !config.sslCaBundle || !config.canonicalHost || !config.sslPort) {
@@ -33,10 +33,10 @@ if (config.sslCert) {
         'configured for SSL support.')
   }
 
-  var caList = []
-    , curCert = []
-  var caFile = fs.readFileSync(path.join(__dirname, config.sslCaBundle), 'utf8')
-  for (var line of caFile.split('\n')) {
+  const caList = []
+  const curCert = []
+  const caFile = fs.readFileSync(path.join(__dirname, config.sslCaBundle), 'utf8')
+  for (const line of caFile.split('\n')) {
     if (!line.length) continue
 
     curCert.push(line)
@@ -47,8 +47,8 @@ if (config.sslCert) {
   }
   curCert.length = 0
 
-  var sslCert = fs.readFileSync(path.join(__dirname, config.sslCert), 'utf8')
-    , sslKey = fs.readFileSync(path.join(__dirname, config.sslKey), 'utf8')
+  const sslCert = fs.readFileSync(path.join(__dirname, config.sslCert), 'utf8')
+  const sslKey = fs.readFileSync(path.join(__dirname, config.sslKey), 'utf8')
 
   httpServer = https.createServer({
     ca: caList,
@@ -57,7 +57,7 @@ if (config.sslCert) {
   }, app)
   listenPort = config.sslPort
 
-  var canon = canonicalHost(config.canonicalHost, 301)
+  const canon = canonicalHost(config.canonicalHost, 301)
   http.createServer(function(req, res) {
     if (canon(req, res)) return
     res.statusCode = 400
@@ -68,7 +68,7 @@ if (config.sslCert) {
   listenPort = config.port
 }
 
-var io = socketIo(httpServer)
+const io = socketIo(httpServer)
 
 app.use(require('cookie-parser')())
 
@@ -90,15 +90,12 @@ createFfmpegRunner((err, runner) => {
       userIdKey,
       meatspaceProxy(config.meatspaceServer, runner),
       runner,
-      15 /* server backscroll limit */,
+      15, /* server backscroll limit */
       10 * 60 * 1000 /* expiry time */)
 
   httpServer.listen(listenPort, function() {
-    var host = httpServer.address().address
-      , port = httpServer.address().port
+    const host = httpServer.address().address
+    const port = httpServer.address().port
     console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
   })
 })
-
-
-

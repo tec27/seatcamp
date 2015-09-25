@@ -1,4 +1,4 @@
-var getUserMedia = navigator.getUserMedia ||
+let getUserMedia = navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia
@@ -6,7 +6,7 @@ if (getUserMedia) {
   getUserMedia = getUserMedia.bind(navigator)
 }
 
-let supportsSourceSelection = !!window.MediaStreamTrack.getSources
+const supportsSourceSelection = !!window.MediaStreamTrack.getSources
 
 function equalsNormalizedFacing(desired, check) {
   let normalized = check
@@ -19,15 +19,46 @@ function equalsNormalizedFacing(desired, check) {
       break
   }
 
-  return desired == normalized
+  return desired === normalized
 }
 
-module.exports = function(video, width, height, facing, cb) {
+class StreamResult {
+  constructor(video, stream, url, hasFrontAndRear, facing) {
+    this.video = video
+    this.stream = stream
+    this.url = url
+    this.hasFrontAndRear = hasFrontAndRear
+    this.facing = facing
+    this.stopped = false
+  }
+
+  stop() {
+    if (this.stopped) return
+
+    if (this.url && this.video.src === this.url) {
+      this.video.pause()
+      this.video.removeAttribute('src')
+      window.URL.revokeObjectURL(this.url)
+      this.url = null
+    } else if (this.video.mozSrcObject && this.video.mozSrcObject === this.stream) {
+      this.video.pause()
+      this.video.removeAttribute('src')
+    }
+
+    this.stream.stop()
+    this.video = null
+    this.stream = null
+    this.stopped = true
+  }
+}
+
+
+function initWebrtc(video, width, height, facing, cb) {
   if (!getUserMedia) {
     return cb(new Error('Browser doesn\'t support WebRTC'))
   }
 
-  let constraints = {
+  const constraints = {
     optional: [
       { minWidth: width },
       { minHeight: height },
@@ -46,8 +77,8 @@ module.exports = function(video, width, height, facing, cb) {
     let hasFront = false
     let hasRear = false
 
-    for (let info of infos) {
-      if (info.kind != 'video') continue
+    for (const info of infos) {
+      if (info.kind !== 'video') continue
 
       if (equalsNormalizedFacing(facing, info.facing) && !found) {
         found = true
@@ -74,7 +105,7 @@ module.exports = function(video, width, height, facing, cb) {
   }
 
   function success(stream) {
-    var url
+    let url
     video.autoplay = true
     if (video.mozSrcObject) {
       video.mozSrcObject = stream
@@ -97,34 +128,5 @@ module.exports = function(video, width, height, facing, cb) {
   }
 }
 
-module.exports.supportsSourceSelection = supportsSourceSelection
-
-class StreamResult {
-  constructor(video, stream, url, hasFrontAndRear, facing) {
-    this.video = video
-    this.stream = stream
-    this.url = url
-    this.hasFrontAndRear = hasFrontAndRear
-    this.facing = facing
-    this.stopped = false
-  }
-
-  stop() {
-    if (this.stopped) return
-
-    if (this.url && this.video.src == this.url) {
-      this.video.pause()
-      this.video.removeAttribute('src')
-      window.URL.revokeObjectURL(this.url)
-      this.url = null
-    } else if (this.video.mozSrcObject && this.video.mozSrcObject == this.stream) {
-      this.video.pause()
-      this.video.removeAttribute('src')
-    }
-
-    this.stream.stop()
-    this.video = null
-    this.stream = null
-    this.stopped = true
-  }
-}
+initWebrtc.supportsSourceSelection = supportsSourceSelection
+export default initWebrtc

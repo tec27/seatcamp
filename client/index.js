@@ -1,35 +1,39 @@
-let io = require('socket.io-client')()
-  , cameraPreview = require('./camera-preview')
-  , captureFrames = require('./capture-frames')
-  , cuid = require('cuid')
-  , Fingerprint = require('fingerprintjs')
-  , NotificationCounter = require('./notification-counter')
-  , StoredSet = require('./stored-set')
-  , createCharCounter = require('./char-counter')
-  , createDropdown = require('./dropdown')
-  , progressSpinner = require('./progress')(document.querySelector('.progress'))
-  , muteSet = new StoredSet('mutes')
-  , messageList = require('./message')(document.querySelector('#message-list'), muteSet)
-  , theme = require('./theme')
-  , createAbout = require('./about')
+import createSocketIoClient from 'socket.io-client'
+import cameraPreview from './camera-preview'
+import captureFrames from './capture-frames'
+import cuid from 'cuid'
+import Fingerprint from 'fingerprintjs'
+import NotificationCounter from './notification-counter'
+import StoredSet from './stored-set'
+import createCharCounter from './char-counter'
+import createDropdown from './dropdown'
+import initProgressSpinner from './progress'
+import initMessageList from './message'
+import theme from './theme'
+import createAbout from './about'
 
-let possibleEvents = {
-  'transition': 'transitionend',
-  'OTransition': 'oTransitionEnd',
-  'MozTransition': 'transitionend',
-  'WebkitTransition': 'webkitTransitionEnd',
+const io = createSocketIoClient()
+const muteSet = new StoredSet('mutes')
+const progressSpinner = initProgressSpinner(document.querySelector('.progress'))
+const messageList = initMessageList(document.querySelector('#message-list'), muteSet)
+
+const possibleEvents = {
+  transition: 'transitionend',
+  OTransition: 'oTransitionEnd',
+  MozTransition: 'transitionend',
+  WebkitTransition: 'webkitTransitionEnd',
 }
 
 let transitionEvent
-for (let t in possibleEvents) {
+for (const t in possibleEvents) {
   if (document.body.style[t] !== undefined) {
     transitionEvent = possibleEvents[t]
     break
   }
 }
 
-var active = 0
-  , meatspaceActive = 0
+let active = 0
+let meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', new Fingerprint({ canvas: true }).get())
   io.emit('join', 'jpg')
@@ -39,10 +43,10 @@ io.on('connect', function() {
   updateActiveUsers()
 })
 
-var unreadMessages = 0
+let unreadMessages = 0
 io.on('chat', function(chat) {
-  var autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
-  var message = messageList.addMessage(chat, autoScroll)
+  const autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
+  const message = messageList.addMessage(chat, autoScroll)
   if (message && autoScroll) {
     message.elem.scrollIntoView()
   }
@@ -58,14 +62,14 @@ io.on('chat', function(chat) {
   meatspaceActive = numActive
   updateActiveUsers()
 }).on('meatspace', function(status) {
-  if (status != 'connected') {
+  if (status !== 'connected') {
     meatspaceActive = 0
     updateActiveUsers()
   }
 })
 
 function updateActiveUsers() {
-  let elem = document.querySelector('#active-users')
+  const elem = document.querySelector('#active-users')
   if (active + meatspaceActive > 0) {
     elem.innerHTML = '' + (active + meatspaceActive)
     elem.title = `${active} active seat.camp users, ${meatspaceActive} meatspace`
@@ -81,17 +85,17 @@ createDropdown(document.querySelector('header .dropdown'), {
   about: () => showAbout(),
 })
 
-let updateTheme = newTheme => {
-  document.body.classList.toggle('dark', newTheme == 'dark')
-  let otherTheme = newTheme == 'light' ? 'dark' : 'light'
+const updateTheme = newTheme => {
+  document.body.classList.toggle('dark', newTheme === 'dark')
+  const otherTheme = newTheme === 'light' ? 'dark' : 'light'
   document.querySelector('#change-theme').textContent = `Use ${otherTheme} theme`
 }
 
 theme.on('themeChange', updateTheme)
 updateTheme(theme.getTheme())
 
-var messageInput = document.querySelector('#message')
-  , awaitingAck = null
+const messageInput = document.querySelector('#message')
+let awaitingAck = null
 
 createCharCounter(messageInput, document.querySelector('#char-counter'), 250)
 
@@ -120,7 +124,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
       return console.error(err)
     }
 
-    var message = {
+    const message = {
       text: messageInput.value,
       format: 'image/jpeg',
       ack: awaitingAck
@@ -128,14 +132,14 @@ document.querySelector('form').addEventListener('submit', function(event) {
     io.emit('chat', message, frames)
     messageInput.value = ''
     // fire 'change'
-    let event = document.createEvent('HTMLEvents')
+    const event = document.createEvent('HTMLEvents')
     event.initEvent('change', false, true)
     messageInput.dispatchEvent(event)
   }).on('progress', percentDone => progressSpinner.setValue(percentDone))
 })
 
 io.on('ack', function(ack) {
-  if (awaitingAck && awaitingAck == ack.key) {
+  if (awaitingAck && awaitingAck === ack.key) {
     messageInput.readonly = false
     awaitingAck = null
     if (ack.err) {
@@ -155,7 +159,7 @@ document.addEventListener('visibilitychange', () => {
   }
 })
 
-var notificationCounter = new NotificationCounter()
+const notificationCounter = new NotificationCounter()
 function updateNotificationCount() {
   if (!unreadMessages) {
     notificationCounter.clear()
@@ -165,17 +169,17 @@ function updateNotificationCount() {
 }
 
 function showAbout() {
-  let { scrim, container, dialog } = createAbout()
+  const { scrim, container, dialog } = createAbout()
   document.body.appendChild(scrim)
   document.body.appendChild(container)
 
   setTimeout(() => {
     scrim.classList.remove('entering')
     dialog.classList.remove('entering')
-  }, 15);
+  }, 15)
 
-  let clickListener = e => {
-    if (e.target != container) return
+  const clickListener = e => {
+    if (e.target !== container) return
 
     container.removeEventListener('click', clickListener)
     // remove the dialog
@@ -188,7 +192,7 @@ function showAbout() {
 
       scrim.addEventListener(transitionEvent, () => document.body.removeChild(scrim))
       dialog.addEventListener(transitionEvent, () => document.body.removeChild(container))
-    }, 15);
+    }, 15)
   }
   container.addEventListener('click', clickListener)
 }
