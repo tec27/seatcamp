@@ -24,6 +24,7 @@ app
   .set('x-powered-by', false)
   .set('view engine', 'jade')
 
+const servers = []
 let httpServer
 let listenPort
 
@@ -58,15 +59,19 @@ if (config.sslCert) {
   listenPort = config.sslPort
 
   const canon = canonicalHost(config.canonicalHost, 301)
-  http.createServer(function(req, res) {
+  const redirector = http.createServer(function(req, res) {
     if (canon(req, res)) return
     res.statusCode = 400
     res.end('Bad request\n')
-  }).listen(config.port)
+  })
+  servers.push(redirector)
+
+  redirector.listen(config.port)
 } else {
   httpServer = http.Server(app)
   listenPort = config.port
 }
+servers.push(httpServer)
 
 const io = socketIo(httpServer)
 
@@ -79,24 +84,33 @@ app
 
 app.use(serveStatic('public'))
 
-userCounter(io)
-createFfmpegRunner((err, runner) => {
-  if (err) {
-    throw err
-  }
+const readyPromise = new Promise((resolve, reject) => {
+  userCounter(io)
+  createFfmpegRunner((err, runner) => {
+    if (err) {
+      throw err
+    }
 
-  const chat = new ChatSockets(// eslint-disable-line no-unused-vars
-      io,
-      userIdKey,
-      meatspaceProxy(config.meatspaceServer, runner),
-      runner,
-      15, /* server backscroll limit */
-      10 * 60 * 1000, /* expiry time */
-      1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */)
+    const chat = new ChatSockets(// eslint-disable-line no-unused-vars
+        io,
+        userIdKey,
+        meatspaceProxy(config.meatspaceServer, runner),
+        runner,
+        15, /* server backscroll limit */
+        10 * 60 * 1000, /* expiry time */
+        1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */)
 
-  httpServer.listen(listenPort, function() {
-    const host = httpServer.address().address
-    const port = httpServer.address().port
-    console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
+    httpServer.listen(listenPort, function() {
+      const host = httpServer.address().address
+      const port = httpServer.address().port
+      console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
+      resolve()
+    })
   })
 })
+
+export default {
+  io,
+  servers,
+  readyPromise,
+}

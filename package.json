@@ -63,7 +63,9 @@
     "eslint": "^1.5.1",
     "eslint-plugin-babel": "^2.1.1",
     "mocha": "^2.3.3",
-    "mocha-eslint": "^1.0.0"
+    "mocha-eslint": "^1.0.0",
+    "proxyquire": "^1.7.2",
+    "stream-spigot": "^3.0.5"
   },
   "browser": {
     "waypoints": "./node_modules/waypoints/lib/noframework.waypoints.js"
