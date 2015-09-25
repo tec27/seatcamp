@@ -9,6 +9,7 @@ const testConfig = {
   port: PORT,
   idKey: 'test',
   meatspaceServer: false,
+  '@noCallThru': true,
 }
 
 const stubFs = {
@@ -57,9 +58,11 @@ describe('legacy client support', () => {
     await server.readyPromise
   })
   after(() => {
-    server.io.close()
-    for (const s of server.servers) {
-      s.close()
+    if (server) {
+      server.io.close()
+      for (const s of server.servers) {
+        s.close()
+      }
     }
   })
 
