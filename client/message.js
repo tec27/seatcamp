@@ -7,7 +7,7 @@ import localeTime from './locale-time'
 import theme from './theme'
 
 const MESSAGE_LIMIT = 30
-  , MAX_RECYCLED = 6
+  , MAX_RECYCLED = 0
   , NUM_VIDEO_FRAMES = 10
   , FILMSTRIP_DURATION = 0.92
   , FILMSTRIP_HORIZONTAL = false
@@ -257,7 +257,6 @@ class MessageList {
     toRecycle = Math.min(toRecycle, messages.length)
     this._recycled = this._recycled.concat(messages.slice(0, toRecycle))
     for (const message of messages.slice(toRecycle, messages.length)) {
-      message.elem.parentElement.removeChild(message.elem)
       message.dispose()
     }
   }
