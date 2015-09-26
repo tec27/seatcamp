@@ -36,7 +36,7 @@ export default class NotificationCounter {
       c.fillStyle = 'rgb(255, 255, 255)'
       c.textAlign = 'left'
       c.textBaseline = 'top'
-      c.strokeStyle = 'rgba(244, 67, 54, 0.95)'
+      c.strokeStyle = 'rgba(2, 136, 209, 0.95)'
       c.lineWidth = this._rel16(4)
       const startX = this._rel16(2)
       const startY = this._rel16(1)

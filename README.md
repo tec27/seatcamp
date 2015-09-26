@@ -1,4 +1,4 @@
-![seatcamp](https://github.com/tec27/seatcamp/blob/master/icon/seatcamp-256.png)
+![seatcamp](https://github.com/tec27/seatcamp/blob/master/icon/icon-256.png)
 # seatcamp
 A web-based ephemeral chat site that lets users send simple, short messages
 along with a 2-second video of themselves.
