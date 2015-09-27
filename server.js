@@ -5,6 +5,7 @@ import path from 'path'
 import fs from 'fs'
 import socketIo from 'socket.io'
 import browserify from 'browserify-middleware'
+import bundleCollapser from 'bundle-collapser/plugin'
 import serveStatic from 'serve-static'
 import serveCss from './lib/serve-css'
 import canonicalHost from 'canonical-host'
@@ -77,9 +78,14 @@ const io = socketIo(httpServer)
 
 app.use(require('cookie-parser')())
 
+const browserifyOpts = {}
+if (process.env.NODE_ENV === 'production') {
+  browserifyOpts.plugins = [{ plugin: bundleCollapser }]
+}
+
 app
   .get('/', (req, res) => res.render('index', { theme: req.cookies.theme }))
-  .get('/client.js', browserify('./client/index.js'))
+  .get('/client.js', browserify('./client/index.js', browserifyOpts))
   .get('/styles.css', serveCss('./css/styles.css'))
 
 app.use(serveStatic('public'))
