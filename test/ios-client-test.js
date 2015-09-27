@@ -8,7 +8,6 @@ const PORT = 62578
 const testConfig = {
   port: PORT,
   idKey: 'test',
-  meatspaceServer: false,
   '@noCallThru': true,
 }
 

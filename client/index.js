@@ -33,13 +33,11 @@ for (const t in possibleEvents) {
 }
 
 let active = 0
-let meatspaceActive = 0
 io.on('connect', function() {
   io.emit('fingerprint', getFingerprint())
   io.emit('join', 'jpg')
 }).on('disconnect', function() {
   active = 0
-  meatspaceActive = 0
   updateActiveUsers()
 })
 
@@ -58,21 +56,13 @@ io.on('chat', function(chat) {
 }).on('active', function(numActive) {
   active = numActive
   updateActiveUsers()
-}).on('meatspaceActive', function(numActive) {
-  meatspaceActive = numActive
-  updateActiveUsers()
-}).on('meatspace', function(status) {
-  if (status !== 'connected') {
-    meatspaceActive = 0
-    updateActiveUsers()
-  }
 })
 
 function updateActiveUsers() {
   const elem = document.querySelector('#active-users')
-  if (active + meatspaceActive > 0) {
-    elem.innerHTML = '' + (active + meatspaceActive)
-    elem.title = `${active} active seat.camp users, ${meatspaceActive} meatspace`
+  if (active > 0) {
+    elem.innerHTML = '' + active
+    elem.title = `${active} active users`
   } else {
     elem.innerHTML = '?'
     elem.title = 'not connected'

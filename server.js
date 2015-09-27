@@ -12,7 +12,6 @@ import canonicalHost from 'canonical-host'
 import userCounter from './lib/user-counter'
 import createFfmpegRunner from './lib/ffmpeg-runner'
 import ChatSockets from './lib/chat-sockets'
-import meatspaceProxy from './lib/meatspace-proxy'
 import config from './conf.json'
 
 const userIdKey = config.idKey
@@ -100,7 +99,6 @@ const readyPromise = new Promise((resolve, reject) => {
     const chat = new ChatSockets(// eslint-disable-line no-unused-vars
         io,
         userIdKey,
-        meatspaceProxy(config.meatspaceServer, runner),
         runner,
         15, /* server backscroll limit */
         10 * 60 * 1000, /* expiry time */
