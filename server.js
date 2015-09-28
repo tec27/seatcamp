@@ -85,7 +85,7 @@ if (process.env.NODE_ENV === 'production') {
 app
   .get('/', (req, res) => res.render('index', { theme: req.cookies.theme }))
   .get('/client.js', browserify(__dirname + '/client/index.js', browserifyOpts))
-  .get('/styles.css', serveCss(__dirname + './css/styles.css'))
+  .get('/styles.css', serveCss(__dirname + '/css/styles.css'))
 
 app.use(serveStatic('public'))
 
