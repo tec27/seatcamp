@@ -1,11 +1,12 @@
 import sha1 from 'sha1'
 import theme from './theme'
 
-export default function createIdenticon(id, internal) {
+export default function createIdenticon(id) {
   const hash = sha1(id)
   const container = document.createElement('div')
   let html = []
   container.className = 'identicon'
+  container.dataset.fingerprint = id
   // Last 16 characters are the foreground color
   const fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
   const saturationLow = theme.isDark() ? 35 : 50
