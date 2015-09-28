@@ -46,7 +46,10 @@ const ioOpts = {
   forceNew: true,
 }
 
-describe('legacy client support', () => {
+describe('legacy client support', function() {
+  // These tests can run a tad long on some machines
+  this.timeout(4000)
+
   let server
   before(async () => {
     server = proxyquire('../server.js', {
