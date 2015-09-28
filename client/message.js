@@ -1,7 +1,7 @@
 import Waypoint from 'waypoints'
 import filmstrip2gif from 'filmstrip2gif'
 import createIdenticon from './identicon'
-import svgIcons from './svg-icons'
+import icons from './icons'
 import createDropdown from './dropdown'
 import localeTime from './locale-time'
 import theme from './theme'
@@ -52,8 +52,8 @@ class Message {
     this.messageOverflow = this.root.querySelector('.message-overflow')
 
     // generate icons where needed
-    this.saveButton.appendChild(svgIcons.save('invert'))
-    this.messageOverflow.appendChild(svgIcons.moreVert('normal'))
+    this.saveButton.appendChild(icons.save('invert'))
+    this.messageOverflow.appendChild(icons.moreVert('normal'))
 
     this.waypoints = [
       new Waypoint({

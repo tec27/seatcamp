@@ -1,5 +1,5 @@
 import initWebrtc from './init-webrtc'
-import svgIcons from './svg-icons'
+import icons from './icons'
 
 class CameraPreview {
   constructor(previewContainer) {
@@ -60,9 +60,9 @@ class CameraPreview {
     this.switchButton.setAttribute('title', `Switch to ${otherCameraTitle} camera`)
     this.switchButton.addEventListener('click', this.switchButtonListener)
     if (this.videoStream.facing === 'front') {
-      this.switchButton.appendChild(svgIcons.cameraRear('invert'))
+      this.switchButton.appendChild(icons.cameraRear('invert'))
     } else {
-      this.switchButton.appendChild(svgIcons.cameraFront('invert'))
+      this.switchButton.appendChild(icons.cameraFront('invert'))
     }
 
     this.container.appendChild(this.switchButton)

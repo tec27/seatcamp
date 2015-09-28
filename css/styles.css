@@ -89,10 +89,6 @@ button {
   font-family: 'Roboto', 'sans-serif';
 }
 
-button > .icon > svg {
-  vertical-align: middle;
-}
-
 header {
   background-color: #F06292;
   color: #ffffff;
@@ -119,16 +115,16 @@ header .actions {
   display: flex;
 }
 
-.icon-invert {
-  fill: #ffffff;
+.icon-invert.icon-invert {
+  color: #ffffff;
 }
 
-.icon-normal {
-  fill: rgba(0, 0, 0, 0.54);
+.icon-normal.icon-normal {
+  color: rgba(0, 0, 0, 0.54);
 }
 
-.dark .icon-normal {
-  fill: #ffffff;
+.dark .icon-normal.icon-normal {
+  color: #ffffff;
 }
 
 #active-users {
@@ -204,6 +200,10 @@ header .actions {
   padding-left: 16px;
   padding-right: 16px;
   text-align: left;
+}
+
+.dropdown button.material-icons {
+  font-size: 24px;
 }
 
 .dark .dropdown button {
@@ -391,11 +391,11 @@ header .actions {
 }
 
 .message-overflow:hover .icon, .message-overflow:active .icon {
-  fill: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .dark .message-overflow:hover .icon, .dark .message-overflow:active .icon {
-  fill: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .identicon {
@@ -461,13 +461,14 @@ footer .progress {
 .preview-container .switch-camera, .preview-container .switch-camera:focus {
   position: absolute;
   display: block;
-  padding: 4px 8px;
+  /* vertical differences here account for weirdness in this particular icon's spacing */
+  padding: 6px 8px 2px;
   bottom: 8px;
   left: 8px;
   border: 1px solid rgba(0, 0, 0, 0.54);
   outline: none;
   border-radius: 2px;
-  background-color: #03a9f4;
+  background-color: #F06292;
   opacity: 0;
   visibility: hidden;
 
@@ -589,10 +590,6 @@ form {
 
 #send:active {
   background-color: #FF71A1;
-}
-
-#send > svg {
-  vertical-align: middle;
 }
 
 .progress {

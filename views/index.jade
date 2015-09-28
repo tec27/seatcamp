@@ -3,7 +3,7 @@ html
   head
     title meatspace
     link(type='text/css', rel='stylesheet',
-      href='//fonts.googleapis.com/css?family=Roboto:300,500,400')
+      href='//fonts.googleapis.com/css?family=Roboto:300,500,400|Material+Icons')
     link(type='text/css', rel='stylesheet', href='styles.css')
     link(type='image/x-icon', rel='icon', href='favicon.ico')
     meta(name='theme-color', content='#212121')
@@ -18,8 +18,7 @@ html
       .actions
         p#active-users ?
         div.dropdown
-          button.toggle.icon-invert(title="Options")
-            include ../svg/ic_more_vert_24px.svg
+          button.toggle.icon-invert.material-icons(title="Options") more_vert
           div.menu.shadow-2
             button(data-action='unmute') Unmute all
             button#change-theme(data-action='changeTheme') Use dark theme
@@ -41,6 +40,5 @@ html
         input#message(type='text', maxlength='250', autofocus='true', autocomplete='off',
           autocorrect='on', autocapitalize='on', spellcheck='true')
         p#char-counter 0 / 250
-        button#send.icon-invert(type='submit', title="Send")
-          include ../svg/ic_send_24px.svg
+        button#send.icon-invert.material-icons(type='submit', title="Send") send
     script(type='text/javascript', src='client.js')
