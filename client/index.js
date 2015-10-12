@@ -11,11 +11,13 @@ import initProgressSpinner from './progress'
 import initMessageList from './message'
 import theme from './theme'
 import createAbout from './about'
+import Tracker from './analytics'
 
 const io = createSocketIoClient()
 const muteSet = new StoredSet('mutes')
 const progressSpinner = initProgressSpinner(document.querySelector('.progress'))
-const messageList = initMessageList(document.querySelector('#message-list'), muteSet)
+const tracker = new Tracker()
+const messageList = initMessageList(document.querySelector('#message-list'), muteSet, tracker)
 
 const possibleEvents = {
   transition: 'transitionend',
@@ -70,9 +72,19 @@ function updateActiveUsers() {
 }
 
 createDropdown(document.querySelector('header .dropdown'), {
-  unmute: () => muteSet.clear(),
-  changeTheme: () => theme.setTheme(theme.isDark() ? 'light' : 'dark'),
-  about: () => showAbout(),
+  unmute: () => {
+    muteSet.clear()
+    tracker.onUnmute()
+  },
+  changeTheme: () => {
+    const newTheme = theme.isDark() ? 'light' : 'dark'
+    theme.setTheme(newTheme)
+    tracker.onChangeTheme(newTheme)
+  },
+  about: () => {
+    showAbout()
+    tracker.onShowAbout()
+  },
 })
 
 const updateTheme = newTheme => {
@@ -86,6 +98,7 @@ updateTheme(theme.getTheme())
 
 const messageInput = document.querySelector('#message')
 let awaitingAck = null
+let sendTime = 0
 
 createCharCounter(messageInput, document.querySelector('#char-counter'), 250)
 
@@ -111,6 +124,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
       messageInput.readOnly = false
       awaitingAck = null
       // TODO(tec27): show to user
+      tracker.onMessageCaptureError(err.message)
       return console.error(err)
     }
 
@@ -120,6 +134,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
       ack: awaitingAck
     }
     io.emit('chat', message, frames)
+    sendTime = Date.now()
     messageInput.value = ''
     // fire 'change'
     const event = document.createEvent('HTMLEvents')
@@ -130,16 +145,20 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
 io.on('ack', function(ack) {
   if (awaitingAck && awaitingAck === ack.key) {
+    const timing = Date.now() - sendTime
     messageInput.readOnly = false
     awaitingAck = null
     if (ack.err) {
       // TODO(tec27): display to user
       console.log('Error: ' + ack.err)
+      tracker.onMessageSendError('' + ack.err, timing)
+    } else {
+      tracker.onMessageSent(timing)
     }
   }
 })
 
-cameraPreview(document.querySelector('#preview').parentNode)
+cameraPreview(document.querySelector('#preview').parentNode, tracker)
 
 document.addEventListener('visibilitychange', () => {
   document.body.classList.toggle('backgrounded', document.hidden)

@@ -138,6 +138,7 @@ class Message {
   saveGif() {
     this._throwIfDisposed()
     this.saveButton.disabled = true
+    this.owner.trackSaveGif()
 
     const cb = (err, gifBlob) => {
       this.saveButton.disabled = false
@@ -194,13 +195,14 @@ class Message {
 }
 
 class MessageList {
-  constructor(listElem, muteSet) {
+  constructor(listElem, muteSet, tracker) {
     this.elem = listElem
     this.messages = []
     this.messageKeys = new Set()
     this._recycled = []
 
     this._mutes = muteSet
+    this._tracker = tracker
 
     theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
   }
@@ -230,6 +232,7 @@ class MessageList {
 
   muteUser(userId) {
     this._mutes.add(userId)
+    this._tracker.onUserMuted()
 
     const userMessages = []
     const nonUserMessages = []
@@ -244,6 +247,10 @@ class MessageList {
     this._recycle(userMessages)
     this.messages = nonUserMessages
     this._refreshWaypoints()
+  }
+
+  trackSaveGif() {
+    this._tracker.onSaveGif()
   }
 
   _recycle(messages) {
@@ -278,6 +285,6 @@ class MessageList {
   }
 }
 
-export default function createMessageList(listElem, muteSet) {
-  return new MessageList(listElem, muteSet)
+export default function createMessageList() {
+  return new MessageList(...arguments)
 }

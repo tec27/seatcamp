@@ -2,12 +2,13 @@ import initWebrtc from './init-webrtc'
 import icons from './icons'
 
 class CameraPreview {
-  constructor(previewContainer) {
+  constructor(previewContainer, tracker) {
     this.container = previewContainer
     this.videoElem = previewContainer.querySelector('video')
     this.facing = null
     this.switchButton = null
     this.videoStream = null
+    this.tracker = tracker
 
     this.switchButtonListener = () => this.onSwitchCamera()
 
@@ -38,8 +39,11 @@ class CameraPreview {
         // TODO(tec27): display something to the user depending on error type
         console.log('error initializing camera preview:')
         console.dir(err)
+        this.tracker.onCameraError(err.name || err.message)
         return
       }
+
+      this.tracker.onCameraInitialized()
 
       this.videoStream = stream
       this.updateSwitchButton()
@@ -71,10 +75,11 @@ class CameraPreview {
   onSwitchCamera() {
     this.facing = this.facing === 'front' ? 'rear' : 'front'
     window.localStorage.setItem('cameraFacing', this.facing)
+    this.tracker.onCameraFacingChange(this.facing)
     this.initializeCamera()
   }
 }
 
-export default function createCameraPreview(previewContainer) {
-  return new CameraPreview(previewContainer)
+export default function createCameraPreview() {
+  return new CameraPreview(...arguments)
 }
