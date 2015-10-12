@@ -92,6 +92,12 @@ on and sufficiently long (10+ characters recommended).
 
 **Ex:** `"idKey": "thisServerIsGreat123"`
 
+#### gaTrackingId
+The tracking ID to use for Google Analytics tracking. If this isn't
+specified (or is a falsy value), Analytics will not be utilized.
+
+**Ex:** `"gaTrackingId": "UA-9999999-1"`
+
 ###HTTPS options (all must be specified if you want to use HTTPS)
 ####sslCert
 A relative filepath to an SSL certificate file to be used for setting up
