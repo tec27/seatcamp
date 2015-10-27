@@ -12,25 +12,22 @@ const MESSAGE_LIMIT = 30
   , FILMSTRIP_DURATION = 0.92
   , FILMSTRIP_HORIZONTAL = false
 
-/* eslint-disable indent */ // indented for HTML clarity
-const MESSAGE_HTML = [
-  '<div class="video-container">',
-    '<div class="filmstrip"></div>',
-    '<button class="save shadow-1" title="Save as GIF"></button>',
-  '</div>',
-  '<p>',
-  '<div class="message-meta">',
-    '<div class="dropdown">',
-      '<button class="toggle message-overflow" title="Message options"></button>',
-      '<div class="menu shadow-2">',
-        '<button data-action="mute">Mute user</button>',
-      '</div>',
-    '</div>',
-    '<div class="identicon"></div>',
-    '<time></time>',
-  '</div>',
-].join('')
-/* eslint-enable indent */
+const MESSAGE_HTML = `
+  <div class="video-container">
+    <div class="filmstrip"></div>
+    <button class="save shadow-1" title="Save as GIF"></button>
+  </div>
+  <p>
+  <div class="message-meta">
+    <div class="dropdown">
+      <button class="toggle message-overflow" title="Message options"></button>
+      <div class="menu shadow-2">
+        <button data-action="mute">Mute user</button>
+      </div>
+    </div>
+    <div class="identicon"></div>
+    <time></time>
+  </div>`
 
 class Message {
   constructor(owner) {
@@ -49,6 +46,7 @@ class Message {
     this.timestamp = this.root.querySelector('time')
     // placeholder div so it can be replaced with the real thing when bound
     this.identicon = this.root.querySelector('.identicon')
+    this.muteButton = this.root.querySelector('.menu button')
     this.messageOverflow = this.root.querySelector('.message-overflow')
 
     // generate icons where needed
@@ -77,7 +75,7 @@ class Message {
     })
   }
 
-  bind({ key, text, sent, userId, from, video, videoMime, videoType }) {
+  bind({ key, text, sent, userId, from, video, videoMime, videoType }, myId) {
     this._throwIfDisposed()
     this.unbind()
 
@@ -91,6 +89,10 @@ class Message {
     this.timestamp.datetime = sentDate.toISOString()
     this.timestamp.innerHTML = localeTime(sentDate)
 
+    if (myId === userId) {
+      // No mute menu for yourself
+      this.muteButton.setAttribute('disabled', true)
+    }
     this._userId = userId
     this.refreshIdenticon()
 
@@ -119,6 +121,8 @@ class Message {
       window.URL.revokeObjectURL(this._srcUrl)
       this._srcUrl = null
     }
+
+    this.muteButton.removeAttribute('disabled')
 
     for (const waypoint of this.waypoints) {
       waypoint.disable()
@@ -201,6 +205,7 @@ class MessageList {
     this.messageKeys = new Set()
     this._recycled = []
 
+    this.clientId = ''
     this._mutes = muteSet
     this._tracker = tracker
 
@@ -222,7 +227,7 @@ class MessageList {
     }
 
     const message = this._recycled.length ? this._recycled.pop() : new Message(this)
-    message.bind(chat)
+    message.bind(chat, this.clientId)
     this.messages.push(message)
     this.messageKeys.add(message.key)
     this.elem.appendChild(message.elem)
@@ -231,6 +236,10 @@ class MessageList {
   }
 
   muteUser(userId) {
+    if (userId === this.clientId) {
+      // don't mute me, me
+      return
+    }
     this._mutes.add(userId)
     this._tracker.onUserMuted()
 
