@@ -328,6 +328,7 @@ header .actions {
   visibility: hidden;
 
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .video-container:hover .save {
@@ -489,6 +490,7 @@ footer .progress {
   visibility: hidden;
 
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .preview-container:hover .switch-camera {
@@ -533,6 +535,7 @@ form {
   padding: 4px 2px;
 
   transition: border-color .3s;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .dark #message {
@@ -583,6 +586,7 @@ form {
   opacity: 0;
 
   transition: visiblity .3s, opacity .3s, color .3s;
+  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
 }
 
 .dark #char-counter {
@@ -637,6 +641,7 @@ form {
   opacity: 0;
 
   transition: visibility .3s, opacity .3s;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
 }
 
 .progress.visible {
