@@ -119,6 +119,10 @@ header .actions {
   color: #ffffff;
 }
 
+.icon-invert.icon-invert:disabled {
+  color: rgba(255, 255, 255, 0.3);
+}
+
 .icon-normal.icon-normal {
   color: rgba(0, 0, 0, 0.54);
 }
@@ -555,6 +559,19 @@ form {
   border-color: #D32F2F;
 }
 
+/* lol css gods look at me now */
+#message[readonly][readonly][readonly] {
+  border-color: #CB7A95;
+}
+
+#message[readonly] {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.dark #message[readonly] {
+  color: rgba(255, 255, 255, 0.3);
+}
+
 #char-counter {
   color: rgba(0, 0, 0, 0.54);
   padding: 0px 8px;
@@ -602,6 +619,11 @@ form {
 
 #send:active {
   background-color: #FF71A1;
+}
+
+#send:disabled:disabled {
+  cursor: default;
+  background-color: #CB7A95;
 }
 
 .progress {

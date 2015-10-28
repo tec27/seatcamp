@@ -101,6 +101,7 @@ theme.on('themeChange', updateTheme)
 updateTheme(theme.getTheme())
 
 const messageInput = document.querySelector('#message')
+const sendButton = document.querySelector('#send')
 let awaitingAck = null
 let sendTime = 0
 
@@ -111,7 +112,9 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
   if (awaitingAck) return
 
+  const messageText = messageInput.value
   messageInput.readOnly = true
+  sendButton.setAttribute('disabled', true)
   awaitingAck = cuid()
   progressSpinner.setValue(0).show()
 
@@ -127,6 +130,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
 
     messageInput.value = ''
     messageInput.readOnly = false
+    sendButton.removeAttribute('disabled')
 
     if (err) {
       awaitingAck = null
@@ -136,7 +140,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
     }
 
     const message = {
-      text: messageInput.value,
+      text: messageText,
       format: 'image/jpeg',
       ack: awaitingAck
     }
