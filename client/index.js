@@ -124,8 +124,11 @@ document.querySelector('form').addEventListener('submit', function(event) {
       progressSpinner.hide()
       setTimeout(() => progressSpinner.setValue(0), 400)
     }, 400)
+
+    messageInput.value = ''
+    messageInput.readOnly = false
+
     if (err) {
-      messageInput.readOnly = false
       awaitingAck = null
       // TODO(tec27): show to user
       tracker.onMessageCaptureError(err.message)
@@ -139,7 +142,6 @@ document.querySelector('form').addEventListener('submit', function(event) {
     }
     io.emit('chat', message, frames)
     sendTime = Date.now()
-    messageInput.value = ''
     // fire 'change'
     const event = document.createEvent('HTMLEvents')
     event.initEvent('change', false, true)
@@ -150,7 +152,6 @@ document.querySelector('form').addEventListener('submit', function(event) {
 io.on('ack', function(ack) {
   if (awaitingAck && awaitingAck === ack.key) {
     const timing = Date.now() - sendTime
-    messageInput.readOnly = false
     awaitingAck = null
     if (ack.err) {
       // TODO(tec27): display to user
