@@ -11,7 +11,7 @@ class Dropdown {
       // Handle clicks for the toggle
       let t = evt.target
       while (true) {
-        if (t.classList.contains('toggle')) break
+        if (t.classList.contains('toggle') && !t.hasAttribute('disabled')) break
         if (t === evt.currentTarget) return
         t = t.parentElement
       }

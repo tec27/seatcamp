@@ -91,7 +91,7 @@ class Message {
 
     if (myId === userId) {
       // No mute menu for yourself
-      this.muteButton.setAttribute('disabled', true)
+      this.messageOverflow.setAttribute('disabled', true)
     }
     this._userId = userId
     this.refreshIdenticon()
@@ -122,7 +122,7 @@ class Message {
       this._srcUrl = null
     }
 
-    this.muteButton.removeAttribute('disabled')
+    this.messageOverflow.removeAttribute('disabled')
 
     for (const waypoint of this.waypoints) {
       waypoint.disable()

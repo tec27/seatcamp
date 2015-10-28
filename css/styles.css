@@ -390,12 +390,24 @@ header .actions {
   cursor: pointer;
 }
 
+.message-overflow:disabled:hover {
+  cursor: default;
+}
+
 .message-overflow:hover .icon, .message-overflow:active .icon {
   color: rgba(0, 0, 0, 0.87);
 }
 
+.message-overflow:disabled:disabled .icon {
+  color: rgba(0, 0, 0, 0.38);
+}
+
 .dark .message-overflow:hover .icon, .dark .message-overflow:active .icon {
   color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .message-overflow:disabled:disabled .icon {
+  color: rgba(255, 255, 255, 0.3);
 }
 
 .identicon {
