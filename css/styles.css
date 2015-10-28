@@ -244,7 +244,7 @@ header .actions {
 
 #message-list {
   list-style-type: none;
-  margin: 56px auto 116px;
+  margin: 56px auto 158px;
   padding: 0;
   min-width: 640px;
   width: 1400px;
@@ -450,7 +450,7 @@ footer {
   display: flex;
 
   position: fixed;
-  bottom: 8px;
+  bottom: 4px;
   left: 0px;
   right: 0px;
 
@@ -466,8 +466,8 @@ footer .progress {
 .preview-container {
   background: #000000;
 
-  height: 102px;
-  width: 136px;
+  height: 150px;
+  width: 200px;
 }
 
 .preview-container video {
@@ -856,6 +856,7 @@ form {
     screen and (max-device-height: 500px) and (orientation: landscape) {
   #message-list {
     min-width: 0px;
+    margin-bottom: 110px;
   }
 
   #message-list li {
@@ -863,6 +864,11 @@ form {
   }
 
   #message-list li .video-container {
+    height: 102px;
+    width: 136px;
+  }
+
+  .preview-container {
     height: 102px;
     width: 136px;
   }
