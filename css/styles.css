@@ -852,8 +852,7 @@ form {
   }
 }
 
-@media screen and (max-device-width: 500px) and (orientation: portrait),
-    screen and (max-device-height: 500px) and (orientation: landscape) {
+@media screen and (max-device-width: 500px) {
   #message-list {
     min-width: 0px;
     margin-bottom: 110px;
