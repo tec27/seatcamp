@@ -12,9 +12,11 @@ const MESSAGE_LIMIT = 30
   , FILMSTRIP_DURATION = 0.92
   , FILMSTRIP_HORIZONTAL = false
 
+const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='
+
 const MESSAGE_HTML = `
   <div class="video-container">
-    <div class="filmstrip"></div>
+    <img class="filmstrip" src="${BLANK_IMAGE}"/>
     <button class="save shadow-1" title="Save as GIF"></button>
   </div>
   <p>
@@ -33,8 +35,8 @@ class Message {
   constructor(owner) {
     this._disposed = false
     this._userId = null
-    this._isFilmstrip = false
     this._srcUrl = null
+    this._animationRequest = null
     this.owner = owner
 
     this.root = document.createElement('li')
@@ -81,7 +83,7 @@ class Message {
 
     const blob = new window.Blob([ video ], { type: videoMime })
     this._srcUrl = window.URL.createObjectURL(blob)
-    this.filmstrip.style['background-image'] = `url('${this._srcUrl}')`
+    this.filmstrip.src = this._srcUrl
 
     this.chatText.innerHTML = text
 
@@ -97,9 +99,12 @@ class Message {
     this.refreshIdenticon()
 
     this._key = key
-    for (const waypoint of this.waypoints) {
-      waypoint.enable()
-    }
+    this._animationRequest = window.requestAnimationFrame(() => {
+      this._animationRequest = null
+      for (const waypoint of this.waypoints) {
+        waypoint.enable()
+      }
+    })
   }
 
   refreshIdenticon() {
@@ -110,12 +115,17 @@ class Message {
 
   unbind() {
     this._throwIfDisposed()
+
+    if (this._animationRequest) {
+      window.cancelAnimationFrame(this._animationRequest)
+      this._animationRequest = null
+    }
+
     this._userId = null
     this._key = null
-    this._isFilmstrip = false
     this.dropdown.close()
 
-    delete this.filmstrip.style['background-image']
+    this.filmstrip.src = BLANK_IMAGE
 
     if (this._srcUrl) {
       window.URL.revokeObjectURL(this._srcUrl)

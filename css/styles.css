@@ -292,25 +292,28 @@ header .actions {
   height: 150px;
   margin-bottom: -1px;
   position: relative;
+  overflow: hidden;
 }
 
 .video-container .filmstrip {
   display: none;
-}
-
-.video-container .filmstrip {
-  display: block;
   width: 100%;
-  height: 100%;
-  background-size: 100% 1000%;
+  height: 1000%;
+  position: absolute;
+  top: 0;
+  left: 0;
   backface-visibility: hidden;
 }
 
 .displayed .video-container .filmstrip {
+  display: block;
   animation: filmstrip 0.92s infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .backgrounded .displayed .video-container .filmstrip {
+  display: none;
   animation: none;
 }
 
@@ -884,43 +887,43 @@ form {
 
 @keyframes filmstrip {
   0% {
-    background-position: 0 -0%;
+    transform: translateY(0);
     animation-timing-function: steps(1);
   }
   10% {
-    background-position: 0 -100%;
+    transform: translateY(-10%);
     animation-timing-function: steps(1);
   }
   20% {
-    background-position: 0 -200%;
+    transform: translateY(-20%);
     animation-timing-function: steps(1);
   }
   30% {
-    background-position: 0 -300%;
+    transform: translateY(-30%);
     animation-timing-function: steps(1);
   }
   40% {
-    background-position: 0 -400%;
+    transform: translateY(-40%);
     animation-timing-function: steps(1);
   }
   50% {
-    background-position: 0 -500%;
+    transform: translateY(-50%);
     animation-timing-function: steps(1);
   }
   60% {
-    background-position: 0 -600%;
+    transform: translateY(-60%);
     animation-timing-function: steps(1);
   }
   70% {
-    background-position: 0 -700%;
+    transform: translateY(-70%);
     animation-timing-function: steps(1);
   }
   80% {
-    background-position: 0 -800%;
+    transform: translateY(-80%);
     animation-timing-function: steps(1);
   }
   90% {
-    background-position: 0 -900%;
+    transform: translateY(-90%);
     animation-timing-function: steps(1);
   }
 }
