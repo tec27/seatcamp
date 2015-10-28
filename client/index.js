@@ -43,6 +43,10 @@ io.on('connect', function() {
   updateActiveUsers()
 })
 
+io.on('userid', function(id) {
+  messageList.clientId = id
+})
+
 let unreadMessages = 0
 io.on('chat', function(chat) {
   const autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
