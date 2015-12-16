@@ -62,8 +62,6 @@ function initWebrtc(video, width, height, facing, cb) {
 
   const constraints = {
     optional: [
-      { minWidth: width },
-      { minHeight: height },
       { minAspectRatio: width / height },
     ],
   }
