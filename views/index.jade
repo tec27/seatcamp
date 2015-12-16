@@ -14,7 +14,7 @@ html
         background-color: #212121;
         color: #ffffff;
       }
-      
+    link(rel='manifest', href='manifest.json')  
     link(type='text/css', rel='stylesheet',
       href='//fonts.googleapis.com/css?family=Roboto:300,500,400|Material+Icons')
     link(type='text/css', rel='stylesheet', href='styles.css?20151027')
@@ -51,7 +51,7 @@ html
             p.text 0%
       form.shadow-1
         input#message(type='text', maxlength='250', autofocus='true', autocomplete='off',
-          autocorrect='on', autocapitalize='on', spellcheck='true')
+          autocorrect='on', autocapitalize='on', spellcheck='false')
         p#char-counter 0 / 250
         button#send.icon-invert.material-icons(type='submit', title="Send") send
     if trackingId
