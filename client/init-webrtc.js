@@ -45,7 +45,9 @@ class StreamResult {
       this.video.removeAttribute('src')
     }
 
-    this.stream.stop()
+    for (const track of this.stream.getTracks()) {
+      track.stop()
+    }
     this.video = null
     this.stream = null
     this.stopped = true
