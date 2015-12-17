@@ -308,7 +308,6 @@ header .actions {
 .displayed .video-container .filmstrip {
   display: block;
   animation: filmstrip 0.92s infinite;
-  will-change: transform;
   transform: translateZ(0);
 }
 
