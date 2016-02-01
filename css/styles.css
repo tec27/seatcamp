@@ -293,6 +293,7 @@ header .actions {
   margin-bottom: -1px;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .video-container .filmstrip {
@@ -352,14 +353,16 @@ header .actions {
 }
 
 #message-list li p {
-  flex: 1;
+  flex: 1 1;
   padding: 8px;
 
   word-wrap: break-word;
   overflow-wrap: break-word;
+  overflow: hidden;
 }
 
 #message-list li .message-meta {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
