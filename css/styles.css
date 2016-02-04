@@ -473,6 +473,7 @@ footer .progress {
 
   height: 150px;
   width: 200px;
+  flex-shrink: 0;
 }
 
 .preview-container video {
@@ -519,6 +520,7 @@ form {
   display: flex;
   flex: 1;
   margin: 0 8px;
+  overflow: hidden;
 }
 
 .dark form {
@@ -538,6 +540,7 @@ form {
   margin-top: 4px;
   outline: none;
   padding: 4px 2px;
+  overflow: hidden;
 
   transition: border-color .3s;
   transition-timing-function: cubic-bezier(.4, 0, .2, 1);
@@ -884,6 +887,14 @@ form {
   .identicon {
     height: 28px;
     width: 28px;
+  }
+
+  #char-counter {
+    display: none;
+  }
+
+  #message {
+    margin-right: 2px;
   }
 }
 
