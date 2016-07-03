@@ -57,7 +57,8 @@ class StreamResult {
 
 function initWebrtc(video, width, height, facing, cb) {
   if (!getUserMedia) {
-    return cb(new Error('Browser doesn\'t support WebRTC'))
+    cb(new Error('Browser doesn\'t support WebRTC'))
+    return
   }
 
   const constraints = {
@@ -69,7 +70,8 @@ function initWebrtc(video, width, height, facing, cb) {
   let requestedFacing = false
 
   if (!facing || !supportsSourceSelection) {
-    return getMedia()
+    getMedia()
+    return
   }
 
   window.MediaStreamTrack.getSources(infos => {

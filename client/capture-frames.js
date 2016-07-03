@@ -52,8 +52,13 @@ export default function(video, options, cb) {
       } catch (err) {
         if (t) clearTimeout(t)
 
-        if (cb) return cb(err)
-        else return emitter.emit('error', err)
+        if (cb) {
+          cb(err)
+          return
+        } else {
+          emitter.emit('error', err)
+          return
+        }
       }
 
       // + 2 because we want the progress to indicate what frame we are *taking*
@@ -81,7 +86,8 @@ export default function(video, options, cb) {
 
 function compatToBlob(canvas, format, opts, cb) {
   if (canvas.toBlob) {
-    return canvas.toBlob(cb, format, opts)
+    canvas.toBlob(cb, format, opts)
+    return
   }
 
   setTimeout(() => cb(toBlob(canvas.toDataURL(format, opts))), 0)

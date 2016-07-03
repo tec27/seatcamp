@@ -1,10 +1,12 @@
-import Waypoint from 'waypoints'
+import 'waypoints/lib/noframework.waypoints.js'
 import filmstrip2gif from 'filmstrip2gif'
 import createIdenticon from './identicon'
 import icons from './icons'
 import createDropdown from './dropdown'
 import localeTime from './locale-time'
 import theme from './theme'
+
+const Waypoint = window.Waypoint
 
 const MESSAGE_LIMIT = 30
   , MAX_RECYCLED = 0
@@ -159,7 +161,8 @@ class Message {
       if (err) {
         // TODO(tec27): need a good way to display this error to users
         console.error('Error creating GIF:')
-        return console.dir(err)
+        console.dir(err)
+        return
       }
 
       const url = window.URL.createObjectURL(gifBlob)

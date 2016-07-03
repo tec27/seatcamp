@@ -8,7 +8,8 @@ export default class NotificationCounter {
 
   getIcon(cb) {
     if (this.image) {
-      return cb(this.image)
+      cb(this.image)
+      return
     }
 
     const image = new window.Image()

@@ -56,7 +56,7 @@ describe('legacy client support', function() {
       './conf.json': testConfig,
       './lib/frame-converter.js': proxiedFrameConverter,
       './lib/ffmpeg-runner.js': proxiedFfmpegRunner,
-    })
+    }).default
     await server.readyPromise
   })
   after(() => {

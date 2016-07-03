@@ -136,7 +136,8 @@ document.querySelector('form').addEventListener('submit', function(event) {
       awaitingAck = null
       // TODO(tec27): show to user
       tracker.onMessageCaptureError(err.message)
-      return console.error(err)
+      console.error(err)
+      return
     }
 
     const message = {

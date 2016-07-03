@@ -36,7 +36,7 @@ periods of time.
 
 ##Running a server
 ###Required software
-seatcamp requires [node](http://nodejs.org) >=4.0.0, ffmpeg/libav, and ImageMagick
+seatcamp requires [node](http://nodejs.org) >=6.0.0, ffmpeg/libav, and ImageMagick
 in order to work. Node can be downloaded from the official site. ffmpeg or libav
 can generally be installed from your OS's package manager, or from source. Examples
 of installing it:
