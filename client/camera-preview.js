@@ -28,7 +28,8 @@ class CameraPreview {
     }
   }
 
-  initializeCamera() {
+  initializeCamera(attempt = 0) {
+    const initTime = Date.now()
     if (this.videoStream) {
       this.videoStream.stop()
       this.videoStream = null
@@ -36,6 +37,17 @@ class CameraPreview {
 
     initWebrtc(this.videoElem, 200, 150, this.facing, (err, stream) => {
       if (err) {
+        if (attempt < 2 && Date.now() - initTime < 200) {
+          // Chrome has a weird problem where if you try to do a getUserMedia request too early, it
+          // can return a MediaDeviceNotSupported error (even though nothing is wrong and permission
+          // has been granted). So we install a delay and retry a couple times to try and mitigate
+          // this
+          if ((err.name && err.name === 'MediaDeviceNotSupported') ||
+              (err.message && err.message === 'MediaDeviceNotSupported')) {
+            setTimeout(() => this.initializeCamera(attempt + 1), 200)
+            return
+          }
+        }
         // TODO(tec27): display something to the user depending on error type
         console.log('error initializing camera preview:')
         console.dir(err)
