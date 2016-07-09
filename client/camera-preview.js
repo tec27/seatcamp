@@ -49,12 +49,14 @@ class CameraPreview {
           }
         }
         // TODO(tec27): display something to the user depending on error type
+        this.container.classList.remove('camera-enabled')
         console.log('error initializing camera preview:')
         console.dir(err)
         this.tracker.onCameraError(err.name || err.message)
         return
       }
 
+      this.container.classList.add('camera-enabled')
       this.tracker.onCameraInitialized()
 
       this.videoStream = stream

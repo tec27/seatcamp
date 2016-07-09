@@ -470,6 +470,7 @@ footer .progress {
 
 .preview-container {
   background: #000000;
+  position: relative;
 
   height: 150px;
   width: 200px;
@@ -511,6 +512,34 @@ footer .progress {
 
 .switch-camera:active {
   background-color: #FF71A1;
+}
+
+.camera-disabled-message {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.camera-disabled-icon {
+  margin-bottom: 8px;
+  font-size: 48px;
+}
+
+.camera-disabled-text {
+  font-size: 20px;
+}
+
+.camera-enabled .camera-disabled-message {
+  display: none;
 }
 
 form {
@@ -878,6 +907,14 @@ form {
   .preview-container {
     height: 102px;
     width: 136px;
+  }
+
+  .camera-disabled-icon {
+    margin-bottom: 4px;
+  }
+
+  .camera-disabled-text {
+    font-size: 15px;
   }
 
   .message-meta time {
