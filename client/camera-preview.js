@@ -35,7 +35,16 @@ class CameraPreview {
       this.videoStream = null
     }
 
+    let timer = setTimeout(() => {
+      this.container.classList.remove('camera-enabled')
+      timer = null
+    }, 15000)
+
     initWebrtc(this.videoElem, 200, 150, this.facing, (err, stream) => {
+      if (timer) {
+        clearTimeout(timer)
+        timer = null
+      }
       if (err) {
         if (attempt < 2 && Date.now() - initTime < 200) {
           // Chrome has a weird problem where if you try to do a getUserMedia request too early, it
