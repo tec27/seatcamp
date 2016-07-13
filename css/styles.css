@@ -521,6 +521,7 @@ footer .progress {
   right: 0;
   bottom: 0;
   padding: 16px;
+  color: #ffffff;
 
   display: flex;
   flex-direction: column;
