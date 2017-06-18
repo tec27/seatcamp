@@ -84,7 +84,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app
   .get('/', (req, res) =>
-      res.render('index', { theme: req.cookies.theme, trackingId: config.gaTrackingId }))
+    res.render('index', { theme: req.cookies.theme, trackingId: config.gaTrackingId }))
   .get('/client.js', browserify(__dirname + '/client/index.js', browserifyOpts))
   .get('/styles.css', serveCss(__dirname + '/css/styles.css'))
 
@@ -98,13 +98,13 @@ const readyPromise = new Promise((resolve, reject) => {
     }
 
     const chat = new ChatSockets(// eslint-disable-line no-unused-vars
-        io,
-        userIdKey,
-        runner,
-        15, /* server backscroll limit */
-        10 * 60 * 1000, /* expiry time */
-        1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */,
-        !!config.imageMagick7)
+      io,
+      userIdKey,
+      runner,
+      15, /* server backscroll limit */
+      10 * 60 * 1000, /* expiry time */
+      1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */,
+      !!config.imageMagick7)
 
     httpServer.listen(listenPort, function() {
       const host = httpServer.address().address

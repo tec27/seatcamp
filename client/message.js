@@ -172,7 +172,7 @@ class Message {
       link.href = url
       link.download = Date.now() + '.gif'
       click.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0,
-          false, false, false, false, 0, null)
+        false, false, false, false, 0, null)
       link.dispatchEvent(click)
       setTimeout(() => window.URL.revokeObjectURL(url), 100)
     }

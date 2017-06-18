@@ -50,6 +50,7 @@
     "express": "^4.9.8",
     "filmstrip2gif": "^1.0.1",
     "jade": "^1.7.0",
+    "mocha-eslint": "^3.0.1",
     "postcss": "^5.0.8",
     "prepare-response": "^1.1.2",
     "rimraf": "^2.2.8",
@@ -62,12 +63,11 @@
     "waypoints": "^3.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.0",
+    "babel-eslint": "^7.2.3",
     "chai": "^3.3.0",
-    "eslint": "^3.0.0",
-    "eslint-plugin-babel": "^3.3.0",
-    "mocha": "^2.3.3",
-    "mocha-eslint": "^2.1.1",
+    "eslint": "^4.0.0",
+    "eslint-plugin-babel": "^4.1.1",
+    "mocha": "^3.4.2",
     "proxyquire": "^1.7.2",
     "stream-spigot": "^3.0.5"
   },

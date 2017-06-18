@@ -121,7 +121,7 @@ function initWebrtc(video, width, height, facing, cb) {
     function dataLoaded() {
       video.removeEventListener('loadeddata', dataLoaded)
       cb(null,
-          new StreamResult(video, stream, url, hasFrontAndRear, requestedFacing ? facing : null))
+        new StreamResult(video, stream, url, hasFrontAndRear, requestedFacing ? facing : null))
     }
   }
 
