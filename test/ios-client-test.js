@@ -4,6 +4,8 @@ import spigot from 'stream-spigot'
 import sio from 'socket.io-client'
 import { expect } from 'chai'
 
+process.env.TESTING_NO_COMPILE = true
+
 const PORT = 62578
 const testConfig = {
   port: PORT,
@@ -48,7 +50,7 @@ const ioOpts = {
 
 describe('legacy client support', function() {
   // These tests can run a tad long on some machines
-  this.timeout(15000)
+  this.timeout(4000)
 
   let server
   before(async () => {

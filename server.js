@@ -84,7 +84,8 @@ app.use(require('cookie-parser')())
 const compiler = webpack(webpackConfig)
 if (process.env.NODE_ENV !== 'production') {
   app.use(webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath
+    publicPath: webpackConfig.output.publicPath,
+    lazy: !!process.env.TESTING_NO_COMPILE
   }))
 } else {
   compiler.run = thenify(compiler.run)
