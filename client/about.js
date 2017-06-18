@@ -1,11 +1,6 @@
-// Trying to avoid confusing the browserify transform with babel output
-/* eslint-disable no-var */
-var fs = require('fs')
+import content from './about.htm'
 
-var content = fs.readFileSync(__dirname + '/about.htm', 'utf8')
-/* eslint-enable no-var */
-
-module.exports = function() {
+export default function() {
   const scrim = document.createElement('div')
   scrim.className = 'dialog-scrim entering'
 

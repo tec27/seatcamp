@@ -40,4 +40,4 @@ class ThemeManager extends EventEmitter {
   }
 }
 
-module.exports = new ThemeManager()
+export default new ThemeManager()
