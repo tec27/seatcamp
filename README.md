@@ -36,10 +36,10 @@ periods of time.
 
 ##Running a server
 ###Required software
-seatcamp requires [node](http://nodejs.org) >=6.0.0, ffmpeg/libav, and ImageMagick
-in order to work. Node can be downloaded from the official site. ffmpeg or libav
-can generally be installed from your OS's package manager, or from source. Examples
-of installing it:
+seatcamp requires [node](http://nodejs.org) >=6.0.0, [yarn](https://yarnpkg.com),
+ffmpeg/libav, and ImageMagick in order to work. Node and Yarn can be downloaded from
+their official sites. ffmpeg or libav can generally be installed from your OS's
+package manager, or from source. Examples of installing it:
 
 **OSX**
 ```bash
@@ -97,6 +97,13 @@ The tracking ID to use for Google Analytics tracking. If this isn't
 specified (or is a falsy value), Analytics will not be utilized.
 
 **Ex:** `"gaTrackingId": "UA-9999999-1"`
+
+#### imageMagick7
+If you are using ImageMagick 7+, make sure to set this value to true.
+If this value is set to false, or not set at all, ImageMagick 6
+commands will be used.
+
+**Ex:** `"imageMagick7": true`
 
 ###HTTPS options (all must be specified if you want to use HTTPS)
 ####sslCert

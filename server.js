@@ -103,7 +103,8 @@ const readyPromise = new Promise((resolve, reject) => {
         runner,
         15, /* server backscroll limit */
         10 * 60 * 1000, /* expiry time */
-        1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */)
+        1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */,
+        !!config.imageMagick7)
 
     httpServer.listen(listenPort, function() {
       const host = httpServer.address().address
