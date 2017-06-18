@@ -4,3 +4,4 @@ conf.json
 npm-debug.log
 .DS_Store
 *.swp
+public/client.js

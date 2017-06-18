@@ -7,6 +7,7 @@ import thenify from 'thenify'
 import socketIo from 'socket.io'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpack from 'webpack'
+import compression from 'compression'
 import serveStatic from 'serve-static'
 import serveCss from './lib/serve-css'
 import canonicalHost from 'canonical-host'
@@ -89,6 +90,7 @@ if (process.env.NODE_ENV !== 'production') {
   compiler.run = thenify(compiler.run)
 }
 
+app.use(compression())
 app
   .get('/', (req, res) =>
     res.render('index', { theme: req.cookies.theme, trackingId: config.gaTrackingId }))
