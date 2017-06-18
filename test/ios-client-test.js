@@ -48,7 +48,7 @@ const ioOpts = {
 
 describe('legacy client support', function() {
   // These tests can run a tad long on some machines
-  this.timeout(4000)
+  this.timeout(15000)
 
   let server
   before(async () => {
