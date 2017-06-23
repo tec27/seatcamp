@@ -52,6 +52,7 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(nodeEnv)
     }),
   ].concat(isProd ? [
+    new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false },
       output: { comments: false },

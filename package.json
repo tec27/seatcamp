@@ -48,7 +48,7 @@
     "jade": "^1.7.0",
     "mocha-eslint": "^3.0.1",
     "postcss": "^6.0.2",
-    "prepare-response": "^1.1.2",
+    "prepare-response": "^2.0.0",
     "rimraf": "^2.2.8",
     "serve-static": "^1.10.0",
     "sha1": "^1.1.0",
@@ -58,7 +58,7 @@
     "tokenthrottle": "^1.1.0",
     "twitter-text": "^1.10.0",
     "waypoints": "^3.1.1",
-    "webpack": "^2.6.1"
+    "webpack": "^3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
