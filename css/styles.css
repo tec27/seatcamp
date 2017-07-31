@@ -471,6 +471,7 @@ footer .progress {
 .preview-container {
   background: #000000;
   position: relative;
+  overflow: hidden;
 
   height: 150px;
   width: 200px;
@@ -480,6 +481,7 @@ footer .progress {
 .preview-container video {
   height: 100%;
   width: 100%;
+  position: absolute;
 }
 
 .preview-container .switch-camera, .preview-container .switch-camera:focus {

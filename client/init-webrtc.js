@@ -1,25 +1,25 @@
-let getUserMedia = navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia
-if (getUserMedia) {
-  getUserMedia = getUserMedia.bind(navigator)
-}
-
-const supportsSourceSelection = !!window.MediaStreamTrack.getSources
-
-function equalsNormalizedFacing(desired, check) {
-  let normalized = check
-  switch (check) {
-    case 'user':
-      normalized = 'front'
-      break
-    case 'environment':
-      normalized = 'rear'
-      break
+function polyfillGetUserMedia() {
+  if (!navigator.mediaDevices) {
+    navigator.mediaDevices = {}
   }
 
-  return desired === normalized
+  if (!navigator.mediaDevices.getUserMedia) {
+    let oldGetUserMedia = navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia ||
+        navigator.msGetUserMedia
+    if (oldGetUserMedia) {
+      oldGetUserMedia = oldGetUserMedia.bind(navigator)
+    } else {
+      navigator.mediaDevices.getUserMedia =
+        Promise.reject(new Error('Browser doesn\'t support getUserMedia'))
+      return
+    }
+
+    navigator.mediaDevices.getUserMedia = function(constraints) {
+      return new Promise((resolve, reject) => oldGetUserMedia(constraints, resolve, reject))
+    }
+  }
 }
 
 class StreamResult {
@@ -55,80 +55,43 @@ class StreamResult {
 }
 
 
-function initWebrtc(video, width, height, facing, cb) {
-  if (!getUserMedia) {
-    cb(new Error('Browser doesn\'t support WebRTC'))
-    return
-  }
+async function initWebrtc(video, width, height, facing) {
+  polyfillGetUserMedia()
 
   const constraints = {
-    optional: [
-      { minAspectRatio: width / height },
-    ],
+    facingMode: facing,
+    width: {
+      ideal: 1280
+    },
+    height: {
+      ideal: 720
+    },
   }
-  let hasFrontAndRear = false
-  let requestedFacing = false
-
-  if (!facing || !supportsSourceSelection) {
-    getMedia()
-    return
-  }
-
-  window.MediaStreamTrack.getSources(infos => {
-    let found = false
-    let hasFront = false
-    let hasRear = false
-
-    for (const info of infos) {
-      if (info.kind !== 'video') continue
-
-      if (equalsNormalizedFacing(facing, info.facing) && !found) {
-        found = true
-        requestedFacing = true
-        constraints.optional.push({ sourceId: info.id })
-      }
-
-      if (equalsNormalizedFacing('front', info.facing)) {
-        hasFront = true
-      } else if (equalsNormalizedFacing('rear', info.facing)) {
-        hasRear = true
-      }
-    }
-
-    hasFrontAndRear = hasFront && hasRear
-    getMedia()
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: constraints,
   })
 
-  function getMedia() {
-    getUserMedia({
-      audio: false,
-      video: constraints,
-    }, success, failure)
+  let url
+  video.autoplay = true
+  video.muted = true
+  if (video.mozSrcObject) {
+    video.mozSrcObject = stream
+  } else {
+    url = window.URL.createObjectURL(stream)
+    video.src = url
   }
 
-  function success(stream) {
-    let url
-    video.autoplay = true
-    if (video.mozSrcObject) {
-      video.mozSrcObject = stream
-    } else {
-      url = window.URL.createObjectURL(stream)
-      video.src = url
+  await new Promise(resolve => {
+    const listener = () => {
+      video.removeEventListener('loadeddata', listener)
+      resolve()
     }
-
-    video.addEventListener('loadeddata', dataLoaded)
-
-    function dataLoaded() {
-      video.removeEventListener('loadeddata', dataLoaded)
-      cb(null,
-        new StreamResult(video, stream, url, hasFrontAndRear, requestedFacing ? facing : null))
-    }
-  }
-
-  function failure(err) {
-    cb(err)
-  }
+    video.addEventListener('loadeddata', listener)
+  })
+  return new StreamResult(video, stream, url, true /* hasFrontAndRear */, facing)
 }
 
-initWebrtc.supportsSourceSelection = supportsSourceSelection
+// TODO(tec27): only set this if there are multiple cameras?
+initWebrtc.supportsSourceSelection = true
 export default initWebrtc

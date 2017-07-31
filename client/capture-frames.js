@@ -25,6 +25,22 @@ export default function(video, options, cb) {
   let awaitingSave = opts.numFrames
   let index = 0
 
+  const dimens = {
+    left: 0,
+    top: 0,
+    width: video.videoWidth,
+    height: video.videoHeight
+  }
+  const targetAspect = opts.width / opts.height
+  const actualAspect = dimens.width / dimens.height
+  if (targetAspect > actualAspect) {
+    dimens.height = Math.round(dimens.width / targetAspect)
+  } else {
+    dimens.width = Math.round(dimens.height * targetAspect)
+  }
+  dimens.left = Math.floor((video.videoWidth - dimens.width) / 2)
+  dimens.top = Math.floor((video.videoHeight - dimens.height) / 2)
+
   setTimeout(begin, 0)
   return emitter
 
@@ -47,8 +63,10 @@ export default function(video, options, cb) {
 
     (function(i) {
       try {
-        // TODO(tec27): handle letterboxing
-        context.drawImage(video, 0, 0, canvas.width, canvas.height)
+        context.drawImage(
+          video,
+          dimens.left, dimens.top, dimens.width, dimens.height,
+          0, 0, canvas.width, canvas.height)
       } catch (err) {
         if (t) clearTimeout(t)
 
