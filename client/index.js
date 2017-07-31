@@ -50,20 +50,31 @@ io.on('userid', function(id) {
 })
 
 let unreadMessages = 0
+let historyComplete = false
 io.on('chat', function(chat) {
   const autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
   const message = messageList.addMessage(chat, autoScroll)
+  if (message) {
+    hideEmptyState()
+  }
   if (message && autoScroll) {
     message.elem.scrollIntoView()
   }
 
-  if (message && document.hidden) {
+  if (historyComplete && message && document.hidden) {
     unreadMessages++
     updateNotificationCount()
   }
 }).on('active', function(numActive) {
   active = numActive
   updateActiveUsers()
+}).on('historyComplete', () => {
+  if (!historyComplete) {
+    historyComplete = true
+    if (!messageList.hasMessages()) {
+      showEmptyState()
+    }
+  }
 })
 
 function updateActiveUsers() {
@@ -216,4 +227,12 @@ function showAbout() {
     }, 15)
   }
   container.addEventListener('click', clickListener)
+}
+
+function showEmptyState() {
+  document.body.classList.add('no-messages')
+}
+
+function hideEmptyState() {
+  document.body.classList.remove('no-messages')
 }

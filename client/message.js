@@ -225,6 +225,10 @@ class MessageList {
     theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
   }
 
+  hasMessages() {
+    return this.messages.length > 0
+  }
+
   addMessage(chat, removeOverLimit = true) {
     if (this._mutes.has(chat.userId)) {
       return null

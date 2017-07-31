@@ -296,6 +296,24 @@ header .actions {
   flex-shrink: 0;
 }
 
+.empty-view {
+  display: none;
+}
+
+.no-messages .empty-view {
+  display: block;
+  padding-left: 16px;
+  padding-right: 16px;
+  font-size: 34px;
+  color: rgba(0, 0, 0, 0.54);
+  text-align: center;
+  margin: 0px auto;
+}
+
+.dark.no-messages .empty-view {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .video-container .filmstrip {
   display: none;
   width: 100%;
@@ -905,6 +923,10 @@ form {
   #message-list li .video-container {
     height: 102px;
     width: 136px;
+  }
+
+  .no-messages .empty-view {
+    font-size: 24px;
   }
 
   .preview-container {
