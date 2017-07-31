@@ -5,7 +5,7 @@ const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'developm
 const isProd = nodeEnv === 'production'
 
 export default {
-  entry: './client/index.js',
+  entry: './client/root.js',
   output: {
     filename: 'client.js',
     path: path.resolve(__dirname, 'public'),

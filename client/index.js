@@ -1,5 +1,3 @@
-import 'babel-polyfill'
-
 import createSocketIoClient from 'socket.io-client'
 import cameraPreview from './camera-preview'
 import captureFrames from './capture-frames'
