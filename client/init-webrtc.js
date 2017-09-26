@@ -78,6 +78,7 @@ async function initWebrtc(video, width, height, facing) {
   let url
   video.autoplay = true
   video.muted = true
+  video.playsInline = true
 
   if ('srcObject' in video) {
     video.srcObject = stream
