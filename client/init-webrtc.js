@@ -40,7 +40,10 @@ class StreamResult {
       this.video.removeAttribute('src')
       window.URL.revokeObjectURL(this.url)
       this.url = null
-    } else if (this.video.mozSrcObject && this.video.mozSrcObject === this.stream) {
+    } else if (
+      (this.video.srcObject && this.video.srcObject === this.stream) ||
+      (this.video.mozSrcObject && this.video.mozSrcObject === this.stream)
+    ) {
       this.video.pause()
       this.video.removeAttribute('src')
     }
@@ -75,7 +78,11 @@ async function initWebrtc(video, width, height, facing) {
   let url
   video.autoplay = true
   video.muted = true
-  if (video.mozSrcObject) {
+  video.playsInline = true
+
+  if ('srcObject' in video) {
+    video.srcObject = stream
+  } else if ('mozSrcObject' in video) {
     video.mozSrcObject = stream
   } else {
     url = window.URL.createObjectURL(stream)
