@@ -19,6 +19,14 @@ class CameraPreview {
       }
     })
 
+    document.addEventListener('visibilitychange', evt => {
+      if (document.hidden) {
+        return this.stop()
+      }
+
+      return this.initializeCamera()
+    })
+
     let resizeTimeout = null
     window.addEventListener('resize', evt => {
       if (resizeTimeout) {
@@ -108,6 +116,13 @@ class CameraPreview {
     this.videoElem.style.top = `${top}px`
     this.videoElem.style.width = `${width}px`
     this.videoElem.style.height = `${height}px`
+  }
+
+  stop() {
+    if (!this.videoStream) return
+
+    this.videoStream.stop()
+    this.videoStream = null
   }
 
   updateSwitchButton() {
