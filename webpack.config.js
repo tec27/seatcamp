@@ -17,7 +17,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx$/,
         exclude: /node_modules/,
         use: [
           {
@@ -26,6 +26,7 @@ export default {
               babelrc: false,
               cacheDirectory: true,
               presets: [
+                'react',
                 ['env', {
                   targets: { browsers: 'last 2 versions' },
                   modules: false,

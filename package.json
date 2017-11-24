@@ -33,6 +33,7 @@
     "babel-loader": "^7.0.0",
     "babel-polyfill": "^6.23.0",
     "babel-preset-env": "^1.5.2",
+    "babel-preset-react": "^6.24.1",
     "babel-register": "^6.9.0",
     "babel-runtime": "^6.9.2",
     "canonical-host": "0.0.5",
@@ -49,6 +50,9 @@
     "mocha-eslint": "^4.1.0",
     "postcss": "^6.0.2",
     "prepare-response": "^2.0.0",
+    "react": "^16.1.1",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
     "rimraf": "^2.2.8",
     "serve-static": "^1.10.0",
     "sha1": "^1.1.0",
@@ -61,11 +65,11 @@
     "webpack": "^3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.2",
     "chai": "^4.0.2",
     "eslint": "^4.0.0",
     "eslint-plugin-babel": "^4.1.1",
-    "mocha": "^3.4.2",
+    "mocha": "^4.0.1",
     "proxyquire": "^1.7.2",
     "stream-spigot": "^3.0.5",
     "webpack-dev-middleware": "^1.10.2"
