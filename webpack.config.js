@@ -17,7 +17,7 @@ export default {
   module: {
     rules: [
       {
-        test: /\.jsx$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: [
           {
@@ -32,6 +32,7 @@ export default {
                   modules: false,
                   useBuiltIns: true,
                 }],
+                'stage-0',
               ],
             },
           },

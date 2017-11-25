@@ -3,17 +3,27 @@ html
   head
     title meatspace
     style.
-      body {
-        background-color: #ECECEC;
-        color: rgba(0, 0, 0, 0.87);
+      html, body {
         width: 100%;
         height: 100%;
       }
 
-      body.dark {
+      * {
+        box-sizing: border-box;
+      }
+
+      #app {
+        width: 100%;
+        height: 100%;
+        background-color: #ECECEC;
+        color: rgba(0, 0, 0, 0.87);
+      }
+
+      .dark #app,  {
         background-color: #212121;
         color: #ffffff;
       }
+
     link(rel='manifest', href='manifest.json')
     link(type='text/css', rel='stylesheet',
       href='//fonts.googleapis.com/css?family=Roboto:300,500,400|Material+Icons')
@@ -26,39 +36,7 @@ html
     meta(content='yes', name='mobile-web-app-capable')
     meta(content='yes', name='apple-mobile-web-app-capable')
   body(class=theme == 'dark' ? 'dark' : '')
-    header.shadow-1
-      p meatspace
-      .actions
-        p#active-users ?
-        div.dropdown
-          button.toggle.icon-invert.material-icons(title="Options") more_vert
-          div.menu.shadow-2
-            button(data-action='unmute') Unmute all
-            button#change-theme(data-action='changeTheme') Use dark theme
-            button(data-action='about') About
-    ul#message-list.shadow-1
-    div.empty-view
-      p This place looks a little empty&hellip; Send a fun message to get things started!
-    footer
-      div.preview-container.shadow-1.camera-enabled
-        div.camera-disabled-message
-          span.camera-disabled-icon.icon-invert.material-icons videocam_off
-          span.camera-disabled-text Please enable your webcam
-        video#preview
-      .progress.shadow-1
-        .circle
-          .mask.full
-            .fill
-          .mask.half
-            .fill
-            .fill.fix
-        .inset.shadow-1
-            p.text 0%
-      form.shadow-1
-        input#message(type='text', maxlength='250', autofocus='true', autocomplete='off',
-          autocorrect='on', autocapitalize='on', spellcheck='true')
-        p#char-counter 0 / 250
-        button#send.icon-invert.material-icons(type='submit', title="Send") send
+    div#app
     if trackingId
       script(type='text/javascript').
         window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date

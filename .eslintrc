@@ -2,11 +2,15 @@
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
 
   "plugins": [
-    "babel"
+    "babel",
+    "react"
   ],
 
   "env": {
@@ -153,7 +157,7 @@
     "no-unneeded-ternary": 2,
     "no-unreachable": 2,
     "no-unused-expressions": 2,
-    "no-unused-vars": [2, { "vars": "all", "args": "none" }],
+    "no-unused-vars": 0,
     "no-use-before-define": [2, "nofunc"],
     "no-var": 2,
     "no-void": 2,
