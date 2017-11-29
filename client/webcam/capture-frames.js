@@ -3,89 +3,103 @@ import toBlob from 'data-uri-to-blob'
 
 export default function(video, options = {}) {
   const progressEmitter = new EventEmitter()
-  return [progressEmitter, new Promise((resolve, reject) => {
-    const opts = {
-      numFrames: options.numFrames || 10,
-      fps: options.fps || 5,
-      format: options.format || 'image/jpeg',
-      quality: options.quality || 0.95,
-      width: options.width || video.videoWidth,
-      height: options.height || video.videoHeight
-    }
+  return {
+    progressEmitter,
+    promise: takeShots(video, options, progressEmitter)
+  }
+}
 
-    const frameDelay = 1000 / opts.fps
+function timeoutPromise(time) {
+  let timeoutId
+  let reject
+  const promise = new Promise((resolve, reject) => {
+    timeoutId = setTimeout(resolve, time)
+  })
+  return [{ id: timeoutId, reject }, promise]
+}
 
-    let canvas
-    let context
-    const frames = new Array(opts.numFrames)
-    let awaitingShot = opts.numFrames
-    let awaitingSave = opts.numFrames
-    let index = 0
+class FrameCapturer {
+  constructor(video, opts) {
+    this.video = video
+    this.opts = opts
 
-    const dimens = {
+    this.dimens = {
       left: 0,
       top: 0,
       width: video.videoWidth,
       height: video.videoHeight
     }
     const targetAspect = opts.width / opts.height
-    const actualAspect = dimens.width / dimens.height
+    const actualAspect = this.dimens.width / this.dimens.height
     if (targetAspect > actualAspect) {
-      dimens.height = Math.round(dimens.width / targetAspect)
+      this.dimens.height = Math.round(this.dimens.width / targetAspect)
     } else {
-      dimens.width = Math.round(dimens.height * targetAspect)
+      this.dimens.width = Math.round(this.dimens.height * targetAspect)
     }
-    dimens.left = Math.floor((video.videoWidth - dimens.width) / 2)
-    dimens.top = Math.floor((video.videoHeight - dimens.height) / 2)
+    this.dimens.left = Math.floor((video.videoWidth - this.dimens.width) / 2)
+    this.dimens.top = Math.floor((video.videoHeight - this.dimens.height) / 2)
 
-    setTimeout(begin, 0)
+    this.canvas = document.createElement('canvas')
+    this.canvas.width = opts.width
+    this.canvas.height = opts.height
+    this.context = this.canvas.getContext('2d')
+  }
 
-    function begin() {
-      canvas = document.createElement('canvas')
-      canvas.width = opts.width
-      canvas.height = opts.height
-      context = canvas.getContext('2d')
+  async captureFrame() {
+    this.context.drawImage(
+      this.video,
+      this.dimens.left, this.dimens.top, this.dimens.width, this.dimens.height,
+      0, 0, this.canvas.width, this.canvas.height)
 
-      progressEmitter.emit('progress', 0.1)
-      captureFrame()
-    }
+    return compatToBlob(this.canvas, this.opts.format, this.opts.quality)
+  }
+}
 
-    function captureFrame() {
-      let t
-      awaitingShot--
-      if (awaitingShot > 0) {
-        t = setTimeout(captureFrame, frameDelay)
-      }
+async function takeShots(video, options, progressEmitter) {
+  const opts = {
+    numFrames: options.numFrames || 10,
+    fps: options.fps || 5,
+    format: options.format || 'image/jpeg',
+    quality: options.quality || 0.92,
+    width: options.width || video.videoWidth,
+    height: options.height || video.videoHeight
+  }
 
-      (function(i) {
-        try {
-          context.drawImage(
-            video,
-            dimens.left, dimens.top, dimens.width, dimens.height,
-            0, 0, canvas.width, canvas.height)
-        } catch (err) {
-          if (t) clearTimeout(t)
-          reject(err)
-        }
+  const frameDelay = 1000 / opts.fps
+  progressEmitter.emit('progress', 0.1)
+  const frameCap = new FrameCapturer(video, opts)
 
+  let canceled = false
+  const timeouts = []
+  const promises = []
+  for (let i = 0; i < opts.numFrames; i++) {
+    const [timeout, promise] = timeoutPromise(i * frameDelay)
+    timeouts.push(timeout)
+    const capturePromise = promise.then(() => frameCap.captureFrame())
+    promises.push(capturePromise)
+
+    if (i + 1 < opts.numFrames) {
+      capturePromise.then(() => {
         // + 2 because we want the progress to indicate what frame we are *taking*
-        if (i + 1 < opts.numFrames) {
-          progressEmitter.emit('progress', (i + 2) / opts.numFrames)
-        }
-        compatToBlob(canvas, opts.format, opts.quality).then(blob => {
-          frames[i] = blob
-          awaitingSave--
-          maybeDone()
-        })
-      })(index++)
-
-      function maybeDone() {
-        if (awaitingSave) return
-
-        resolve(frames)
-      }
+        progressEmitter.emit('progress', (i + 2) / opts.numFrames)
+      })
     }
-  })]
+
+    capturePromise.catch(err => {
+      if (canceled) {
+        return
+      }
+
+      canceled = true
+      for (const timeout of timeouts) {
+        clearTimeout(timeout.id)
+        timeout.reject(new Error('Operation canceled'))
+      }
+      throw err
+    })
+  }
+
+  return Promise.all(promises)
 }
 
 function compatToBlob(canvas, format, opts) {
