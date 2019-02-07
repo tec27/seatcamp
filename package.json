@@ -12,7 +12,7 @@
     "lintfix": "eslint --fix --ext .js ./ && echo Hooray || echo Please fix",
     "prepublish": "npm run test",
     "start": "node index.js",
-    "test": "mocha -R spec --compilers js:babel-register --recursive test/"
+    "test": "mocha -R spec --compilers js:@babel/register --recursive test/"
   },
   "repository": {
     "type": "git",
@@ -30,12 +30,14 @@
   },
   "homepage": "https://github.com/tec27/seatcamp",
   "dependencies": {
-    "autoprefixer": "^7.1.1",
-    "babel-loader": "^7.0.0",
-    "babel-polyfill": "^6.23.0",
-    "babel-preset-env": "^1.5.2",
-    "babel-register": "^6.9.0",
-    "babel-runtime": "^6.9.2",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "@babel/runtime": "^7.3.1",
+    "autoprefixer": "^9.4.7",
+    "babel-loader": "^8.0.5",
     "canonical-host": "0.0.5",
     "compression": "^1.6.2",
     "concat-stream": "^1.4.6",
@@ -47,8 +49,7 @@
     "filmstrip2gif": "^2.0.0",
     "html-loader": "^0.5.0",
     "jade": "^1.7.0",
-    "mocha-eslint": "^4.1.0",
-    "postcss": "^6.0.2",
+    "postcss": "^7.0.14",
     "prepare-response": "^2.0.0",
     "rimraf": "^2.2.8",
     "serve-static": "^1.10.0",
@@ -59,19 +60,21 @@
     "tokenthrottle": "^1.1.0",
     "twitter-text": "^1.10.0",
     "waypoints": "^3.1.1",
-    "webpack": "^3.0.0"
+    "webpack": "^4.29.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "chai": "^4.0.2",
     "eslint": "^5.13.0",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "mocha": "^3.4.2",
+    "mocha": "^5.2.0",
+    "mocha-eslint": "^5.0.0",
     "prettier": "1.16.4",
     "proxyquire": "^1.7.2",
+    "regenerator-runtime": "^0.13.1",
     "stream-spigot": "^3.0.5",
-    "webpack-dev-middleware": "^1.10.2"
+    "webpack-dev-middleware": "^3.5.2"
   }
 }

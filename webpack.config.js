@@ -5,7 +5,9 @@ const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'developm
 const isProd = nodeEnv === 'production'
 
 export default {
-  entry: './client/root.js',
+  mode: isProd ? 'production' : 'development',
+
+  entry: './client/index.js',
   output: {
     filename: 'client.js',
     path: path.resolve(__dirname, 'public'),
@@ -27,13 +29,17 @@ export default {
               cacheDirectory: true,
               presets: [
                 [
-                  'env',
+                  '@babel/preset-env',
                   {
-                    targets: { browsers: 'last 2 versions' },
+                    targets: 'last 2 versions, not dead, not ie 11, not ie_mob 11, not op_mini all',
                     modules: false,
-                    useBuiltIns: true,
+                    useBuiltIns: 'entry',
                   },
                 ],
+              ],
+              plugins: [
+                // Needed or async functions cause 'regeneratorRuntime is not defined'
+                ['@babel/plugin-transform-runtime', { regenerator: true }],
               ],
             },
           },
@@ -52,16 +58,5 @@ export default {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(nodeEnv),
     }),
-  ].concat(
-    isProd
-      ? [
-          new webpack.optimize.ModuleConcatenationPlugin(),
-          new webpack.optimize.UglifyJsPlugin({
-            compress: { warnings: false },
-            output: { comments: false },
-            sourceMap: false,
-          }),
-        ]
-      : [],
-  ),
+  ],
 }
