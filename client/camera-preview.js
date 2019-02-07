@@ -19,12 +19,13 @@ class CameraPreview {
       }
     })
 
-    document.addEventListener('visibilitychange', evt => {
+    document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        return this.stop()
+        this.stop()
+        return
       }
 
-      return this.initializeCamera()
+      this.initializeCamera()
     })
 
     let resizeTimeout = null
@@ -50,10 +51,7 @@ class CameraPreview {
 
   async initializeCamera(attempt = 0) {
     const initTime = Date.now()
-    if (this.videoStream) {
-      this.videoStream.stop()
-      this.videoStream = null
-    }
+    this.stop()
 
     let timer = setTimeout(() => {
       this.container.classList.remove('camera-enabled')
