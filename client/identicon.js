@@ -29,7 +29,7 @@ export default function createIdenticon(id) {
   const blocks = []
   // we only construct 3 columns (not 5) because we mirror the last two columns from the first
   for (let i = 0; i < 3; i++) {
-    blocks.push([ false, false, false, false, false ])
+    blocks.push([false, false, false, false, false])
   }
   for (let i = 0, y = 0; i < 15; i++, y++) {
     // start in middle, move outward
@@ -59,7 +59,7 @@ export default function createIdenticon(id) {
 }
 
 function inRange(percent, min, max) {
-  return Math.round((percent * (max - min))) + min
+  return Math.round(percent * (max - min)) + min
 }
 
 function objToHslStr({ hue, saturation, lightness }) {

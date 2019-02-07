@@ -24,9 +24,7 @@ if (!userIdKey) {
 }
 
 const app = express()
-app
-  .set('x-powered-by', false)
-  .set('view engine', 'jade')
+app.set('x-powered-by', false).set('view engine', 'jade')
 
 const servers = []
 let httpServer
@@ -34,8 +32,10 @@ let listenPort
 
 if (config.sslCert) {
   if (!config.sslKey || !config.sslCaBundle || !config.canonicalHost || !config.sslPort) {
-    throw new Error('sslCert, sslKey, sslCaBundle, sslPort, and canonicalHost must all be ' +
-        'configured for SSL support.')
+    throw new Error(
+      'sslCert, sslKey, sslCaBundle, sslPort, and canonicalHost must all be ' +
+        'configured for SSL support.',
+    )
   }
 
   const caList = []
@@ -55,11 +55,14 @@ if (config.sslCert) {
   const sslCert = fs.readFileSync(path.join(__dirname, config.sslCert), 'utf8')
   const sslKey = fs.readFileSync(path.join(__dirname, config.sslKey), 'utf8')
 
-  httpServer = https.createServer({
-    ca: caList,
-    cert: sslCert,
-    key: sslKey
-  }, app)
+  httpServer = https.createServer(
+    {
+      ca: caList,
+      cert: sslCert,
+      key: sslKey,
+    },
+    app,
+  )
   listenPort = config.sslPort
 
   const canon = canonicalHost(config.canonicalHost, 301)
@@ -83,10 +86,12 @@ app.use(require('cookie-parser')())
 
 const compiler = webpack(webpackConfig)
 if (process.env.NODE_ENV !== 'production') {
-  app.use(webpackDevMiddleware(compiler, {
-    publicPath: webpackConfig.output.publicPath,
-    lazy: !!process.env.TESTING_NO_COMPILE
-  }))
+  app.use(
+    webpackDevMiddleware(compiler, {
+      publicPath: webpackConfig.output.publicPath,
+      lazy: !!process.env.TESTING_NO_COMPILE,
+    }),
+  )
 } else {
   compiler.run = thenify(compiler.run)
 }
@@ -94,7 +99,8 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(compression())
 app
   .get('/', (req, res) =>
-    res.render('index', { theme: req.cookies.theme, trackingId: config.gaTrackingId }))
+    res.render('index', { theme: req.cookies.theme, trackingId: config.gaTrackingId }),
+  )
   .get('/styles.css', serveCss(__dirname + '/css/styles.css'))
 
 app.use(serveStatic('public'))
@@ -117,14 +123,15 @@ const readyPromise = compilePromise.then(async stats => {
   userCounter(io)
   const runner = await createFfmpegRunner()
 
-  const chat = new ChatSockets(// eslint-disable-line no-unused-vars
+  const chat = new ChatSockets( // eslint-disable-line no-unused-vars
     io,
     userIdKey,
     runner,
-    15, /* server backscroll limit */
-    10 * 60 * 1000, /* expiry time */
+    15 /* server backscroll limit */,
+    10 * 60 * 1000 /* expiry time */,
     1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */,
-    !!config.imageMagick7)
+    !!config.imageMagick7,
+  )
 
   await new Promise(resolve => httpServer.listen(listenPort, resolve))
   const host = httpServer.address().address

@@ -12,7 +12,7 @@ export default function(video, options, cb) {
     format: options.format || 'image/jpeg',
     quality: options.quality || 0.95,
     width: options.width || video.videoWidth,
-    height: options.height || video.videoHeight
+    height: options.height || video.videoHeight,
   }
 
   const frameDelay = 1000 / opts.fps
@@ -29,7 +29,7 @@ export default function(video, options, cb) {
     left: 0,
     top: 0,
     width: video.videoWidth,
-    height: video.videoHeight
+    height: video.videoHeight,
   }
   const targetAspect = opts.width / opts.height
   const actualAspect = dimens.width / dimens.height
@@ -61,12 +61,19 @@ export default function(video, options, cb) {
       t = setTimeout(captureFrame, frameDelay)
     }
 
-    (function(i) {
+    ;(function(i) {
       try {
         context.drawImage(
           video,
-          dimens.left, dimens.top, dimens.width, dimens.height,
-          0, 0, canvas.width, canvas.height)
+          dimens.left,
+          dimens.top,
+          dimens.width,
+          dimens.height,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+        )
       } catch (err) {
         if (t) clearTimeout(t)
 

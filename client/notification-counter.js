@@ -41,7 +41,7 @@ export default class NotificationCounter {
       c.lineWidth = this._rel16(4)
       const startX = this._rel16(2)
       const startY = this._rel16(1)
-      const countStr = count < 10 ? ('' + count) : '*'
+      const countStr = count < 10 ? '' + count : '*'
       c.strokeText(countStr, startX, startY)
       c.fillText(countStr, startX, startY)
       this._setIcon(this.canvas.toDataURL('image/png'))

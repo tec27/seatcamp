@@ -71,8 +71,10 @@ class CameraPreview {
         // can return a MediaDeviceNotSupported error (even though nothing is wrong and permission
         // has been granted). So we install a delay and retry a couple times to try and mitigate
         // this
-        if ((err.name && err.name === 'MediaDeviceNotSupported') ||
-            (err.message && err.message === 'MediaDeviceNotSupported')) {
+        if (
+          (err.name && err.name === 'MediaDeviceNotSupported') ||
+          (err.message && err.message === 'MediaDeviceNotSupported')
+        ) {
           setTimeout(() => this.initializeCamera(attempt + 1), 200)
           return
         }
@@ -108,7 +110,8 @@ class CameraPreview {
       containerRect.width,
       containerRect.height,
       this.videoElem.videoWidth,
-      this.videoElem.videoHeight)
+      this.videoElem.videoHeight,
+    )
 
     this.videoElem.style.left = `${left}px`
     this.videoElem.style.top = `${top}px`

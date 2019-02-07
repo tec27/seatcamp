@@ -9,6 +9,7 @@
   "scripts": {
     "autotest": "mocha --watch -R spec --compilers js:babel-register --recursive test/",
     "lint": "eslint --ext .js ./ && echo Hooray || echo Please fix",
+    "lintfix": "eslint --fix --ext .js ./ && echo Hooray || echo Please fix",
     "prepublish": "npm run test",
     "start": "node index.js",
     "test": "mocha -R spec --compilers js:babel-register --recursive test/"
@@ -61,11 +62,14 @@
     "webpack": "^3.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^10.0.1",
     "chai": "^4.0.2",
-    "eslint": "^4.0.0",
+    "eslint": "^5.13.0",
+    "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-babel": "^4.1.1",
+    "eslint-plugin-prettier": "^3.0.1",
     "mocha": "^3.4.2",
+    "prettier": "1.16.4",
     "proxyquire": "^1.7.2",
     "stream-spigot": "^3.0.5",
     "webpack-dev-middleware": "^1.10.2"

@@ -5,13 +5,9 @@ class CharCounter {
     this.limit = limit
 
     this.updateCounter()
-
-    ;[
-      'keyup',
-      'change',
-      'input',
-      'paste'
-    ].forEach(event => input.addEventListener(event, () => this.updateCounter()))
+    ;['keyup', 'change', 'input', 'paste'].forEach(event =>
+      input.addEventListener(event, () => this.updateCounter()),
+    )
   }
 
   updateCounter() {

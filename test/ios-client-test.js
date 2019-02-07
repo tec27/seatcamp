@@ -15,7 +15,7 @@ const testConfig = {
 
 const stubFs = {
   createReadStream(path) {
-    return spigot.array([ 'DEAD', 'BEEF' ])
+    return spigot.array(['DEAD', 'BEEF'])
   },
 }
 
@@ -76,36 +76,42 @@ describe('legacy client support', function() {
       socket = sio(`http://localhost:${PORT}`, ioOpts)
       let expectingDisconnect = false
       let messageAcked = false
-      socket.on('connect', () => {
-        socket.emit('join', 'mp4')
-        socket.emit('message', {
-          message: 'hi',
-          media: EMPTY_FRAMES,
-          fingerprint: 'lolhi',
-          key: 'ACKME',
+      socket
+        .on('connect', () => {
+          socket.emit('join', 'mp4')
+          socket.emit('message', {
+            message: 'hi',
+            media: EMPTY_FRAMES,
+            fingerprint: 'lolhi',
+            key: 'ACKME',
+          })
         })
-      }).on('message', msg => {
-        expect(msg).to.have.property('fingerprint')
-        expect(msg).to.have.property('message')
-        expect(msg).to.have.property('created')
-        expect(msg).to.have.property('key')
-        expect(msg).to.have.property('media')
-        if (messageAcked) {
-          expectingDisconnect = true
-          resolve()
-        }
-      }).on('messageack', (err, msg) => {
-        expect(err).to.not.exist
-        expect(msg.key).to.be.eql('ACKME')
-        expect(msg).to.have.property('userId')
-        messageAcked = true
-      }).on('disconnect', () => {
-        if (!expectingDisconnect) {
-          reject(new Error('Unexpected disconnect'))
-        }
-      }).on('error', err => {
-        reject(err)
-      }).on('connect_timeout', () => reject(new Error('Connection timed out.')))
+        .on('message', msg => {
+          expect(msg).to.have.property('fingerprint')
+          expect(msg).to.have.property('message')
+          expect(msg).to.have.property('created')
+          expect(msg).to.have.property('key')
+          expect(msg).to.have.property('media')
+          if (messageAcked) {
+            expectingDisconnect = true
+            resolve()
+          }
+        })
+        .on('messageack', (err, msg) => {
+          expect(err).to.not.exist
+          expect(msg.key).to.be.eql('ACKME')
+          expect(msg).to.have.property('userId')
+          messageAcked = true
+        })
+        .on('disconnect', () => {
+          if (!expectingDisconnect) {
+            reject(new Error('Unexpected disconnect'))
+          }
+        })
+        .on('error', err => {
+          reject(err)
+        })
+        .on('connect_timeout', () => reject(new Error('Connection timed out.')))
     })
 
     await closeSocket(socket)
@@ -115,7 +121,7 @@ describe('legacy client support', function() {
     let nonLegacySocket
     let socket
     await new Promise((resolve, reject) => {
-      const s = nonLegacySocket = sio(`http://localhost:${PORT}`, ioOpts)
+      const s = (nonLegacySocket = sio(`http://localhost:${PORT}`, ioOpts))
       s.on('connect', () => {
         s.emit('fingerprint', 'lol')
         s.emit('join', 'jpg')
@@ -125,34 +131,40 @@ describe('legacy client support', function() {
         }
         s.emit('chat', { text: 'hi', format: 'image/jpeg', ack: 'sure' }, frames)
         resolve()
-      }).on('error', err => {
-        reject(err)
-      }).on('connect_timeout', () => reject(new Error('Connection timed out.')))
+      })
+        .on('error', err => {
+          reject(err)
+        })
+        .on('connect_timeout', () => reject(new Error('Connection timed out.')))
     })
 
     await new Promise((resolve, reject) => {
       socket = sio(`http://localhost:${PORT}`, ioOpts)
       let expectingDisconnect = false
-      socket.on('connect', () => {
-        socket.emit('join', 'mp4')
-      }).on('message', msg => {
-        expect(msg).to.have.property('fingerprint')
-        expect(msg).to.have.property('message')
-        expect(msg).to.have.property('created')
-        expect(msg).to.have.property('key')
-        expect(msg).to.have.property('media')
+      socket
+        .on('connect', () => {
+          socket.emit('join', 'mp4')
+        })
+        .on('message', msg => {
+          expect(msg).to.have.property('fingerprint')
+          expect(msg).to.have.property('message')
+          expect(msg).to.have.property('created')
+          expect(msg).to.have.property('key')
+          expect(msg).to.have.property('media')
 
-        expectingDisconnect = true
-        resolve()
-      }).on('disconnect', () => {
-        if (!expectingDisconnect) {
-          reject(new Error('Unexpected disconnect'))
-        }
-      }).on('error', err => {
-        reject(err)
-      }).on('connect_timeout', () => reject(new Error('Connection timed out.')))
+          expectingDisconnect = true
+          resolve()
+        })
+        .on('disconnect', () => {
+          if (!expectingDisconnect) {
+            reject(new Error('Unexpected disconnect'))
+          }
+        })
+        .on('error', err => {
+          reject(err)
+        })
+        .on('connect_timeout', () => reject(new Error('Connection timed out.')))
     })
-
 
     await Promise.all([closeSocket(nonLegacySocket), closeSocket(socket)])
   })

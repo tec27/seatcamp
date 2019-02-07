@@ -1,14 +1,11 @@
-
 export default class Tracker {
-  constructor() {
-  }
+  constructor() {}
 
   _ga() {
     if (window.ga) {
       window.ga(...arguments)
     }
   }
-
 
   _sendEvent(eventCategory, eventAction, eventLabel) {
     this._ga('send', {

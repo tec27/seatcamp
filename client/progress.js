@@ -20,13 +20,13 @@ class ProgressSpinner {
 
   setValue(value) {
     this._value = value
-    this.textElem.innerHTML = ((value * 100 | 0) + '%')
+    this.textElem.innerHTML = ((value * 100) | 0) + '%'
     this._updateRotation()
     return this
   }
 
   _updateRotation() {
-    const fillRotation = this._value * 180 | 0
+    const fillRotation = (this._value * 180) | 0
     const fixRotation = fillRotation * 2
     const fillCss = `rotate(${fillRotation}deg)`
     const fixCss = `rotate(${fixRotation}deg)`

@@ -26,11 +26,14 @@ export default {
               babelrc: false,
               cacheDirectory: true,
               presets: [
-                ['env', {
-                  targets: { browsers: 'last 2 versions' },
-                  modules: false,
-                  useBuiltIns: true,
-                }],
+                [
+                  'env',
+                  {
+                    targets: { browsers: 'last 2 versions' },
+                    modules: false,
+                    useBuiltIns: true,
+                  },
+                ],
               ],
             },
           },
@@ -40,23 +43,25 @@ export default {
       {
         test: /\.html?$/,
         exclude: /node_modules/,
-        use: [
-          { loader: 'html-loader' },
-        ],
+        use: [{ loader: 'html-loader' }],
       },
     ],
   },
 
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(nodeEnv)
+      'process.env.NODE_ENV': JSON.stringify(nodeEnv),
     }),
-  ].concat(isProd ? [
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: { warnings: false },
-      output: { comments: false },
-      sourceMap: false,
-    })
-  ] : []),
+  ].concat(
+    isProd
+      ? [
+          new webpack.optimize.ModuleConcatenationPlugin(),
+          new webpack.optimize.UglifyJsPlugin({
+            compress: { warnings: false },
+            output: { comments: false },
+            sourceMap: false,
+          }),
+        ]
+      : [],
+  ),
 }

@@ -8,11 +8,11 @@ import theme from './theme'
 
 const Waypoint = window.Waypoint
 
-const MESSAGE_LIMIT = 30
-  , MAX_RECYCLED = 0
-  , NUM_VIDEO_FRAMES = 10
-  , FILMSTRIP_DURATION = 0.92
-  , FILMSTRIP_HORIZONTAL = false
+const MESSAGE_LIMIT = 30,
+  MAX_RECYCLED = 0,
+  NUM_VIDEO_FRAMES = 10,
+  FILMSTRIP_DURATION = 0.92,
+  FILMSTRIP_HORIZONTAL = false
 
 const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='
 
@@ -75,7 +75,7 @@ class Message {
 
     this.saveButton.addEventListener('click', () => this.saveGif())
     this.dropdown = createDropdown(this.messageOverflow.parentElement, {
-      mute: () => this.mute()
+      mute: () => this.mute(),
     })
   }
 
@@ -83,7 +83,7 @@ class Message {
     this._throwIfDisposed()
     this.unbind()
 
-    const blob = new window.Blob([ video ], { type: videoMime })
+    const blob = new window.Blob([video], { type: videoMime })
     this._srcUrl = window.URL.createObjectURL(blob)
     this.filmstrip.src = this._srcUrl
 
@@ -165,14 +165,29 @@ class Message {
         return
       }
 
-      const url = window.URL.createObjectURL(gifBlob)
-        , link = document.createElement('a')
-        , click = document.createEvent('MouseEvents')
+      const url = window.URL.createObjectURL(gifBlob),
+        link = document.createElement('a'),
+        click = document.createEvent('MouseEvents')
 
       link.href = url
       link.download = Date.now() + '.gif'
-      click.initMouseEvent('click', true, true, window, 0, 0, 0, 0, 0,
-        false, false, false, false, 0, null)
+      click.initMouseEvent(
+        'click',
+        true,
+        true,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null,
+      )
       link.dispatchEvent(click)
       setTimeout(() => window.URL.revokeObjectURL(url), 100)
     }

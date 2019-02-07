@@ -4,15 +4,17 @@ function polyfillGetUserMedia() {
   }
 
   if (!navigator.mediaDevices.getUserMedia) {
-    let oldGetUserMedia = navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia ||
-        navigator.msGetUserMedia
+    let oldGetUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia ||
+      navigator.msGetUserMedia
     if (oldGetUserMedia) {
       oldGetUserMedia = oldGetUserMedia.bind(navigator)
     } else {
-      navigator.mediaDevices.getUserMedia =
-        Promise.reject(new Error('Browser doesn\'t support getUserMedia'))
+      navigator.mediaDevices.getUserMedia = Promise.reject(
+        new Error("Browser doesn't support getUserMedia"),
+      )
       return
     }
 
@@ -57,17 +59,16 @@ class StreamResult {
   }
 }
 
-
 async function initWebrtc(video, width, height, facing) {
   polyfillGetUserMedia()
 
   const constraints = {
     facingMode: facing,
     width: {
-      ideal: 1280
+      ideal: 1280,
     },
     height: {
-      ideal: 720
+      ideal: 720,
     },
   }
   const stream = await navigator.mediaDevices.getUserMedia({

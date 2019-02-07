@@ -3,7 +3,7 @@ class Dropdown {
     this.elem = elem
     this.actions = actions
     if (Object.keys(actions).length !== elem.querySelectorAll('.menu button').length) {
-      throw new Error('provided actions don\'t match the number of buttons in the dropdown')
+      throw new Error("provided actions don't match the number of buttons in the dropdown")
     }
 
     this.closeListener = () => this.close()
@@ -36,7 +36,7 @@ class Dropdown {
 
   onAction(action) {
     if (!this.actions[action]) {
-      throw new Error('couldn\'t find a handler for action: ' + action)
+      throw new Error("couldn't find a handler for action: " + action)
     }
 
     this.actions[action]()

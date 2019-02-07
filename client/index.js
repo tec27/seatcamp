@@ -63,17 +63,19 @@ io.on('chat', function(chat) {
     unreadMessages++
     updateNotificationCount()
   }
-}).on('active', function(numActive) {
-  active = numActive
-  updateActiveUsers()
-}).on('historyComplete', () => {
-  if (!historyComplete) {
-    historyComplete = true
-    if (!messageList.hasMessages()) {
-      showEmptyState()
-    }
-  }
 })
+  .on('active', function(numActive) {
+    active = numActive
+    updateActiveUsers()
+  })
+  .on('historyComplete', () => {
+    if (!historyComplete) {
+      historyComplete = true
+      if (!messageList.hasMessages()) {
+        showEmptyState()
+      }
+    }
+  })
 
 function updateActiveUsers() {
   const elem = document.querySelector('#active-users')
@@ -129,40 +131,44 @@ document.querySelector('form').addEventListener('submit', function(event) {
   awaitingAck = cuid()
   progressSpinner.setValue(0).show()
 
-  captureFrames(document.querySelector('#preview'), {
-    format: 'image/jpeg',
-    width: 200,
-    height: 150
-  }, function(err, frames) {
-    setTimeout(() => {
-      progressSpinner.hide()
-      setTimeout(() => progressSpinner.setValue(0), 400)
-    }, 400)
-
-    messageInput.value = ''
-    messageInput.readOnly = false
-    sendButton.removeAttribute('disabled')
-
-    if (err) {
-      awaitingAck = null
-      // TODO(tec27): show to user
-      tracker.onMessageCaptureError(err.message)
-      console.error(err)
-      return
-    }
-
-    const message = {
-      text: messageText,
+  captureFrames(
+    document.querySelector('#preview'),
+    {
       format: 'image/jpeg',
-      ack: awaitingAck
-    }
-    io.emit('chat', message, frames)
-    sendTime = Date.now()
-    // fire 'change'
-    const event = document.createEvent('HTMLEvents')
-    event.initEvent('change', false, true)
-    messageInput.dispatchEvent(event)
-  }).on('progress', percentDone => progressSpinner.setValue(percentDone))
+      width: 200,
+      height: 150,
+    },
+    function(err, frames) {
+      setTimeout(() => {
+        progressSpinner.hide()
+        setTimeout(() => progressSpinner.setValue(0), 400)
+      }, 400)
+
+      messageInput.value = ''
+      messageInput.readOnly = false
+      sendButton.removeAttribute('disabled')
+
+      if (err) {
+        awaitingAck = null
+        // TODO(tec27): show to user
+        tracker.onMessageCaptureError(err.message)
+        console.error(err)
+        return
+      }
+
+      const message = {
+        text: messageText,
+        format: 'image/jpeg',
+        ack: awaitingAck,
+      }
+      io.emit('chat', message, frames)
+      sendTime = Date.now()
+      // fire 'change'
+      const event = document.createEvent('HTMLEvents')
+      event.initEvent('change', false, true)
+      messageInput.dispatchEvent(event)
+    },
+  ).on('progress', percentDone => progressSpinner.setValue(percentDone))
 })
 
 io.on('ack', function(ack) {
