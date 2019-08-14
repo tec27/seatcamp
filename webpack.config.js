@@ -33,13 +33,10 @@ export default {
                   {
                     targets: 'last 2 versions, not dead, not ie 11, not ie_mob 11, not op_mini all',
                     modules: false,
-                    useBuiltIns: 'entry',
+                    useBuiltIns: 'usage',
+                    corejs: 3,
                   },
                 ],
-              ],
-              plugins: [
-                // Needed or async functions cause 'regeneratorRuntime is not defined'
-                ['@babel/plugin-transform-runtime', { regenerator: true }],
               ],
             },
           },

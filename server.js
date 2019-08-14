@@ -24,7 +24,7 @@ if (!userIdKey) {
 }
 
 const app = express()
-app.set('x-powered-by', false).set('view engine', 'jade')
+app.set('x-powered-by', false).set('view engine', 'pug')
 
 const servers = []
 let httpServer
