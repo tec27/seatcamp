@@ -37,7 +37,7 @@ for (const t in possibleEvents) {
 let active = 0
 io.on('connect', function() {
   io.emit('fingerprint', getFingerprint())
-  io.emit('join', 'jpg')
+  io.emit('join', 'mp4')
 }).on('disconnect', function() {
   active = 0
   updateActiveUsers()

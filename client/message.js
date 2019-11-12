@@ -1,24 +1,15 @@
-import 'waypoints/lib/noframework.waypoints.js'
-import filmstrip2gif from 'filmstrip2gif'
 import createIdenticon from './identicon'
 import icons from './icons'
 import createDropdown from './dropdown'
 import localeTime from './locale-time'
 import theme from './theme'
 
-const Waypoint = window.Waypoint
-
-const MESSAGE_LIMIT = 30,
-  MAX_RECYCLED = 0,
-  NUM_VIDEO_FRAMES = 10,
-  FILMSTRIP_DURATION = 0.92,
-  FILMSTRIP_HORIZONTAL = false
-
-const BLANK_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA='
+const MESSAGE_LIMIT = 30
+const MAX_RECYCLED = 0
 
 const MESSAGE_HTML = `
   <div class="video-container">
-    <img class="filmstrip" src="${BLANK_IMAGE}"/>
+    <video class="message-video" muted loop></video>
     <button class="save shadow-1" title="Save as GIF"></button>
   </div>
   <p>
@@ -38,13 +29,14 @@ class Message {
     this._disposed = false
     this._userId = null
     this._srcUrl = null
-    this._animationRequest = null
+    this._isVisible = false
+    this._playPauseRequest = null
     this.owner = owner
 
     this.root = document.createElement('li')
     this.root.innerHTML = MESSAGE_HTML
     this.videoContainer = this.root.querySelector('.video-container')
-    this.filmstrip = this.root.querySelector('.filmstrip')
+    this.video = this.root.querySelector('.message-video')
     this.saveButton = this.root.querySelector('.save')
     this.chatText = this.root.querySelector('p')
     this.timestamp = this.root.querySelector('time')
@@ -56,22 +48,6 @@ class Message {
     // generate icons where needed
     this.saveButton.appendChild(icons.save('invert'))
     this.messageOverflow.appendChild(icons.moreVert('normal'))
-
-    this.waypoints = [
-      new Waypoint({
-        element: this.root,
-        offset: () => -this.root.clientHeight,
-        handler: direction => this.handleWaypoint('bottom', direction),
-      }),
-      new Waypoint({
-        element: this.root,
-        offset: '100%',
-        handler: direction => this.handleWaypoint('top', direction),
-      }),
-    ]
-    for (const waypoint of this.waypoints) {
-      waypoint.disable()
-    }
 
     this.saveButton.addEventListener('click', () => this.saveGif())
     this.dropdown = createDropdown(this.messageOverflow.parentElement, {
@@ -85,7 +61,7 @@ class Message {
 
     const blob = new window.Blob([video], { type: videoMime })
     this._srcUrl = window.URL.createObjectURL(blob)
-    this.filmstrip.src = this._srcUrl
+    this.video.src = this._srcUrl
 
     this.chatText.innerHTML = text
 
@@ -101,12 +77,6 @@ class Message {
     this.refreshIdenticon()
 
     this._key = key
-    this._animationRequest = window.requestAnimationFrame(() => {
-      this._animationRequest = null
-      for (const waypoint of this.waypoints) {
-        waypoint.enable()
-      }
-    })
   }
 
   refreshIdenticon() {
@@ -118,16 +88,17 @@ class Message {
   unbind() {
     this._throwIfDisposed()
 
-    if (this._animationRequest) {
-      window.cancelAnimationFrame(this._animationRequest)
-      this._animationRequest = null
+    if (this._playPauseRequest) {
+      cancelAnimationFrame(this._playPauseRequest)
+      this._playPauseRequest = null
     }
 
     this._userId = null
     this._key = null
     this.dropdown.close()
 
-    this.filmstrip.src = BLANK_IMAGE
+    this._isVisible = false
+    delete this.video.src
 
     if (this._srcUrl) {
       window.URL.revokeObjectURL(this._srcUrl)
@@ -135,22 +106,14 @@ class Message {
     }
 
     this.messageOverflow.removeAttribute('disabled')
-
-    for (const waypoint of this.waypoints) {
-      waypoint.disable()
-    }
   }
 
   dispose() {
     this._throwIfDisposed()
     this._disposed = true
-
-    for (const waypoint of this.waypoints) {
-      waypoint.destroy()
-    }
-    this.waypoints.length = 0
   }
 
+  // TODO(tec27): need to fix this for video
   saveGif() {
     this._throwIfDisposed()
     this.saveButton.disabled = true
@@ -192,7 +155,9 @@ class Message {
       setTimeout(() => window.URL.revokeObjectURL(url), 100)
     }
 
+    /*
     filmstrip2gif(this._srcUrl, FILMSTRIP_DURATION, NUM_VIDEO_FRAMES, FILMSTRIP_HORIZONTAL, cb)
+    */
   }
 
   mute() {
@@ -200,11 +165,18 @@ class Message {
     this.owner.muteUser(this._userId)
   }
 
-  handleWaypoint(side, direction) {
-    if ((side === 'top' && direction === 'down') || (side === 'bottom' && direction === 'up')) {
-      this.root.className = 'displayed'
-    } else {
-      this.root.className = ''
+  updateVisibility(visible) {
+    this._isVisible = visible
+
+    if (!this._playPauseRequest) {
+      this._playPauseRequest = requestAnimationFrame(() => {
+        this._playPauseRequest = null
+        if (this._isVisible) {
+          this.video.play()
+        } else {
+          this.video.pause()
+        }
+      })
     }
     // TODO(tec27): tell owner about this so it can recycle on scrolling?
   }
@@ -231,6 +203,7 @@ class MessageList {
     this.elem = listElem
     this.messages = []
     this.messageKeys = new Set()
+    this.messageElemsToMessage = new WeakMap()
     this._recycled = []
 
     this.clientId = ''
@@ -238,6 +211,12 @@ class MessageList {
     this._tracker = tracker
 
     theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
+
+    this.intersectionObserver = new IntersectionObserver(entries => {
+      for (const { target, isIntersecting } of entries) {
+        this.messageElemsToMessage.get(target).updateVisibility(isIntersecting)
+      }
+    })
   }
 
   hasMessages() {
@@ -262,8 +241,9 @@ class MessageList {
     message.bind(chat, this.clientId)
     this.messages.push(message)
     this.messageKeys.add(message.key)
+    this.messageElemsToMessage.set(message.elem, message)
     this.elem.appendChild(message.elem)
-    this._refreshWaypoints()
+    this.intersectionObserver.observe(message.elem)
     return message
   }
 
@@ -287,7 +267,6 @@ class MessageList {
 
     this._recycle(userMessages)
     this.messages = nonUserMessages
-    this._refreshWaypoints()
   }
 
   trackSaveGif() {
@@ -297,6 +276,8 @@ class MessageList {
   _recycle(messages) {
     for (const message of messages) {
       this.messageKeys.delete(message.key)
+      this.intersectionObserver.unobserve(message.elem)
+      this.messageElemsToMessage.delete(message.elem)
       message.elem.parentElement.removeChild(message.elem)
       message.unbind()
     }
@@ -306,15 +287,6 @@ class MessageList {
     this._recycled = this._recycled.concat(messages.slice(0, toRecycle))
     for (const message of messages.slice(toRecycle, messages.length)) {
       message.dispose()
-    }
-  }
-
-  _refreshWaypoints() {
-    if (!this._waypointTimeout) {
-      this._waypointTimeout = setTimeout(() => {
-        Waypoint.refreshAll()
-        this._waypointTimeout = null
-      }, 0)
     }
   }
 

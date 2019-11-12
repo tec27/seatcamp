@@ -45,7 +45,6 @@
     "data-uri-to-blob": "0.0.4",
     "data-uri-to-buffer": "^3.0.0",
     "express": "^4.17.1",
-    "filmstrip2gif": "^2.0.0",
     "html-loader": "^0.5.0",
     "postcss": "^7.0.21",
     "prepare-response": "^2.0.0",
@@ -58,7 +57,6 @@
     "thenify": "^3.3.0",
     "tokenthrottle": "^1.1.0",
     "twitter-text": "^3.0.1",
-    "waypoints": "^3.1.1",
     "webpack": "^4.41.2"
   },
   "devDependencies": {

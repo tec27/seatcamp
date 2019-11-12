@@ -10,7 +10,7 @@ html {
 }
 
 body {
-  background-color: #ECECEC;
+  background-color: #ececec;
   color: rgba(0, 0, 0, 0.87);
   font-family: 'Roboto', 'sans-serif';
   font-size: 15px;
@@ -19,7 +19,7 @@ body {
   width: 100%;
   height: 100%;
   -webkit-font-smoothing: antialiased;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-touch-callout: none;
 }
 
@@ -32,7 +32,12 @@ b {
   font-weight: 500;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 400;
   text-rendering: optimizeLegibility;
   margin: 8px 0;
@@ -62,27 +67,36 @@ h4 {
 
 h5 {
   font-size: 16px;
-  letter-spacing: 0.010em;
+  letter-spacing: 0.01em;
   line-height: 24px;
 }
 
 h6 {
   font-size: 14px;
-  letter-spacing: 0.020em;
+  letter-spacing: 0.02em;
   color: rgba(0, 0, 0, 0.54);
 }
 
-.dark h1, .dark h6 {
+.dark h1,
+.dark h6 {
   color: #ffffff;
 }
 
-a, a:visited, a:hover, a:focus, a:active {
+a,
+a:visited,
+a:hover,
+a:focus,
+a:active {
   font-weight: inherit;
-  color: #F06292;
+  color: #f06292;
 }
 
-.dark a, .dark a:visited, .dark a:hover, .dark a:focus,  .dark a:active {
-  color: #F48FB1;
+.dark a,
+.dark a:visited,
+.dark a:hover,
+.dark a:focus,
+.dark a:active {
+  color: #f48fb1;
 }
 
 button {
@@ -90,7 +104,7 @@ button {
 }
 
 header {
-  background-color: #F06292;
+  background-color: #f06292;
   color: #ffffff;
   display: flex;
   height: 48px;
@@ -183,7 +197,7 @@ header .actions {
   transform-origin: 100% 0%;
 
   transition: visibility 0.3s, opacity 0.3s, transform 0.3s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dropdown.active .menu {
@@ -314,28 +328,14 @@ header .actions {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.video-container .filmstrip {
-  display: none;
+.video-container .message-video {
   width: 100%;
-  height: 1000%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  backface-visibility: hidden;
-}
-
-.displayed .video-container .filmstrip {
+  height: 100%;
   display: block;
-  animation: filmstrip 0.92s infinite;
-  transform: translateZ(0);
 }
 
-.backgrounded .displayed .video-container .filmstrip {
-  display: none;
-  animation: none;
-}
-
-.video-container .save, .video-container .save:focus {
+.video-container .save,
+.video-container .save:focus {
   position: absolute;
   display: block;
   padding: 4px 8px;
@@ -344,12 +344,12 @@ header .actions {
   border: 1px solid rgba(0, 0, 0, 0.54);
   outline: none;
   border-radius: 2px;
-  background-color: #F06292;
+  background-color: #f06292;
   opacity: 0;
   visibility: hidden;
 
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .video-container:hover .save {
@@ -358,16 +358,16 @@ header .actions {
 }
 
 .save:hover {
-  background-color: #F86A9A;
+  background-color: #f86a9a;
   cursor: pointer;
 }
 
 .save:active {
-  background-color: #FF71A1;
+  background-color: #ff71a1;
 }
 
 .save[disabled] {
-  background-color: #E91E63;
+  background-color: #e91e63;
 }
 
 #message-list li p {
@@ -422,7 +422,8 @@ header .actions {
   cursor: default;
 }
 
-.message-overflow:hover .icon, .message-overflow:active .icon {
+.message-overflow:hover .icon,
+.message-overflow:active .icon {
   color: rgba(0, 0, 0, 0.87);
 }
 
@@ -430,7 +431,8 @@ header .actions {
   color: rgba(0, 0, 0, 0.38);
 }
 
-.dark .message-overflow:hover .icon, .dark .message-overflow:active .icon {
+.dark .message-overflow:hover .icon,
+.dark .message-overflow:active .icon {
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -466,7 +468,7 @@ header .actions {
 }
 
 .dark .message-meta time {
-  color: rgba(255, 255, 255, 0.7)
+  color: rgba(255, 255, 255, 0.7);
 }
 
 footer {
@@ -502,7 +504,8 @@ footer .progress {
   position: absolute;
 }
 
-.preview-container .switch-camera, .preview-container .switch-camera:focus {
+.preview-container .switch-camera,
+.preview-container .switch-camera:focus {
   position: absolute;
   display: block;
   /* vertical differences here account for weirdness in this particular icon's spacing */
@@ -512,12 +515,12 @@ footer .progress {
   border: 1px solid rgba(0, 0, 0, 0.54);
   outline: none;
   border-radius: 2px;
-  background-color: #F06292;
+  background-color: #f06292;
   opacity: 0;
   visibility: hidden;
 
   transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .preview-container:hover .switch-camera {
@@ -526,12 +529,12 @@ footer .progress {
 }
 
 .switch-camera:hover {
-  background-color: #F86A9A;
+  background-color: #f86a9a;
   cursor: pointer;
 }
 
 .switch-camera:active {
-  background-color: #FF71A1;
+  background-color: #ff71a1;
 }
 
 .camera-disabled-message {
@@ -592,8 +595,8 @@ form {
   padding: 4px 2px;
   overflow: hidden;
 
-  transition: border-color .3s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition: border-color 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark #message {
@@ -610,19 +613,21 @@ form {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-#message:active:active, #message:focus:focus {
-  border-color: #F06292;
+#message:active:active,
+#message:focus:focus {
+  border-color: #f06292;
   border-width: 2px;
   padding: 4px 2px 3px 2px; /* account for extra border size */
 }
 
-#message.full:active:active, body #message.full:focus:focus {
-  border-color: #D32F2F;
+#message.full:active:active,
+body #message.full:focus:focus {
+  border-color: #d32f2f;
 }
 
 /* lol css gods look at me now */
 #message[readonly][readonly][readonly] {
-  border-color: #CB7A95;
+  border-color: #cb7a95;
 }
 
 #message[readonly] {
@@ -643,8 +648,8 @@ form {
   visibility: hidden;
   opacity: 0;
 
-  transition: visiblity .3s, opacity .3s, color .3s;
-  transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+  transition: visiblity 0.3s, opacity 0.3s, color 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dark #char-counter {
@@ -652,21 +657,22 @@ form {
 }
 
 #char-counter.full {
-  color: #F44336;
+  color: #f44336;
 }
 
 .dark #char-counter.full {
-  #color: #C62828;
+  color: #c62828;
 }
 
-#message:active + #char-counter, #message:focus + #char-counter {
+#message:active + #char-counter,
+#message:focus + #char-counter {
   visibility: visible;
   opacity: 1;
 }
 
 #send {
   border: 0;
-  background-color: #F06292;
+  background-color: #f06292;
   /* match the form's border radius on the outer corners */
   border-radius: 0 2px 2px 0;
   margin: 0 0 0 4px;
@@ -675,17 +681,17 @@ form {
 }
 
 #send:hover {
-  background-color: #F86A9A;
+  background-color: #f86a9a;
   cursor: pointer;
 }
 
 #send:active {
-  background-color: #FF71A1;
+  background-color: #ff71a1;
 }
 
 #send:disabled:disabled {
   cursor: default;
-  background-color: #CB7A95;
+  background-color: #cb7a95;
 }
 
 .progress {
@@ -698,8 +704,8 @@ form {
   visibility: hidden;
   opacity: 0;
 
-  transition: visibility .3s, opacity .3s;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
+  transition: visibility 0.3s, opacity 0.3s;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .progress.visible {
@@ -707,16 +713,18 @@ form {
   opacity: 1;
 }
 
-.progress .circle .mask, .progress .circle .fill {
+.progress .circle .mask,
+.progress .circle .fill {
   width: 48px;
   height: 48px;
   position: absolute;
   border-radius: 50%;
 }
 
-.progress .circle .mask, .progress .circle .fill {
+.progress .circle .mask,
+.progress .circle .fill {
   backface-visibility: hidden;
-  transition: transform .3s;
+  transition: transform 0.3s;
 }
 
 .progress .circle .mask {
@@ -725,7 +733,7 @@ form {
 
 .progress .circle .mask .fill {
   clip: rect(0px, 24px, 48px, 0px);
-  background-color: #F06292;
+  background-color: #f06292;
 }
 
 .progress .inset {
@@ -761,12 +769,13 @@ form {
   top: 0;
   bottom: 0;
   z-index: 20;
-  background-color: rgba(0, 0, 0, 0.40);
-  transition: opacity cubic-bezier(.4, 0, .2, 1) 300ms;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: opacity cubic-bezier(0.4, 0, 0.2, 1) 300ms;
   opacity: 1;
 }
 
-.dialog-scrim.entering, .dialog-scrim.leaving {
+.dialog-scrim.entering,
+.dialog-scrim.leaving {
   opacity: 0;
 }
 
@@ -791,7 +800,7 @@ form {
   max-height: 80vh;
   overflow-y: auto;
   padding: 24px;
-  transition: transform cubic-bezier(0, 0, .2, 1) 400ms;
+  transition: transform cubic-bezier(0, 0, 0.2, 1) 400ms;
   transform: translateY(0);
 }
 
@@ -800,7 +809,7 @@ form {
 }
 
 .dialog.will-leave {
-  transition: all cubic-bezier(.4, 0, 1, 1) 400ms;
+  transition: all cubic-bezier(0.4, 0, 1, 1) 400ms;
 }
 
 .dialog.leaving {
@@ -837,7 +846,7 @@ form {
 }
 
 .dark .secondary {
-  color: rgba(255, 255, 255, 0.70);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .flex-grow {
@@ -848,21 +857,18 @@ form {
 }
 
 .shadow-1 {
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,.14),
-      0 2px 2px 0 rgba(0,0,0,.098),
-      0 1px 5px 0 rgba(0,0,0,.084);
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.098),
+    0 1px 5px 0 rgba(0, 0, 0, 0.084);
 }
 
 .shadow-2 {
-  box-shadow: 0 2px 4px -1px rgba(0,0,0,.14),
-      0 4px 5px 0 rgba(0,0,0,.098),
-      0 1px 10px 0 rgba(0,0,0,.084);
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.14), 0 4px 5px 0 rgba(0, 0, 0, 0.098),
+    0 1px 10px 0 rgba(0, 0, 0, 0.084);
 }
 
 .shadow-5 {
-  box-shadow: 0 8px 10px -5px rgba(0,0,0,.14),
-      0 16px 24px 2px rgba(0,0,0,.098),
-      0 6px 30px 5px rgba(0,0,0,.084);
+  box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.14), 0 16px 24px 2px rgba(0, 0, 0, 0.098),
+    0 6px 30px 5px rgba(0, 0, 0, 0.084);
 }
 
 @media (max-width: 2000px) {
@@ -957,48 +963,5 @@ form {
 
   #message {
     margin-right: 2px;
-  }
-}
-
-@keyframes filmstrip {
-  0% {
-    transform: translateY(0);
-    animation-timing-function: steps(1);
-  }
-  10% {
-    transform: translateY(-10%);
-    animation-timing-function: steps(1);
-  }
-  20% {
-    transform: translateY(-20%);
-    animation-timing-function: steps(1);
-  }
-  30% {
-    transform: translateY(-30%);
-    animation-timing-function: steps(1);
-  }
-  40% {
-    transform: translateY(-40%);
-    animation-timing-function: steps(1);
-  }
-  50% {
-    transform: translateY(-50%);
-    animation-timing-function: steps(1);
-  }
-  60% {
-    transform: translateY(-60%);
-    animation-timing-function: steps(1);
-  }
-  70% {
-    transform: translateY(-70%);
-    animation-timing-function: steps(1);
-  }
-  80% {
-    transform: translateY(-80%);
-    animation-timing-function: steps(1);
-  }
-  90% {
-    transform: translateY(-90%);
-    animation-timing-function: steps(1);
   }
 }
