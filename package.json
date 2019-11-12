@@ -7,12 +7,12 @@
   },
   "main": "index.js",
   "scripts": {
-    "autotest": "mocha --watch -R spec --compilers js:babel-register --recursive test/",
+    "autotest": "mocha --watch -R spec --require @babel/register --recursive test/",
     "lint": "eslint --ext .js ./ && echo Hooray || echo Please fix",
     "lintfix": "eslint --fix --ext .js ./ && echo Hooray || echo Please fix",
     "prepublish": "npm run test",
     "start": "node index.js",
-    "test": "mocha -R spec --compilers js:@babel/register --recursive test/"
+    "test": "mocha -R spec --require @babel/register --recursive test/"
   },
   "repository": {
     "type": "git",

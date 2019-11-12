@@ -36,6 +36,9 @@ const proxiedFrameConverter = proxyquire('../lib/frame-converter.js', {
 const proxiedFfmpegRunner = proxyquire('../lib/ffmpeg-runner.js', {
   child_process: stubChild, // eslint-disable-line camelcase
 })
+const proxiedChatSockets = proxyquire('../lib/chat-sockets.js', {
+  './frame-converter': proxiedFrameConverter,
+})
 
 const EMPTY_FRAME = 'data:image/jpeg;base64,'
 const EMPTY_FRAMES = []
@@ -50,14 +53,14 @@ const ioOpts = {
 
 describe('legacy client support', function() {
   // These tests can run a tad long on some machines
-  this.timeout(4000)
+  this.timeout(5000)
 
   let server
   before(async () => {
     server = proxyquire('../server.js', {
       './conf.json': testConfig,
-      './lib/frame-converter.js': proxiedFrameConverter,
-      './lib/ffmpeg-runner.js': proxiedFfmpegRunner,
+      './lib/chat-sockets': proxiedChatSockets,
+      './lib/ffmpeg-runner': proxiedFfmpegRunner,
     }).default
     await server.readyPromise
   })
@@ -127,7 +130,7 @@ describe('legacy client support', function() {
         s.emit('join', 'jpg')
         const frames = []
         for (let i = 0; i < 10; i++) {
-          frames.push(new Buffer(0))
+          frames.push(Buffer.alloc(0))
         }
         s.emit('chat', { text: 'hi', format: 'image/jpeg', ack: 'sure' }, frames)
         resolve()
