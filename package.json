@@ -34,6 +34,7 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/register": "^7.7.0",
     "@babel/runtime": "^7.7.2",
+    "animated_gif": "^1.0.2",
     "autoprefixer": "^9.7.1",
     "babel-loader": "^8.0.6",
     "canonical-host": "0.0.5",

@@ -3,6 +3,7 @@ import icons from './icons'
 import createDropdown from './dropdown'
 import localeTime from './locale-time'
 import theme from './theme'
+import { videoToGif } from './gif'
 
 const MESSAGE_LIMIT = 30
 const MAX_RECYCLED = 0
@@ -119,45 +120,42 @@ class Message {
     this.saveButton.disabled = true
     this.owner.trackSaveGif()
 
-    const cb = (err, gifBlob) => {
-      this.saveButton.disabled = false
-      if (err) {
+    videoToGif({ videoElem: this.video, numFrames: 10 })
+      .then(gifBlob => {
+        this.saveButton.disabled = false
+        const url = window.URL.createObjectURL(gifBlob)
+        const link = document.createElement('a')
+        const click = document.createEvent('MouseEvents')
+
+        link.href = url
+        link.download = Date.now() + '.gif'
+        click.initMouseEvent(
+          'click',
+          true,
+          true,
+          window,
+          0,
+          0,
+          0,
+          0,
+          0,
+          false,
+          false,
+          false,
+          false,
+          0,
+          null,
+        )
+        link.dispatchEvent(click)
+        setTimeout(() => window.URL.revokeObjectURL(url), 100)
+      })
+      .catch(err => {
+        this.saveButton.disabled = false
         // TODO(tec27): need a good way to display this error to users
         console.error('Error creating GIF:')
         console.dir(err)
         return
-      }
-
-      const url = window.URL.createObjectURL(gifBlob),
-        link = document.createElement('a'),
-        click = document.createEvent('MouseEvents')
-
-      link.href = url
-      link.download = Date.now() + '.gif'
-      click.initMouseEvent(
-        'click',
-        true,
-        true,
-        window,
-        0,
-        0,
-        0,
-        0,
-        0,
-        false,
-        false,
-        false,
-        false,
-        0,
-        null,
-      )
-      link.dispatchEvent(click)
-      setTimeout(() => window.URL.revokeObjectURL(url), 100)
-    }
-
-    /*
-    filmstrip2gif(this._srcUrl, FILMSTRIP_DURATION, NUM_VIDEO_FRAMES, FILMSTRIP_HORIZONTAL, cb)
-    */
+      })
   }
 
   mute() {
