@@ -1,5 +1,4 @@
-// We use the minified version because it has the web worker script inlined
-import AnimatedGif from 'animated_gif/dist/Animated_GIF.min.js'
+import AnimatedGif from 'animated_gif/dist/Animated_GIF'
 import toBlob from 'data-uri-to-blob'
 
 export async function videoToGif({ videoElem, numFrames }) {
