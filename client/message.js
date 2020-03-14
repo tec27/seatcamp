@@ -114,7 +114,6 @@ class Message {
     this._disposed = true
   }
 
-  // TODO(tec27): need to fix this for video
   saveGif() {
     this._throwIfDisposed()
     this.saveButton.disabled = true
