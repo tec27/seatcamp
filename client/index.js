@@ -1,18 +1,18 @@
 import './register-components'
 
+import cuid from 'cuid'
 import createSocketIoClient from 'socket.io-client'
 import cameraPreview from './camera-preview'
 import captureFrames from './capture-frames'
-import cuid from 'cuid'
 import getFingerprint from './fingerprint'
 import NotificationCounter from './notification-counter'
 import StoredSet from './stored-set'
 import createCharCounter from './char-counter'
-import createDropdown from './dropdown'
 import initProgressSpinner from './progress'
 import theme from './theme'
 import createAbout from './about'
 import Tracker from './analytics'
+import { PROTOCOL_VERSION } from '../protocol-version'
 
 const io = createSocketIoClient()
 const muteSet = new StoredSet('mutes')
@@ -47,13 +47,20 @@ io.on('connect', function() {
   updateActiveUsers()
 })
 
+io.on('protocolVersion', version => {
+  if (PROTOCOL_VERSION !== version) {
+    // TODO: display a dialog to refresh
+    console.log('protocol version mismatch!')
+  }
+})
+
 io.on('userid', function(id) {
   messageList.myId = id
 })
 
 let unreadMessages = 0
 let historyComplete = false
-io.on('chat', function(chat) {
+io.on('chat', chat => {
   const autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
   const messageAdded = messageList.addMessage(chat, autoScroll)
   if (messageAdded) {
@@ -65,7 +72,7 @@ io.on('chat', function(chat) {
     updateNotificationCount()
   }
 })
-  .on('active', function(numActive) {
+  .on('active', numActive => {
     active = numActive
     updateActiveUsers()
   })
