@@ -2,8 +2,7 @@ export default class NotificationCounter {
   constructor() {
     const link = document.querySelector('link[rel=icon]')
     this.origIcon = link ? link.href : '/favicon.ico'
-    this.canvas = document.createElement('canvas')
-    this.context = this.canvas.getContext('2d')
+    this.image = null
   }
 
   getIcon(cb) {
@@ -15,8 +14,6 @@ export default class NotificationCounter {
     const image = new window.Image()
     image.onload = () => {
       this.image = image
-      this.canvas.width = image.width
-      this.canvas.height = image.height
       cb(this.image)
     }
     image.onerror = err => {
@@ -27,24 +24,30 @@ export default class NotificationCounter {
   }
 
   setCount(count) {
+    // NOTE: we throw away the canvas and create a new one every time because Chrome seems to like
+    // to not draw to canvases when the tab is backgrounded (and thus would leave the previously
+    // drawn contents intact, leading to incorrect counts a lot of the time). New canvases always
+    // seem to draw correctly
+    const canvas = document.createElement('canvas')
     this.getIcon(icon => {
-      const fontSize = this._rel16(11)
-      const c = this.context
+      canvas.width = icon.width
+      canvas.height = icon.height
+      const fontSize = this._rel16(11, canvas)
+      const c = canvas.getContext('2d')
 
-      c.clearRect(0, 0, this.canvas.width, this.canvas.height)
-      c.drawImage(icon, 0, 0, this.canvas.width, this.canvas.height)
+      c.drawImage(icon, 0, 0, canvas.width, canvas.height)
       c.font = `${fontSize}px monospace`
       c.fillStyle = 'rgb(255, 255, 255)'
       c.textAlign = 'left'
       c.textBaseline = 'top'
       c.strokeStyle = 'rgba(2, 136, 209, 0.95)'
-      c.lineWidth = this._rel16(4)
-      const startX = this._rel16(2)
-      const startY = this._rel16(1)
+      c.lineWidth = this._rel16(4, canvas)
+      const startX = this._rel16(2, canvas)
+      const startY = this._rel16(1, canvas)
       const countStr = count < 10 ? '' + count : '*'
       c.strokeText(countStr, startX, startY)
       c.fillText(countStr, startX, startY)
-      this._setIcon(this.canvas.toDataURL('image/png'))
+      this._setIcon(canvas.toDataURL('image/png'))
     })
   }
 
@@ -74,7 +77,7 @@ export default class NotificationCounter {
     document.getElementsByTagName('head')[0].appendChild(link)
   }
 
-  _rel16(val) {
-    return Math.round((val * this.canvas.width) / 16)
+  _rel16(val, canvas) {
+    return Math.round((val * canvas.width) / 16)
   }
 }
