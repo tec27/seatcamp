@@ -244,13 +244,12 @@ class MessageElement extends LitElement {
   }
 
   saveGif() {
-    this._throwIfDisposed()
-    this.saveButton.disabled = true
+    this.shadowRoot.querySelector('.save').disabled = true
     this.owner.trackSaveGif()
 
-    videoToGif({ videoElem: this.video, numFrames: 10 })
+    videoToGif({ videoElem: this.shadowRoot.querySelector('.message-video'), numFrames: 10 })
       .then(gifBlob => {
-        this.saveButton.disabled = false
+        this.shadowRoot.querySelector('.save').disabled = false
         const url = window.URL.createObjectURL(gifBlob)
         const link = document.createElement('a')
         const click = document.createEvent('MouseEvents')
@@ -278,7 +277,7 @@ class MessageElement extends LitElement {
         setTimeout(() => window.URL.revokeObjectURL(url), 100)
       })
       .catch(err => {
-        this.saveButton.disabled = false
+        this.shadowRoot.querySelector('.save').disabled = false
         // TODO(tec27): need a good way to display this error to users
         console.error('Error creating GIF:')
         console.dir(err)
