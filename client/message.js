@@ -227,6 +227,7 @@ class MessageElement extends LitElement {
   }
 
   disconnectedCallback() {
+    this.owner.messageDisconnected(this)
     if (this._srcUrl) {
       window.URL.revokeObjectURL(this._srcUrl)
       this._srcUrl = null
@@ -355,6 +356,8 @@ export class MessageListElement extends LitElement {
   _isAutoScrolling = false
 
   render() {
+    window.IOBS = this._intersectionObserver
+
     return html`
       <div>
         ${repeat(
@@ -420,6 +423,10 @@ export class MessageListElement extends LitElement {
     this._messages.push(message)
     this.requestUpdate()
     return true
+  }
+
+  messageDisconnected(message) {
+    this._intersectionObserver.unobserve(message)
   }
 
   muteUser(userId) {
