@@ -118,6 +118,10 @@ class MessageElement extends LitElement {
         margin-top: -8px;
       }
 
+      .message-meta sc-dropdown {
+        margin-bottom: -24px;
+      }
+
       .identicon {
         width: 38px;
         height: 38px;
