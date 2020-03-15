@@ -1,37 +1,139 @@
-class Dropdown {
-  constructor(elem, actions) {
-    this.elem = elem
-    this.actions = actions
-    if (Object.keys(actions).length !== elem.querySelectorAll('.menu button').length) {
-      throw new Error("provided actions don't match the number of buttons in the dropdown")
+import { LitElement, html, css } from 'lit-element'
+import { SHADOW_2 } from './shadows'
+
+class DropdownElement extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        width: 48px;
+        height: 48px;
+        display: block;
+        margin: 0;
+        overflow: visible;
+        position: relative;
+      }
+
+      .toggle ::slotted(*) {
+        padding: 12px;
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+        outline: none;
+      }
+
+      .menu {
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        opacity: 0;
+        visibility: hidden;
+
+        border-radius: 2px;
+        min-width: 168px;
+        outline: none;
+        margin-top: 8px;
+        margin-right: 8px;
+        overflow: hidden;
+
+        background-color: var(--colorPopoverSurface);
+
+        ${SHADOW_2}
+
+        transform: scale(0);
+        transform-origin: 100% 0%;
+
+        transition: visibility 0.2s, opacity 0.2s, transform 0.3s;
+        transition-timing-function: visibility linear, opacity linear,
+          transform cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .active .menu {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+      }
+
+      ::slotted(button) {
+        width: 100%;
+        height: 48px;
+        outline: none;
+        border: none;
+        background-color: transparent;
+        color: var(--colorTextPrimary);
+        font-size: 16px;
+        padding-left: 16px;
+        padding-right: 16px;
+        text-align: left;
+      }
+
+      ::slotted(button:hover) {
+        background-color: var(--colorButtonHover);
+        cursor: pointer;
+      }
+
+      ::slotted(button:active),
+      .active .toggle ::slotted(button) {
+        background-color: var(--colorButtonActive);
+      }
+
+      ::slotted(button:disabled) {
+        background-color: transparent;
+        cursor: default;
+      }
+
+      .menu ::slotted(button:first-child) {
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+      }
+
+      .menu ::slotted(button:last-child) {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+      }
+    `
+  }
+
+  static get properties() {
+    return {
+      actions: { attribute: false },
+    }
+  }
+
+  static _opened = null
+
+  actions = {}
+  _documentListenerAttached = false
+  _onDocumentClicked = () => this.onClose()
+
+  render() {
+    const isOpen = DropdownElement._opened === this
+    const className = isOpen ? 'active' : ''
+
+    return html`
+      <div class="${className}" @click="${this.onClick}">
+        <div class="toggle"><slot name="toggle"></slot></div>
+        <div class="menu" @click="${this.onMenuClick}">
+          <slot></slot>
+        </div>
+      </div>
+    `
+  }
+
+  onClick(event) {
+    let t = event.target
+    while (t) {
+      if (t.classList.contains('toggle') && !t.hasAttribute('disabled')) break
+      if (t === event.currentTarget) return
+      t = t.parentElement
     }
 
-    this.closeListener = () => this.close()
-    elem.addEventListener('click', evt => {
-      // Handle clicks for the toggle
-      let t = evt.target
-      while (true) {
-        if (t.classList.contains('toggle') && !t.hasAttribute('disabled')) break
-        if (t === evt.currentTarget) return
-        t = t.parentElement
-      }
+    if (this.open()) {
+      event.stopPropagation()
+    }
+  }
 
-      if (this.open()) {
-        evt.stopPropagation()
-      }
-    })
-    elem.addEventListener('click', evt => {
-      // Handle clicks for all `.menu button` elements
-      if (evt.target.tagName !== 'BUTTON') return
-      let p = evt.target.parentElement
-      while (true) {
-        if (p.classList.contains('menu')) break
-        if (p === evt.currentTarget) return
-        p = p.parentElement
-      }
-
-      this.onAction(evt.target.dataset.action)
-    })
+  onMenuClick(event) {
+    if (event.target.tagName !== 'BUTTON') return
+    this.onAction(event.target.dataset.action)
   }
 
   onAction(action) {
@@ -42,32 +144,45 @@ class Dropdown {
     this.actions[action]()
   }
 
+  onClose() {
+    if (DropdownElement._opened === this) {
+      DropdownElement._opened = null
+      this.requestUpdate()
+    }
+  }
+
   open() {
-    if (Dropdown._opened) {
-      Dropdown._opened.close()
+    if (DropdownElement._opened) {
+      const isThis = DropdownElement._opened === this
+      DropdownElement._opened.onClose()
+      if (isThis) {
+        this.requestUpdate()
+        return false
+      }
     }
 
-    if (this.elem.classList.contains('active')) {
-      return false
-    }
-
-    this.elem.classList.add('active')
     document.addEventListener('click', this.closeListener)
-    Dropdown._opened = this
+    DropdownElement._opened = this
+    this.requestUpdate()
     return true
   }
 
-  close() {
-    document.removeEventListener('click', this.closeListener)
-    this.elem.classList.remove('active')
-    if (Dropdown._opened === this) {
-      Dropdown._opened = null
+  updated() {
+    if (DropdownElement._opened === this && !this._documentListenerAttached) {
+      document.addEventListener('click', this._onDocumentClicked)
+      this._documentListenerAttached = true
+    } else if (DropdownElement._opened !== this && this._documentListenerAttached) {
+      document.removeEventListener('click', this._onDocumentClicked)
+      this._documentListenerAttached = false
+    }
+  }
+
+  disconnectedCallback() {
+    if (this._documentListenerAttached) {
+      document.removeEventListener('click', this._onDocumentClicked)
+      this._documentListenerAttached = false
     }
   }
 }
 
-Dropdown._opened = null
-
-export default function(elem, actions) {
-  return new Dropdown(elem, actions)
-}
+customElements.define('sc-dropdown', DropdownElement)

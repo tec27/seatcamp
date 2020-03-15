@@ -27,6 +27,7 @@ export default {
             options: {
               babelrc: false,
               cacheDirectory: true,
+              plugins: ['@babel/plugin-proposal-class-properties'],
               presets: [
                 [
                   '@babel/preset-env',

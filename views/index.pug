@@ -14,9 +14,10 @@ html
         background-color: #212121;
         color: #ffffff;
       }
+
     link(rel='manifest', href='manifest.json')
     link(type='text/css', rel='stylesheet',
-      href='//fonts.googleapis.com/css?family=Roboto:300,500,400|Material+Icons')
+      href='//fonts.googleapis.com/css?family=Roboto:300,500,400')
     link(type='text/css', rel='stylesheet', href='styles.css?20170730')
     link(type='image/x-icon', rel='icon', href='favicon.ico')
     meta(name='theme-color', content='#212121')
@@ -30,19 +31,19 @@ html
       p meatspace
       .actions
         p#active-users ?
-        div.dropdown
-          button.toggle.icon-invert.material-icons(title="Options") more_vert
-          div.menu.shadow-2
-            button(data-action='unmute') Unmute all
-            button#change-theme(data-action='changeTheme') Use dark theme
-            button(data-action='about') About
-    ul#message-list.shadow-1
+        sc-dropdown#options-dropdown
+          button.toggle(slot="toggle", title='Options')
+            sc-svg-icon(invert='true', icon='moreVert')
+          button(data-action='unmute') Unmute all
+          button#change-theme(data-action='changeTheme') Use dark theme
+          button(data-action='about') About
+    sc-message-list#message-list.shadow-1
     div.empty-view
       p This place looks a little empty&hellip; Send a fun message to get things started!
     footer
       div.preview-container.shadow-1.camera-enabled
         div.camera-disabled-message
-          span.camera-disabled-icon.icon-invert.material-icons videocam_off
+          sc-svg-icon.camera-disabled-icon(invert='true', icon='videocamOff', size='48')
           span.camera-disabled-text Please enable your webcam
         video#preview
       .progress.shadow-1
@@ -58,7 +59,8 @@ html
         input#message(type='text', maxlength='250', autofocus='true', autocomplete='off',
           autocorrect='on', autocapitalize='on', spellcheck='true')
         p#char-counter 0 / 250
-        button#send.icon-invert.material-icons(type='submit', title="Send") send
+        button#send(type='submit', title="Send")
+          sc-svg-icon(invert='true', icon='send')
     if trackingId
       script(type='text/javascript').
         window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date

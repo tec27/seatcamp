@@ -1,3 +1,5 @@
+import './register-components'
+
 import createSocketIoClient from 'socket.io-client'
 import cameraPreview from './camera-preview'
 import captureFrames from './capture-frames'
@@ -8,7 +10,6 @@ import StoredSet from './stored-set'
 import createCharCounter from './char-counter'
 import createDropdown from './dropdown'
 import initProgressSpinner from './progress'
-import initMessageList from './message'
 import theme from './theme'
 import createAbout from './about'
 import Tracker from './analytics'
@@ -17,7 +18,10 @@ const io = createSocketIoClient()
 const muteSet = new StoredSet('mutes')
 const progressSpinner = initProgressSpinner(document.querySelector('.progress'))
 const tracker = new Tracker()
-const messageList = initMessageList(document.querySelector('#message-list'), muteSet, tracker)
+const messageList = document.querySelector('#message-list')
+
+messageList.muteSet = muteSet
+messageList.tracker = tracker
 
 const possibleEvents = {
   transition: 'transitionend',
@@ -44,22 +48,19 @@ io.on('connect', function() {
 })
 
 io.on('userid', function(id) {
-  messageList.clientId = id
+  messageList.myId = id
 })
 
 let unreadMessages = 0
 let historyComplete = false
 io.on('chat', function(chat) {
   const autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
-  const message = messageList.addMessage(chat, autoScroll)
-  if (message) {
+  const messageAdded = messageList.addMessage(chat, autoScroll)
+  if (messageAdded) {
     hideEmptyState()
   }
-  if (message && autoScroll) {
-    message.elem.scrollIntoView()
-  }
 
-  if (historyComplete && message && document.hidden) {
+  if (historyComplete && messageAdded && document.hidden) {
     unreadMessages++
     updateNotificationCount()
   }
@@ -88,7 +89,7 @@ function updateActiveUsers() {
   }
 }
 
-createDropdown(document.querySelector('header .dropdown'), {
+document.querySelector('#options-dropdown').actions = {
   unmute: () => {
     muteSet.clear()
     tracker.onUnmute()
@@ -102,7 +103,7 @@ createDropdown(document.querySelector('header .dropdown'), {
     showAbout()
     tracker.onShowAbout()
   },
-})
+}
 
 const updateTheme = newTheme => {
   document.body.classList.toggle('dark', newTheme === 'dark')

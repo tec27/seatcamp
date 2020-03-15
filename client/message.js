@@ -1,117 +1,241 @@
+import { LitElement, html, css } from 'lit-element'
+import { repeat } from 'lit-html/directives/repeat'
+
 import createIdenticon from './identicon'
-import icons from './icons'
-import createDropdown from './dropdown'
 import localeTime from './locale-time'
 import theme from './theme'
 import { videoToGif } from './gif'
 
 const MESSAGE_LIMIT = 30
-const MAX_RECYCLED = 6
 
-const MESSAGE_HTML = `
-  <div class="video-container">
-    <video class="message-video" muted loop></video>
-    <button class="save shadow-1" title="Save as GIF"></button>
-  </div>
-  <p>
-  <div class="message-meta">
-    <div class="dropdown">
-      <button class="toggle message-overflow" title="Message options"></button>
-      <div class="menu shadow-2">
-        <button data-action="mute">Mute user</button>
-      </div>
-    </div>
-    <div class="identicon"></div>
-    <time></time>
-  </div>`
+class MessageElement extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        display: flex;
+        background-color: var(--colorSurface);
+        font-size: 20px;
+        padding: 0px;
+      }
 
-class Message {
-  constructor(owner) {
-    this._disposed = false
-    this._userId = null
-    this._srcUrl = null
-    this._isVisible = false
-    this._playPauseRequest = null
-    this.owner = owner
+      .video-container {
+        width: 200px;
+        height: 150px;
+        position: relative;
+        overflow: hidden;
+        flex-shrink: 0;
 
-    this.root = document.createElement('li')
-    this.root.innerHTML = MESSAGE_HTML
-    this.videoContainer = this.root.querySelector('.video-container')
-    this.video = this.root.querySelector('.message-video')
-    this.saveButton = this.root.querySelector('.save')
-    this.chatText = this.root.querySelector('p')
-    this.timestamp = this.root.querySelector('time')
-    // placeholder div so it can be replaced with the real thing when bound
-    this.identicon = this.root.querySelector('.identicon')
-    this.muteButton = this.root.querySelector('.menu button')
-    this.messageOverflow = this.root.querySelector('.message-overflow')
+        margin-bottom: -1px;
+      }
 
-    // generate icons where needed
-    this.saveButton.appendChild(icons.save('invert'))
-    this.messageOverflow.appendChild(icons.moreVert('normal'))
+      .video-container.first {
+        border-top-left-radius: 2px;
+      }
 
-    this.saveButton.addEventListener('click', () => this.saveGif())
-    this.dropdown = createDropdown(this.messageOverflow.parentElement, {
-      mute: () => this.mute(),
-    })
+      .video-container.last {
+        border-bottom-left-radius: 2px;
+        margin-bottom: 0;
+      }
+
+      .video-container .message-video {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .video-container .save,
+      .video-container .save:focus {
+        position: absolute;
+        display: block;
+        padding: 4px 8px;
+        bottom: 8px;
+        left: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.54);
+        outline: none;
+        border-radius: 2px;
+        background-color: #f06292;
+        opacity: 0;
+        visibility: hidden;
+
+        transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .video-container:hover .save {
+        visibility: visible;
+        opacity: 0.95;
+      }
+
+      .save:hover {
+        background-color: #f86a9a;
+        cursor: pointer;
+      }
+
+      .save:active {
+        background-color: #ff71a1;
+      }
+
+      .save[disabled] {
+        background-color: #e91e63;
+      }
+
+      .message-text {
+        flex: 1 1;
+        margin: 0;
+        padding: 8px;
+
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        overflow: hidden;
+      }
+
+      .message-meta {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: space-between;
+        padding: 0 0 4px;
+      }
+
+      .message-overflow {
+        display: inline-block;
+      }
+
+      .message-meta sc-dropdown .toggle {
+        /* compensate for the icon being higher and not looking like it occupies the lower space */
+        --colorIconPrimary: var(--colorTextSecondary);
+        --colorButtonHover: transparent;
+        --colorButtonActive: transparent;
+      }
+
+      .message-meta sc-dropdown .toggle:hover {
+        --colorIconPrimary: var(--colorTextPrimary);
+      }
+
+      .message-overflow sc-svg-icon {
+        margin-left: 8px;
+        margin-top: -8px;
+      }
+
+      .identicon {
+        width: 38px;
+        height: 38px;
+        border: var(--colorBorder);
+        border-radius: 2px;
+        margin: 1px 8px 1px 2px;
+        padding: 3px;
+      }
+
+      .identicon .block {
+        float: left;
+        width: 20%;
+        height: 20%;
+      }
+
+      .message-meta time {
+        color: var(colorTextSecondary);
+        font-size: 16px;
+        padding: 0;
+        margin-right: 8px;
+      }
+    `
   }
 
-  bind({ key, text, sent, userId, from, video, videoMime, videoType }, myId) {
-    this._throwIfDisposed()
-    this.unbind()
-
-    const blob = new window.Blob([video], { type: videoMime })
-    this._srcUrl = window.URL.createObjectURL(blob)
-    this.video.src = this._srcUrl
-
-    this.chatText.innerHTML = text
-
-    const sentDate = new Date(sent)
-    this.timestamp.datetime = sentDate.toISOString()
-    this.timestamp.innerHTML = localeTime(sentDate)
-
-    if (myId === userId) {
-      // No mute menu for yourself
-      this.messageOverflow.setAttribute('disabled', true)
+  static get properties() {
+    return {
+      isFirst: { type: Boolean, attribute: 'is-first' },
+      isLast: { type: Boolean, attribute: 'is-last' },
+      key: { type: String },
+      owner: { attribute: false },
+      myId: { type: String, attribute: 'my-id' },
+      sent: { type: Number },
+      text: { type: String },
+      userId: { type: String, attribute: 'user-id' },
+      video: { attribute: false },
+      videoMime: { type: String },
     }
-    this._userId = userId
-    this.refreshIdenticon()
-
-    this._key = key
   }
 
-  refreshIdenticon() {
-    const newIdenticon = createIdenticon(this._userId)
-    this.identicon.parentElement.replaceChild(newIdenticon, this.identicon)
-    this.identicon = newIdenticon
+  constructor() {
+    super()
+    this.isFirst = false
+    this.isLast = false
+    this.key = ''
+    this.owner = null
+    this.sent = Date.now()
+    this.text = ''
+    this.userId = ''
+    this.video = null
+    this.videoMime = ''
   }
 
-  unbind() {
-    this._throwIfDisposed()
+  _isVisible = false
+  _playPauseRequest = null
+  _srcUrlIsFor = null
+  _srcUrl = null
 
+  render() {
+    if (this._srcUrl && this._srcUrlIsFor !== this.video) {
+      window.URL.revokeObjectURL(this._srcUrl)
+      this._srcUrl = null
+    }
+    if (!this._srcUrl) {
+      const blob = new window.Blob([this.video], { type: this.videoMime })
+      this._srcUrl = window.URL.createObjectURL(blob)
+      this._srcUrlIsFor = this.video
+    }
+
+    const sentDate = new Date(this.sent)
+    const isMe = this.userId === this.myId
+
+    const videoClass =
+      'video-container' + (this.isFirst ? ' first' : '') + (this.isLast ? ' last' : '')
+
+    const dropdownActions = {
+      mute: () => this.mute(),
+    }
+
+    return html`
+        <div class="${videoClass}">
+          <video class="message-video" muted loop src="${this._srcUrl}"></video>
+          <button class="save shadow-1" title="Save as GIF" @click="${this.saveGif}">
+            <sc-svg-icon class="invert" icon="save"></ms-svg-icon>
+          </button>
+        </div>
+        <p class="message-text" .innerHTML="${this.text}"></p>
+        <div class="message-meta">
+          <sc-dropdown .actions="${dropdownActions}">
+            <button slot="toggle" class="toggle message-overflow"
+                title="Message options"
+                ?disabled="${isMe}">
+              <sc-svg-icon ?disabled="${isMe}" icon="moreVert"></ms-svg-icon>
+            </button>
+            <button data-action="mute">Mute user</button>
+          </sc-dropdown>
+          <div class="identicon"></div>
+          <time datetime="${sentDate.toISOString()}">${localeTime(sentDate)}</time>
+        </div>
+    `
+  }
+
+  updated() {
+    // TODO: make these LitElements too
+    const newIdenticon = createIdenticon(this.userId)
+    const identiconElem = this.shadowRoot.querySelector('.identicon')
+    identiconElem.parentElement.replaceChild(newIdenticon, identiconElem)
+  }
+
+  disconnectedCallback() {
+    if (this._srcUrl) {
+      window.URL.revokeObjectURL(this._srcUrl)
+      this._srcUrl = null
+      this._srcUrlIsFor = null
+    }
     if (this._playPauseRequest) {
       cancelAnimationFrame(this._playPauseRequest)
       this._playPauseRequest = null
     }
-
-    this._userId = null
-    this._key = null
-    this.dropdown.close()
-
-    this._isVisible = false
-    delete this.video.src
-
-    if (this._srcUrl) {
-      window.URL.revokeObjectURL(this._srcUrl)
-      this._srcUrl = null
-    }
-
-    this.messageOverflow.removeAttribute('disabled')
-  }
-
-  dispose() {
-    this._throwIfDisposed()
-    this._disposed = true
   }
 
   saveGif() {
@@ -158,8 +282,7 @@ class Message {
   }
 
   mute() {
-    this._throwIfDisposed()
-    this.owner.muteUser(this._userId)
+    this.owner.muteUser(this.userId)
   }
 
   updateVisibility(visible) {
@@ -168,80 +291,135 @@ class Message {
     if (!this._playPauseRequest) {
       this._playPauseRequest = requestAnimationFrame(() => {
         this._playPauseRequest = null
+        const video = this.shadowRoot.querySelector('.message-video')
         if (this._isVisible) {
-          this.video.play()
+          video.play()
         } else {
-          this.video.pause()
+          video.pause()
         }
       })
     }
-    // TODO(tec27): tell owner about this so it can recycle on scrolling?
-  }
-
-  get elem() {
-    return this.root
-  }
-
-  get userId() {
-    return this._userId
-  }
-
-  get key() {
-    return this._key
-  }
-
-  _throwIfDisposed() {
-    if (this._disposed) throw new Error('Message already disposed!')
   }
 }
 
-class MessageList {
-  constructor(listElem, muteSet, tracker) {
-    this.elem = listElem
-    this.messages = []
-    this.messageKeys = new Set()
-    this.messageElemsToMessage = new WeakMap()
-    this._recycled = []
+customElements.define('sc-message', MessageElement)
 
-    this.clientId = ''
-    this._mutes = muteSet
-    this._tracker = tracker
+export class MessageListElement extends LitElement {
+  static get styles() {
+    return css`
+      :host {
+        display: block;
 
-    theme.on('themeChange', newTheme => this._onThemeChange(newTheme))
+        margin: 56px auto 158px;
+        padding: 0;
 
-    this.intersectionObserver = new IntersectionObserver(entries => {
-      for (const { target, isIntersecting } of entries) {
-        this.messageElemsToMessage.get(target).updateVisibility(isIntersecting)
+        border-radius: 2px;
       }
-    })
+
+      sc-message {
+        border-bottom: 1px solid var(--colorBorder);
+      }
+
+      sc-message:first-of-type {
+        border-top-left-radius: 2px;
+        border-top-right-radius: 2px;
+      }
+
+      sc-message:last-of-type {
+        border-bottom-left-radius: 2px;
+        border-bottom-right-radius: 2px;
+        border-bottom: none;
+      }
+    `
+  }
+
+  static get properties() {
+    return {
+      myId: { type: String, attribute: 'my-id' },
+      muteSet: { attribute: false },
+      tracker: { attribute: false },
+    }
+  }
+
+  myId = ''
+  muteSet = new Set()
+  tracker = null
+
+  _intersectionObserver = new IntersectionObserver(entries => {
+    for (const { target, isIntersecting } of entries) {
+      target.updateVisibility(isIntersecting)
+    }
+  })
+  _messages = []
+
+  _isAutoScrolling = false
+
+  render() {
+    return html`
+      <div>
+        ${repeat(
+          this._messages,
+          m => m.key,
+          (m, index) =>
+            html`
+              <sc-message
+                key="${m.key}"
+                .owner="${this}"
+                my-id="${this.myId}"
+                sent="${m.sent}"
+                text="${m.text}"
+                user-id="${m.userId}"
+                .video="${m.video}"
+                videoMime="${m.videoMime}"
+                ?is-first="${index === 0}"
+                ?is-last="${index === this._messages.length - 1}"
+              ></sc-message>
+            `,
+        )}
+      </div>
+    `
+  }
+
+  updated() {
+    for (const message of this.shadowRoot.querySelectorAll('sc-message')) {
+      this._intersectionObserver.observe(message)
+    }
+
+    if (this._isAutoScrolling && this._messages.length) {
+      requestAnimationFrame(() => {
+        if (!this._messages.length) {
+          return
+        }
+
+        const lastMessage = this._messages[this._messages.length - 1]
+        this.shadowRoot.querySelector(`sc-message[key="${lastMessage.key}"]`).scrollIntoView()
+      })
+      this._isAutoScrolling = false
+    }
   }
 
   hasMessages() {
-    return this.messages.length > 0
+    return this._messages.length > 0
   }
 
-  addMessage(chat, removeOverLimit = true) {
-    if (this._mutes.has(chat.userId)) {
-      return null
+  addMessage(message, autoScrolling = true) {
+    if (this.muteSet.has(message.userId)) {
+      return false
     }
-    if (this.messageKeys.has(chat.key)) {
-      return null
-    }
-
-    const newCount = this.messages.length + 1
-    if (removeOverLimit && newCount > MESSAGE_LIMIT) {
-      const removed = this.messages.splice(0, newCount - MESSAGE_LIMIT)
-      this._recycle(removed)
+    if (this._messages.some(m => m.key === message.key)) {
+      return false
     }
 
-    const message = this._recycled.length ? this._recycled.pop() : new Message(this)
-    message.bind(chat, this.clientId)
-    this.messages.push(message)
-    this.messageKeys.add(message.key)
-    this.messageElemsToMessage.set(message.elem, message)
-    this.elem.appendChild(message.elem)
-    this.intersectionObserver.observe(message.elem)
-    return message
+    this._isAutoScrolling = autoScrolling
+
+    const newCount = this._messages.length + 1
+    if (autoScrolling && newCount > MESSAGE_LIMIT) {
+      this._messages = this._messages.slice(-MESSAGE_LIMIT)
+    }
+
+    this._messages.push(message)
+    this.requestUpdate()
+    return true
   }
 
   muteUser(userId) {
@@ -249,52 +427,26 @@ class MessageList {
       // don't mute me, me
       return
     }
-    this._mutes.add(userId)
-    this._tracker.onUserMuted()
+    this.muteSet.add(userId)
+    this.tracker.onUserMuted()
 
-    const userMessages = []
-    const nonUserMessages = []
-    for (const message of this.messages) {
-      if (message.userId === userId) {
-        userMessages.push(message)
-      } else {
-        nonUserMessages.push(message)
-      }
-    }
-
-    this._recycle(userMessages)
-    this.messages = nonUserMessages
+    this._messages = this._messages.filter(m => m.userId !== userId)
+    this.requestUpdate()
   }
 
   trackSaveGif() {
-    this._tracker.onSaveGif()
-  }
-
-  _recycle(messages) {
-    for (const message of messages) {
-      this.messageKeys.delete(message.key)
-      this.intersectionObserver.unobserve(message.elem)
-      this.messageElemsToMessage.delete(message.elem)
-      message.elem.parentElement.removeChild(message.elem)
-      message.unbind()
-    }
-
-    let toRecycle = Math.max(MAX_RECYCLED - this._recycled.length, 0)
-    toRecycle = Math.min(toRecycle, messages.length)
-    this._recycled = this._recycled.concat(messages.slice(0, toRecycle))
-    for (const message of messages.slice(toRecycle, messages.length)) {
-      message.dispose()
-    }
+    this.tracker.onSaveGif()
   }
 
   _onThemeChange(newTheme) {
+    // TODO: fix this for LitElement
+    /*
     // Re-render identicons based on the new theme to update any inline styles
     for (const message of this.messages) {
       message.refreshIdenticon()
     }
+    */
   }
 }
 
-export default function createMessageList() {
-  return new MessageList(...arguments)
-}
+customElements.define('sc-message-list', MessageListElement)
