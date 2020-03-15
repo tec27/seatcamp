@@ -6,7 +6,7 @@ import theme from './theme'
 import { videoToGif } from './gif'
 
 const MESSAGE_LIMIT = 30
-const MAX_RECYCLED = 0
+const MAX_RECYCLED = 6
 
 const MESSAGE_HTML = `
   <div class="video-container">
