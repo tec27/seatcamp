@@ -143,8 +143,8 @@ document.querySelector('form').addEventListener('submit', function(event) {
     document.querySelector('#preview'),
     {
       format: 'image/jpeg',
-      width: 200,
-      height: 150,
+      width: 400,
+      height: 300,
     },
     function(err, frames) {
       setTimeout(() => {

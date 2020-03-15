@@ -10,7 +10,7 @@ export default function(video, options, cb) {
     numFrames: options.numFrames || 10,
     fps: options.fps || 5,
     format: options.format || 'image/jpeg',
-    quality: options.quality || 0.95,
+    quality: options.quality || 0.92,
     width: options.width || video.videoWidth,
     height: options.height || video.videoHeight,
   }
