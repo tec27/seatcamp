@@ -11,6 +11,10 @@ class CameraPreview {
 
     this.switchButtonListener = () => this.onSwitchCamera()
 
+    this.videoElem.addEventListener('playing', () => {
+      this.videoElem.classList.remove('paused')
+    })
+
     this.loadFacing()
     window.addEventListener('storage', evt => {
       if (evt.key === 'cameraFacing') {
@@ -123,6 +127,7 @@ class CameraPreview {
 
     this.videoStream.stop()
     this.videoStream = null
+    this.videoElem.classList.add('paused')
   }
 
   updateSwitchButton() {

@@ -243,6 +243,12 @@ footer .progress {
   height: 100%;
   width: 100%;
   position: absolute;
+
+  transition: filter 0.3s linear;
+}
+
+.preview-container video.paused {
+  filter: grayscale(1);
 }
 
 .preview-container .switch-camera,
