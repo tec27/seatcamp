@@ -442,7 +442,7 @@ export class MessageListElement extends LitElement {
   }
 
   muteUser(userId) {
-    if (userId === this.clientId) {
+    if (userId === this.myId) {
       // don't mute me, me
       return
     }

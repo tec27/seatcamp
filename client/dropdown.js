@@ -129,6 +129,9 @@ class DropdownElement extends LitElement {
       if (t === event.currentTarget) return
       t = t.parentElement
     }
+    if (!t) {
+      return
+    }
 
     if (this.open()) {
       event.stopPropagation()
