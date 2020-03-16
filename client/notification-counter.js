@@ -2,6 +2,7 @@ export default class NotificationCounter {
   constructor() {
     const link = document.querySelector('link[rel=icon]')
     this.origIcon = link ? link.href : '/favicon.ico'
+    this.origTitle = document.title || 'meatspace'
     this.image = null
   }
 
@@ -47,7 +48,9 @@ export default class NotificationCounter {
       const countStr = count < 10 ? '' + count : '*'
       c.strokeText(countStr, startX, startY)
       c.fillText(countStr, startX, startY)
+
       this._setIcon(canvas.toDataURL('image/png'))
+      document.title = `(${countStr}) ${this.origTitle}`
     })
   }
 
@@ -57,6 +60,7 @@ export default class NotificationCounter {
 
   _revert() {
     this._setIcon(this.origIcon)
+    document.title = this.origTitle
   }
 
   _setIcon(iconHref) {
