@@ -5,7 +5,6 @@ import localeTime from './locale-time'
 import { videoToGif } from './gif'
 import { RESET } from './styles'
 
-const VIDEO_DURATION_SECS = 0.91
 const MESSAGE_LIMIT = 30
 
 class MessageElement extends LitElement {
@@ -303,11 +302,19 @@ class MessageElement extends LitElement {
       this._playPauseRequest = requestAnimationFrame(() => {
         this._playPauseRequest = null
         const video = this.shadowRoot.querySelector('.message-video')
-        // Attempt to keep things in sync across the page (note that this doesn't really work all
-        // that well but you know...). This also helps avoid bugs with stuck videos in Firefox.
-        video.currentTime = performance.now() % VIDEO_DURATION_SECS
         this._playPromise = this._playPromise.then(() => {
           if (this._isVisible) {
+            video.pause()
+            // Attempt to keep things in sync across the page (note that this doesn't really work all
+            // that well but you know...). This also helps avoid bugs with stuck videos in Firefox.
+            if (video.duration) {
+              try {
+                video.currentTime = performance.now() % video.duration
+              } catch (err) {
+                // We just want to make a best effort here, no reason to crash things if this fails
+                console.log('Error setting current time: ' + err)
+              }
+            }
             return video.play()
           } else {
             video.pause()
