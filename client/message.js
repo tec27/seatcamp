@@ -307,7 +307,7 @@ class MessageElement extends LitElement {
             video.pause()
             // Attempt to keep things in sync across the page (note that this doesn't really work all
             // that well but you know...). This also helps avoid bugs with stuck videos in Firefox.
-            if (video.duration) {
+            if (video.duration && video.duration !== Infinity) {
               try {
                 video.currentTime = performance.now() % video.duration
               } catch (err) {
