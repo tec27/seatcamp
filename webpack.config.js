@@ -1,4 +1,5 @@
 import webpack from 'webpack'
+import WorkboxPlugin from 'workbox-webpack-plugin'
 import path from 'path'
 
 const nodeEnv = process.env.NODE_ENV === 'production' ? 'production' : 'development'
@@ -7,9 +8,12 @@ const isProd = nodeEnv === 'production'
 export default {
   mode: isProd ? 'production' : 'development',
 
-  entry: './client/index.js',
+  entry: {
+    client: './client/index.js',
+    serviceworker: './serviceworker/index.js',
+  },
   output: {
-    filename: 'client.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'public'),
     publicPath: '/',
   },
@@ -56,5 +60,13 @@ export default {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(nodeEnv),
     }),
+    ...(isProd
+      ? [
+          new WorkboxPlugin.InjectManifest({
+            swSrc: './public/serviceworker.js',
+            swDest: 'serviceworker.js',
+          }),
+        ]
+      : []),
   ],
 }

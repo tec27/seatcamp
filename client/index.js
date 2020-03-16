@@ -14,6 +14,12 @@ import createAbout from './about'
 import Tracker from './analytics'
 import { PROTOCOL_VERSION } from '../protocol-version'
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/serviceworker.js')
+  })
+}
+
 const io = createSocketIoClient()
 const muteSet = new StoredSet('mutes')
 const progressSpinner = initProgressSpinner(document.querySelector('.progress'))

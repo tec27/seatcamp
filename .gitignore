@@ -5,3 +5,4 @@ npm-debug.log
 .DS_Store
 *.swp
 public/client.js
+public/serviceworker.js
