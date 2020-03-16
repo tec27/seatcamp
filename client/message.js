@@ -216,7 +216,7 @@ class MessageElement extends LitElement {
             .playsInline="${true}"
             src="${this._srcUrl}"></video>
           <button class="save shadow-1" title="Save as GIF" @click="${this.saveGif}">
-            <sc-svg-icon class="invert" icon="save"></ms-svg-icon>
+            <sc-svg-icon invert="true" icon="save"></ms-svg-icon>
           </button>
         </div>
         <p class="message-text" .innerHTML="${this.text}"></p>
