@@ -10,7 +10,6 @@ export default {
 
   entry: {
     client: './client/index.js',
-    serviceworker: './serviceworker/index.js',
   },
   output: {
     filename: '[name].js',
@@ -63,7 +62,7 @@ export default {
     ...(isProd
       ? [
           new WorkboxPlugin.InjectManifest({
-            swSrc: './public/serviceworker.js',
+            swSrc: './serviceworker/index.js',
             swDest: 'serviceworker.js',
           }),
         ]
