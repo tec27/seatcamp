@@ -1,26 +1,30 @@
 import { LitElement, html, css } from 'lit-element'
 import { repeat } from 'lit-html/directives/repeat'
 
-import createIdenticon from './identicon'
 import localeTime from './locale-time'
-import theme from './theme'
 import { videoToGif } from './gif'
+import { RESET } from './styles'
 
+const VIDEO_DURATION_SECS = 0.91
 const MESSAGE_LIMIT = 30
 
 class MessageElement extends LitElement {
   static get styles() {
     return css`
+      /* Fix prettier for this */
+      ${RESET}
+      /* */
+
       :host {
         display: flex;
         background-color: var(--colorSurface);
-        font-size: 20px;
+        font-size: var(--messageFontSize);
         padding: 0px;
       }
 
       .video-container {
-        width: 200px;
-        height: 150px;
+        width: var(--videoWidth);
+        height: var(--videoHeight);
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
@@ -122,24 +126,15 @@ class MessageElement extends LitElement {
         margin-bottom: -24px;
       }
 
-      .identicon {
-        width: 38px;
-        height: 38px;
-        border: var(--colorBorder);
-        border-radius: 2px;
+      .message-meta sc-identicon {
+        width: var(--identiconSize);
+        height: var(--identiconSize);
         margin: 1px 8px 1px 2px;
-        padding: 3px;
-      }
-
-      .identicon .block {
-        float: left;
-        width: 20%;
-        height: 20%;
       }
 
       .message-meta time {
-        color: var(colorTextSecondary);
-        font-size: 16px;
+        color: var(--colorTextSecondary);
+        font-size: var(--messageTimeFontSize);
         padding: 0;
         margin-right: 8px;
       }
@@ -176,6 +171,7 @@ class MessageElement extends LitElement {
 
   _isVisible = false
   _playPauseRequest = null
+  _playPromise = Promise.resolve()
   _srcUrlIsFor = null
   _srcUrl = null
 
@@ -200,9 +196,14 @@ class MessageElement extends LitElement {
       mute: () => this.mute(),
     }
 
+    // NOTE: we use the JS property for `muted` here because Firefox seems to ignore the attribute
+    // in some cases when checking for autoplay permissions (e.g. when the page is loaded in the
+    // background). The JS property makes it happy, I have no idea why.
     return html`
         <div class="${videoClass}">
-          <video class="message-video" muted loop src="${this._srcUrl}"></video>
+          <video class="message-video"
+            .muted="${true}"
+            .loop="${true}" src="${this._srcUrl}"></video>
           <button class="save shadow-1" title="Save as GIF" @click="${this.saveGif}">
             <sc-svg-icon class="invert" icon="save"></ms-svg-icon>
           </button>
@@ -217,17 +218,10 @@ class MessageElement extends LitElement {
             </button>
             <button data-action="mute">Mute user</button>
           </sc-dropdown>
-          <div class="identicon"></div>
+          <sc-identicon user-id="${this.userId}"></sc-identicon>
           <time datetime="${sentDate.toISOString()}">${localeTime(sentDate)}</time>
         </div>
     `
-  }
-
-  updated() {
-    // TODO: make these LitElements too
-    const newIdenticon = createIdenticon(this.userId)
-    const identiconElem = this.shadowRoot.querySelector('.identicon')
-    identiconElem.parentElement.replaceChild(newIdenticon, identiconElem)
   }
 
   disconnectedCallback() {
@@ -241,6 +235,8 @@ class MessageElement extends LitElement {
       cancelAnimationFrame(this._playPauseRequest)
       this._playPauseRequest = null
     }
+    this._playPromise = Promise.resolve()
+    super.disconnectedCallback()
   }
 
   saveGif() {
@@ -296,11 +292,17 @@ class MessageElement extends LitElement {
       this._playPauseRequest = requestAnimationFrame(() => {
         this._playPauseRequest = null
         const video = this.shadowRoot.querySelector('.message-video')
-        if (this._isVisible) {
-          video.play()
-        } else {
-          video.pause()
-        }
+        // Attempt to keep things in sync across the page (note that this doesn't really work all
+        // that well but you know...). This also helps avoid bugs with stuck videos in Firefox.
+        video.currentTime = performance.now() % VIDEO_DURATION_SECS
+        this._playPromise = this._playPromise.then(() => {
+          if (this._isVisible) {
+            return video.play()
+          } else {
+            video.pause()
+            return undefined
+          }
+        })
       })
     }
   }
@@ -311,6 +313,11 @@ customElements.define('sc-message', MessageElement)
 export class MessageListElement extends LitElement {
   static get styles() {
     return css`
+      /* Fix prettier for this */
+      ${RESET}
+      /* */
+
+
       :host {
         display: block;
 

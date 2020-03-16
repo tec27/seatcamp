@@ -1,9 +1,13 @@
 import { LitElement, html, css } from 'lit-element'
-import { SHADOW_2 } from './shadows'
+import { SHADOW_2 } from './styles'
 
 class DropdownElement extends LitElement {
   static get styles() {
     return css`
+      * {
+        box-sizing: border-box;
+      }
+
       :host {
         width: 48px;
         height: 48px;
@@ -36,7 +40,7 @@ class DropdownElement extends LitElement {
 
         background-color: var(--colorPopoverSurface);
 
-        ${SHADOW_2}
+        ${SHADOW_2};
 
         transform: scale(0);
         transform-origin: 100% 0%;
@@ -182,6 +186,7 @@ class DropdownElement extends LitElement {
       document.removeEventListener('click', this._onDocumentClicked)
       this._documentListenerAttached = false
     }
+    super.disconnectedCallback()
   }
 }
 

@@ -5,4 +5,5 @@
 
 import './icons/svg-icon'
 import './dropdown'
+import './identicon'
 import './message'

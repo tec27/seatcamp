@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit-element'
 
+import { RESET } from '../styles'
+
 import cameraFront from './camera-front'
 import cameraRear from './camera-rear'
 import moreVert from './more-vert'
@@ -28,6 +30,10 @@ class SvgIcon extends LitElement {
 
   static get styles() {
     return css`
+      /* Stop prettier from doing dumb things with this */
+      ${RESET}
+      /* */
+
       :host {
         display: block;
       }

@@ -30,12 +30,17 @@ body {
 
   --colorBorder: rgba(0, 0, 0, 0.12);
 
+  --messageFontSize: 20px;
+  --messageTimeFontSize: 16px;
+  --videoWidth: 200px;
+  --videoHeight: 150px;
+
   margin: 0;
   padding: 0;
   background-color: var(--colorBackground);
   color: var(--colorTextPrimary);
   font-family: 'Roboto', 'sans-serif';
-  font-size: 15px;
+  font-size: 16px;
   font-weight: normal;
   line-height: 1.4;
   width: 100%;
@@ -189,9 +194,10 @@ header .actions {
   text-align: center;
 }
 
-#message-list {
+sc-message-list {
   min-width: 640px;
   width: 1400px;
+  --identiconSize: 38px;
 }
 
 .empty-view {
@@ -226,13 +232,11 @@ footer .progress {
 }
 
 .preview-container {
-  background: #000000;
+  width: var(--videoWidth);
+  height: var(--videoHeight);
+  background: #101010;
   position: relative;
   overflow: hidden;
-
-  height: 150px;
-  width: 200px;
-  flex-shrink: 0;
 }
 
 .preview-container video {
@@ -608,7 +612,7 @@ body #message.full:focus:focus {
 }
 
 @media (max-width: 2000px) {
-  #message-list {
+  sc-message-list {
     width: 70%;
   }
 
@@ -618,7 +622,7 @@ body #message.full:focus:focus {
 }
 
 @media (max-width: 1460px) {
-  #message-list {
+  sc-message-list {
     width: 80%;
   }
 
@@ -628,7 +632,7 @@ body #message.full:focus:focus {
 }
 
 @media (max-width: 1200px) {
-  #message-list {
+  sc-message-list {
     width: 892px;
   }
 
@@ -638,8 +642,9 @@ body #message.full:focus:focus {
 }
 
 @media (max-width: 920px) {
-  #message-list {
+  sc-message-list {
     width: auto;
+    min-width: unset;
   }
 
   footer {
@@ -653,27 +658,22 @@ body #message.full:focus:focus {
 }
 
 @media screen and (max-device-width: 500px) {
-  #message-list {
+  body {
+    --videoWidth: 136px;
+    --videoHeight: 102px;
+  }
+
+  sc-message-list {
     min-width: 0px;
     margin-bottom: 110px;
-  }
 
-  #message-list li {
-    font-size: 14px;
-  }
-
-  #message-list li .video-container {
-    height: 102px;
-    width: 136px;
+    --identiconSize: 28px;
+    --messageFontSize: 14px;
+    --messageTimeFontSize: 12px;
   }
 
   .no-messages .empty-view {
     font-size: 24px;
-  }
-
-  .preview-container {
-    height: 102px;
-    width: 136px;
   }
 
   .camera-disabled-icon {
@@ -682,15 +682,6 @@ body #message.full:focus:focus {
 
   .camera-disabled-text {
     font-size: 15px;
-  }
-
-  .message-meta time {
-    font-size: 12px;
-  }
-
-  .identicon {
-    height: 28px;
-    width: 28px;
   }
 
   #char-counter {

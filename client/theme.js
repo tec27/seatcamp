@@ -3,6 +3,8 @@ import { EventEmitter } from 'events'
 class ThemeManager extends EventEmitter {
   constructor() {
     super()
+    // Avoid a warning message for normal attachment by message elements
+    this.setMaxListeners(50)
     this.theme = null
     this.loadTheme()
     window.addEventListener('storage', evt => {
