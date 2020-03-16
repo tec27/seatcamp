@@ -22,6 +22,7 @@ body {
   --colorTextSecondary: rgba(0, 0, 0, 0.6);
   --colorTextDisabled: rgba(0, 0, 0, 0.3);
   --colorTextInvert: #ffffff;
+  --colorTextLink: #f06292;
 
   --colorIconPrimary: rgba(0, 0, 0, 0.6);
   --colorIconDisabled: rgba(0, 0, 0, 0.3);
@@ -60,6 +61,7 @@ body.dark {
   --colorTextPrimary: #ffffff;
   --colorTextSecondary: rgba(255, 255, 255, 0.7);
   --colorTextDisabled: rgba(255, 255, 255, 0.3);
+  --colorTextLink: #f48fb1;
 
   --colorIconPrimary: #ffffff;
   --colorIconDisabled: rgba(255, 255, 255, 0.3);
@@ -129,15 +131,7 @@ a:hover,
 a:focus,
 a:active {
   font-weight: inherit;
-  color: #f06292;
-}
-
-.dark a,
-.dark a:visited,
-.dark a:hover,
-.dark a:focus,
-.dark a:active {
-  color: #f48fb1;
+  color: var(--colorTextLink);
 }
 
 button {

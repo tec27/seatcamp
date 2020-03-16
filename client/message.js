@@ -15,6 +15,15 @@ class MessageElement extends LitElement {
       ${RESET}
       /* */
 
+      a,
+      a:visited,
+      a:hover,
+      a:focus,
+      a:active {
+        font-weight: inherit;
+        color: var(--colorTextLink);
+      }
+
       :host {
         display: flex;
         background-color: var(--colorSurface);
