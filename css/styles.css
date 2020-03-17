@@ -31,6 +31,13 @@ body {
 
   --colorBorder: rgba(0, 0, 0, 0.12);
 
+  --identiconBgSaturation: 20;
+  --identiconBgLightness: 96;
+  --identiconFgSaturationLow: 50;
+  --identiconFgSaturationHigh: 90;
+  --identiconFgLightnessLow: 30;
+  --identiconFgLightnessHigh: 60;
+
   --messageFontSize: 20px;
   --messageTimeFontSize: 16px;
   --videoWidth: 200px;
@@ -67,6 +74,13 @@ body.dark {
   --colorIconDisabled: rgba(255, 255, 255, 0.3);
 
   --colorBorder: rgba(255, 255, 255, 0.12);
+
+  --identiconBgSaturation: 8;
+  --identiconBgLightness: 27;
+  --identiconFgSaturationLow: 35;
+  --identiconFgSaturationHigh: 75;
+  --identiconFgLightnessLow: 50;
+  --identiconFgLightnessHigh: 75;
 }
 
 sc-dropdown:not(:defined) {

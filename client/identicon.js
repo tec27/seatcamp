@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit-element'
 import sha1 from 'sha1'
-import theme from './theme'
 import { RESET } from './styles'
 
 class IdenticonElement extends LitElement {
@@ -21,12 +20,39 @@ class IdenticonElement extends LitElement {
         border: 1px solid var(--colorBorder);
         border-radius: 2px;
         padding: 3px;
+
+        background-color: hsl(
+          calc(var(--h) + 180),
+          calc(var(--identiconBgSaturation) * 1%),
+          calc(var(--identiconBgLightness) * 1%)
+        );
+        color: hsl(
+          var(--h),
+          calc(
+            1% *
+              (
+                var(--s) * (var(--identiconFgSaturationHigh) - var(--identiconFgSaturationLow)) +
+                  var(--identiconFgSaturationLow)
+              )
+          ),
+          calc(
+            1% *
+              (
+                var(--l) * (var(--identiconFgLightnessHigh) - var(--identiconFgLightnessLow)) +
+                  var(--identiconFgLightnessLow)
+              )
+          )
+        );
       }
 
-      .identicon .block {
+      .block {
         float: left;
         width: 20%;
         height: 20%;
+      }
+
+      .on {
+        background-color: currentColor;
       }
     `
   }
@@ -39,28 +65,14 @@ class IdenticonElement extends LitElement {
 
   userId = ''
 
-  _onThemeChange = () => this.onThemeChange()
-
   render() {
     const hash = sha1(this.userId)
     // Last 16 characters are the foreground color
-    const fgHue = Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360)
-    const saturationLow = theme.isDark() ? 35 : 50
-    const saturationHigh = theme.isDark() ? 75 : 90
-    const lightnessLow = theme.isDark() ? 50 : 30
-    const lightnessHigh = theme.isDark() ? 75 : 60
-    const fg = objToHslStr({
-      hue: fgHue,
-      saturation: inRange(parseInt(hash.substr(-13, 3), 16) / 0xfff, saturationLow, saturationHigh),
-      lightness: inRange(parseInt(hash.substr(-16, 3), 16) / 0xfff, lightnessLow, lightnessHigh),
-    })
-    // background is a light (or dark if dark theme) grey, opposite of the hue we're using for the
-    // foreground color
-    const bg = objToHslStr({
-      hue: (180 + fgHue) % 360,
-      saturation: theme.isDark() ? 8 : 20,
-      lightness: theme.isDark() ? 27 : 96,
-    })
+    const fg = {
+      hue: Math.round((parseInt(hash.substr(-10), 16) / 0xffffffffff) * 360),
+      saturation: parseInt(hash.substr(-13, 3), 16) / 0xfff,
+      lightness: parseInt(hash.substr(-16, 3), 16) / 0xfff,
+    }
 
     const blocks = []
     // we only construct 3 columns (not 5) because we mirror the last two columns from the first
@@ -70,9 +82,9 @@ class IdenticonElement extends LitElement {
     for (let i = 0, y = 0; i < 15; i++, y++) {
       // start in middle, move outward
       const x = 2 - ((i / 5) | 0)
-      const color = parseInt(hash.charAt(i), 16) % 2 ? false : fg
+      const on = !(parseInt(hash.charAt(i), 16) % 2)
       y = y % 5
-      blocks[x][y] = color
+      blocks[x][y] = on
     }
 
     const templates = []
@@ -81,42 +93,23 @@ class IdenticonElement extends LitElement {
       for (let x = 0; x < 5; x++) {
         // mirror the last 2 columns from the first 2
         const srcX = x >= 3 ? 4 - x : x
-        const style = blocks[srcX][y] ? `background-color: ${blocks[srcX][y]};` : ''
         templates.push(
-          html`
-            <div class="block" style="${style}"></div>
-          `,
+          blocks[srcX][y]
+            ? html`
+                <div class="block on"></div>
+              `
+            : html`
+                <div class="block"></div>
+              `,
         )
       }
     }
 
-    const style = `background-color: ${bg};`
+    const style = `--h: ${fg.hue}; --s: ${fg.saturation}; --l: ${fg.lightness};`
     return html`
       <div class="identicon" style="${style}">${templates}</div>
     `
   }
-
-  connectedCallback() {
-    super.connectedCallback()
-    theme.on('themeChange', this._onThemeChange)
-  }
-
-  disconnectedCallback() {
-    theme.removeListener('themeChange', this._onThemeChange)
-    super.disconnectedCallback()
-  }
-
-  onThemeChange() {
-    this.requestUpdate()
-  }
 }
 
 customElements.define('sc-identicon', IdenticonElement)
-
-function inRange(percent, min, max) {
-  return Math.round(percent * (max - min)) + min
-}
-
-function objToHslStr({ hue, saturation, lightness }) {
-  return `hsl(${hue}, ${saturation}%, ${lightness}%)`
-}

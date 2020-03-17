@@ -470,16 +470,6 @@ export class MessageListElement extends LitElement {
   trackSaveGif() {
     this.tracker.onSaveGif()
   }
-
-  _onThemeChange(newTheme) {
-    // TODO: fix this for LitElement
-    /*
-    // Re-render identicons based on the new theme to update any inline styles
-    for (const message of this.messages) {
-      message.refreshIdenticon()
-    }
-    */
-  }
 }
 
 customElements.define('sc-message-list', MessageListElement)
