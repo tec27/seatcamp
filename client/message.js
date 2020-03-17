@@ -442,13 +442,11 @@ export class MessageListElement extends LitElement {
     }
 
     this._isAutoScrolling = autoScrolling
-
-    const newCount = this._messages.length + 1
-    if (autoScrolling && newCount > MESSAGE_LIMIT) {
+    this._messages.push(message)
+    if (autoScrolling && this._messages.length > MESSAGE_LIMIT) {
       this._messages = this._messages.slice(-MESSAGE_LIMIT)
     }
 
-    this._messages.push(message)
     this.requestUpdate()
     return true
   }
