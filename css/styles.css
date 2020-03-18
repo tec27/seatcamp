@@ -244,6 +244,7 @@ footer .progress {
   height: var(--videoHeight);
   background: #101010;
   position: relative;
+  contain: strict;
   overflow: hidden;
 }
 
@@ -322,16 +323,13 @@ footer .progress {
 
 form {
   align-self: flex-end;
-  background-color: #fafafa;
+  background-color: var(--colorSurface);
   border-radius: 2px;
   display: flex;
   flex: 1;
   margin: 0 8px;
   overflow: hidden;
-}
-
-.dark form {
-  background-color: #303030;
+  contain: layout paint;
 }
 
 #message {

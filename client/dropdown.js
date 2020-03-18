@@ -30,6 +30,8 @@ class DropdownElement extends LitElement {
         top: 0px;
         opacity: 0;
         visibility: hidden;
+        contain: content;
+        z-index: 100;
 
         border-radius: 2px;
         min-width: 168px;

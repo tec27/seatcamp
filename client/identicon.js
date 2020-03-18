@@ -17,6 +17,7 @@ class IdenticonElement extends LitElement {
       .identicon {
         width: 100%;
         height: 100%;
+        contain: layout;
         border: 1px solid var(--colorBorder);
         border-radius: 2px;
         padding: 3px;

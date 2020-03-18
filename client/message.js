@@ -25,6 +25,8 @@ class MessageElement extends LitElement {
 
       :host {
         display: flex;
+        contain: content;
+
         background-color: var(--colorSurface);
         font-size: var(--messageFontSize);
         padding: 0px;
@@ -33,11 +35,10 @@ class MessageElement extends LitElement {
       .video-container {
         width: var(--videoWidth);
         height: var(--videoHeight);
+        contain: strict;
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
-
-        margin-bottom: -1px;
       }
 
       .video-container.first {
@@ -108,6 +109,11 @@ class MessageElement extends LitElement {
         align-items: flex-end;
         justify-content: space-between;
         padding: 0 0 4px;
+      }
+
+      .message-text,
+      .message-meta {
+        border-top: var(--messageBorderSize) solid var(--colorBorder);
       }
 
       .message-overflow {
@@ -355,12 +361,13 @@ export class MessageListElement extends LitElement {
       }
 
       sc-message {
-        border-bottom: 1px solid var(--colorBorder);
+        --messageBorderSize: 1px;
       }
 
       sc-message:first-of-type {
         border-top-left-radius: 2px;
         border-top-right-radius: 2px;
+        --messageBorderSize: 0px;
       }
 
       sc-message:last-of-type {
