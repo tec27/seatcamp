@@ -441,7 +441,9 @@ export class MessageListElement extends LitElement {
       return false
     }
 
-    this._isAutoScrolling = autoScrolling
+    // NOTE: we || this to avoid clearing the flag if multiple messages get added before an update
+    // actually occurs
+    this._isAutoScrolling = this._isAutoScrolling || autoScrolling
     this._messages.push(message)
     if (autoScrolling && this._messages.length > MESSAGE_LIMIT) {
       this._messages = this._messages.slice(-MESSAGE_LIMIT)
