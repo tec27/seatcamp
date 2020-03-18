@@ -182,11 +182,13 @@ class MessageElement extends LitElement {
   _playPromise = Promise.resolve()
   _srcUrlIsFor = null
   _srcUrl = null
+  _srcLoaded = false
 
   render() {
     if (this._srcUrl && this._srcUrlIsFor !== this.video) {
       window.URL.revokeObjectURL(this._srcUrl)
       this._srcUrl = null
+      this._srcLoaded = false
     }
     if (!this._srcUrl) {
       const blob = new window.Blob([this.video], { type: this.videoMime })
@@ -213,6 +215,8 @@ class MessageElement extends LitElement {
             .muted="${true}"
             .loop="${true}"
             .playsInline="${true}"
+            .autoplay="${false}"
+            @loadeddata="${this.onVideoLoaded}"
             src="${this._srcUrl}"></video>
           <button class="save shadow-1" title="Save as GIF" @click="${this.saveGif}">
             <sc-svg-icon invert="true" icon="save"></ms-svg-icon>
@@ -295,10 +299,15 @@ class MessageElement extends LitElement {
     this.owner.muteUser(this.userId)
   }
 
+  onVideoLoaded() {
+    this._srcLoaded = true
+    this.updateVisibility(this._isVisible)
+  }
+
   updateVisibility(visible) {
     this._isVisible = visible
 
-    if (!this._playPauseRequest) {
+    if (this._srcLoaded && !this._playPauseRequest) {
       this._playPauseRequest = requestAnimationFrame(() => {
         this._playPauseRequest = null
         const video = this.shadowRoot.querySelector('.message-video')
