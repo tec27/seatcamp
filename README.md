@@ -89,6 +89,12 @@ The port to run the HTTP server on for this instance.
 
 **Ex:** `"port": 3000`
 
+#### host
+
+The host or IP to run the HTTP server on for this instance. If left unspecified, it will listen on all interfaces.
+
+**Ex:** `"host": "127.0.0.1"`
+
 #### idKey
 
 The key to use for hashing user ID's. This allows users to be given a
