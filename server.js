@@ -24,6 +24,7 @@ app.set('x-powered-by', false).set('view engine', 'pug')
 
 const httpServer = http.Server(app)
 const listenPort = config.port
+const listenHost = config.host
 
 const io = socketIo(httpServer)
 
@@ -77,7 +78,7 @@ const readyPromise = compilePromise.then(async stats => {
     1.2548346 /* expiry gain factor, calculated so last message =~ 6 hours */,
   )
 
-  await new Promise(resolve => httpServer.listen(listenPort, resolve))
+  await new Promise(resolve => httpServer.listen(listenPort, listenHost, resolve))
   const host = httpServer.address().address
   const port = httpServer.address().port
   console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
