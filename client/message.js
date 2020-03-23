@@ -218,10 +218,10 @@ class MessageElement extends LitElement {
     return html`
         <div class="${videoClass}">
           <video class="message-video"
+            ?playsinline="${true}"
             .muted="${true}"
             .loop="${true}"
-            .playsInline="${true}"
-            .autoplay="${false}"
+            .autoplay="${true}"
             @loadeddata="${this.onVideoLoaded}"
             src="${this._srcUrl}"></video>
           <button class="save shadow-1" title="Save as GIF" @click="${this.saveGif}">
@@ -319,7 +319,6 @@ class MessageElement extends LitElement {
         const video = this.shadowRoot.querySelector('.message-video')
         this._playPromise = this._playPromise.then(() => {
           if (this._isVisible) {
-            video.pause()
             // Attempt to keep things in sync across the page (note that this doesn't really work all
             // that well but you know...). This also helps avoid bugs with stuck videos in Firefox.
             if (video.duration && video.duration !== Infinity) {
@@ -330,7 +329,12 @@ class MessageElement extends LitElement {
                 console.log('Error setting current time: ' + err)
               }
             }
-            return video.play()
+            return video.play().then(
+              () => {},
+              err => {
+                console.log('error playing video: ' + err)
+              },
+            )
           } else {
             video.pause()
             return undefined
