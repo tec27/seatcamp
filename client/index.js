@@ -1,6 +1,5 @@
 import './register-components'
 
-import cuid from 'cuid'
 import createSocketIoClient from 'socket.io-client'
 import cameraPreview from './camera-preview'
 import captureFrames from './capture-frames'
