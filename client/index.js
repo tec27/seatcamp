@@ -129,20 +129,15 @@ updateTheme(theme.getTheme())
 
 const messageInput = document.querySelector('#message')
 const sendButton = document.querySelector('#send')
-let awaitingAck = null
-let sendTime = 0
 
 createCharCounter(messageInput, document.querySelector('#char-counter'), 250)
 
 document.querySelector('form').addEventListener('submit', function(event) {
   event.preventDefault()
 
-  if (awaitingAck) return
-
   const messageText = messageInput.value
   messageInput.readOnly = true
   sendButton.setAttribute('disabled', true)
-  awaitingAck = cuid()
   progressSpinner.setValue(0).show()
 
   captureFrames(
@@ -163,40 +158,46 @@ document.querySelector('form').addEventListener('submit', function(event) {
       sendButton.removeAttribute('disabled')
 
       if (err) {
-        awaitingAck = null
         // TODO(tec27): show to user
         tracker.onMessageCaptureError(err.message)
         console.error(err)
         return
       }
 
-      const message = {
-        text: messageText,
-        format: 'image/jpeg',
-        ack: awaitingAck,
+      const formData = new FormData()
+      formData.append('fingerprint', getFingerprint())
+      formData.append('message', messageText)
+      formData.append('format', 'image/jpeg')
+      for (const frame of frames) {
+        formData.append('frames', frame)
       }
-      io.emit('chat', message, frames)
-      sendTime = Date.now()
+
+      const sendTime = Date.now()
+      fetch('/message', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error(`Failed to post message: ${res.status} ${res.statusText}`)
+          }
+
+          const timing = Date.now() - sendTime
+          tracker.onMessageSent(timing)
+        })
+        .catch(err => {
+          // TODO(tec27): display to user
+          const timing = Date.now() - sendTime
+          console.error('Error: ' + err)
+          tracker.onMessageSendError('' + err, timing)
+        })
+
       // fire 'change'
       const event = document.createEvent('HTMLEvents')
       event.initEvent('change', false, true)
       messageInput.dispatchEvent(event)
     },
   ).on('progress', percentDone => progressSpinner.setValue(percentDone))
-})
-
-io.on('ack', function(ack) {
-  if (awaitingAck && awaitingAck === ack.key) {
-    const timing = Date.now() - sendTime
-    awaitingAck = null
-    if (ack.err) {
-      // TODO(tec27): display to user
-      console.log('Error: ' + ack.err)
-      tracker.onMessageSendError('' + ack.err, timing)
-    } else {
-      tracker.onMessageSent(timing)
-    }
-  }
 })
 
 cameraPreview(document.querySelector('#preview').parentNode, tracker)

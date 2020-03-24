@@ -69,6 +69,7 @@ const readyPromise = compilePromise.then(async stats => {
   const runner = await createFfmpegRunner()
 
   const chat = new ChatSockets( // eslint-disable-line no-unused-vars
+    app,
     io,
     userIdKey,
     runner,
