@@ -64,11 +64,44 @@ io.on('userid', function(id) {
   messageList.myId = id
 })
 
+let isAutoScrolling = true
+let autoScrollCalcCallback = null
+function calcAutoScroll() {
+  autoScrollCalcCallback = null
+  const visibleEnd = window.pageYOffset + window.innerHeight
+  // the 16px is for some extra slop in this calculation (you can be slightly scrolled up and we
+  // still autoscroll)
+  const contentHeight = document.body.clientHeight - 16
+
+  isAutoScrolling = visibleEnd > contentHeight
+}
+
+document.addEventListener('scroll', () => {
+  if (!autoScrollCalcCallback) {
+    autoScrollCalcCallback = requestAnimationFrame(calcAutoScroll)
+  }
+})
+
+let maintainAutoScrollCallback = null
+function maintainAutoScroll() {
+  maintainAutoScrollCallback = null
+  if (isAutoScrolling) {
+    // A resize should never move the scroll position away from the bottom of the message list if
+    // we were scrolled there (really it should always keep the previous last message visible, but
+    // that's more complex to implement for minimal gain)
+    window.scrollTo(0, document.body.scrollHeight)
+  }
+}
+window.addEventListener('resize', () => {
+  if (!maintainAutoScrollCallback) {
+    maintainAutoScrollCallback = requestAnimationFrame(maintainAutoScroll)
+  }
+})
+
 let unreadMessages = 0
 let historyComplete = false
 io.on('chat', chat => {
-  const autoScroll = window.pageYOffset + window.innerHeight + 32 > document.body.clientHeight
-  const messageAdded = messageList.addMessage(chat, autoScroll)
+  const messageAdded = messageList.addMessage(chat, isAutoScrolling)
   if (messageAdded) {
     hideEmptyState()
   }

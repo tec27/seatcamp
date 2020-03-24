@@ -44,7 +44,7 @@ body {
   --videoHeight: 150px;
 
   margin: 0;
-  padding: 0;
+  padding: 56px 0 158px;
   background-color: var(--colorBackground);
   color: var(--colorTextPrimary);
   font-family: 'Roboto', 'sans-serif';
@@ -673,11 +673,11 @@ body #message.full:focus:focus {
   body {
     --videoWidth: 136px;
     --videoHeight: 102px;
+    padding-bottom: 110px;
   }
 
   sc-message-list {
     min-width: 0px;
-    margin-bottom: 110px;
 
     --identiconSize: 28px;
     --messageFontSize: 14px;

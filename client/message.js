@@ -358,7 +358,7 @@ export class MessageListElement extends LitElement {
       :host {
         display: block;
 
-        margin: 56px auto 158px;
+        margin: 0 auto;
         padding: 0;
 
         border-radius: 2px;
