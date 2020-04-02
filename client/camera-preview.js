@@ -1,5 +1,9 @@
 import initWebrtc from './init-webrtc'
 
+class CancelToken {
+  canceled = false
+}
+
 class CameraPreview {
   constructor(previewContainer, tracker) {
     this.container = previewContainer
@@ -8,6 +12,7 @@ class CameraPreview {
     this.switchButton = null
     this.videoStream = null
     this.tracker = tracker
+    this.initCancelToken = new CancelToken()
 
     this.switchButtonListener = () => this.onSwitchCamera()
 
@@ -61,15 +66,17 @@ class CameraPreview {
       timer = null
     }, 15000)
 
+    this.initCancelToken = new CancelToken()
+
     let stream
     try {
-      stream = await initWebrtc(this.videoElem, 200, 150, this.facing)
+      stream = await initWebrtc(this.videoElem, this.facing, this.initCancelToken)
     } catch (err) {
       if (timer) {
         clearTimeout(timer)
         timer = null
       }
-      if (attempt < 2 && Date.now() - initTime < 200) {
+      if (!this.initCancelToken.canceled && attempt < 2 && Date.now() - initTime < 200) {
         // Chrome has a weird problem where if you try to do a getUserMedia request too early, it
         // can return a MediaDeviceNotSupported error (even though nothing is wrong and permission
         // has been granted). So we install a delay and retry a couple times to try and mitigate
@@ -123,6 +130,7 @@ class CameraPreview {
   }
 
   stop() {
+    this.initCancelToken.canceled = true
     if (!this.videoStream) return
 
     this.videoStream.stop()

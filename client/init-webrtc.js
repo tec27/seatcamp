@@ -59,7 +59,7 @@ class StreamResult {
   }
 }
 
-async function initWebrtc(video, width, height, facing) {
+async function initWebrtc(video, facing, cancelToken = { canceled: false }) {
   polyfillGetUserMedia()
 
   const constraints = {
@@ -97,7 +97,15 @@ async function initWebrtc(video, width, height, facing) {
     }
     video.addEventListener('loadeddata', listener)
   })
-  return new StreamResult(video, stream, url, true /* hasFrontAndRear */, facing)
+  const result = new StreamResult(video, stream, url, true /* hasFrontAndRear */, facing)
+
+  if (cancelToken.canceled) {
+    // NOTE: we wait to stop things here because it makes the code simpler, technically we could
+    // probably stop things after the getUserMedia call most of the time
+    result.stop()
+  }
+
+  return result
 }
 
 // TODO(tec27): only set this if there are multiple cameras?
