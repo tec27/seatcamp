@@ -246,6 +246,9 @@ footer .progress {
   position: relative;
   contain: strict;
   overflow: hidden;
+  /* This makes iOS Safari actually treat this as hoverable so the switch camera
+     button shows */
+  cursor: pointer;
 }
 
 .preview-container video {
