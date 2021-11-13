@@ -18,7 +18,7 @@ function polyfillGetUserMedia() {
       return
     }
 
-    navigator.mediaDevices.getUserMedia = function(constraints) {
+    navigator.mediaDevices.getUserMedia = function (constraints) {
       return new Promise((resolve, reject) => oldGetUserMedia(constraints, resolve, reject))
     }
   }

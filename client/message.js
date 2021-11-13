@@ -423,8 +423,7 @@ export class MessageListElement extends LitElement {
                 .video="${m.video}"
                 videoMime="${m.videoMime}"
                 ?is-first="${index === 0}"
-                ?is-last="${index === this._messages.length - 1}"
-              ></sc-message>
+                ?is-last="${index === this._messages.length - 1}"></sc-message>
             `,
         )}
       </div>

@@ -17,7 +17,7 @@ export default {
     publicPath: '/',
   },
 
-  devtool: isProd ? false : 'cheap-module-eval-source-map',
+  devtool: isProd ? false : 'eval-cheap-module-source-map',
 
   module: {
     rules: [

@@ -96,20 +96,14 @@ class IdenticonElement extends LitElement {
         const srcX = x >= 3 ? 4 - x : x
         templates.push(
           blocks[srcX][y]
-            ? html`
-                <div class="block on"></div>
-              `
-            : html`
-                <div class="block"></div>
-              `,
+            ? html` <div class="block on"></div> `
+            : html` <div class="block"></div> `,
         )
       }
     }
 
     const style = `--h: ${fg.hue}; --s: ${fg.saturation}; --l: ${fg.lightness};`
-    return html`
-      <div class="identicon" style="${style}">${templates}</div>
-    `
+    return html` <div class="identicon" style="${style}">${templates}</div> `
   }
 }
 

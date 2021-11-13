@@ -19,6 +19,6 @@ class CharCounter {
   }
 }
 
-export default function(input, counter, limit) {
+export default function (input, counter, limit) {
   return new CharCounter(input, counter, limit)
 }

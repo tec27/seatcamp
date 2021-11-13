@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import toBlob from 'data-uri-to-blob'
 
-export default function(video, options, cb) {
+export default function (video, options, cb) {
   if (typeof options == 'function') {
     cb = options
     options = {}
@@ -61,7 +61,7 @@ export default function(video, options, cb) {
       t = setTimeout(captureFrame, frameDelay)
     }
 
-    ;(function(i) {
+    ;(function (i) {
       try {
         context.drawImage(
           video,
@@ -90,7 +90,7 @@ export default function(video, options, cb) {
       if (i + 1 < opts.numFrames) {
         emitter.emit('progress', (i + 2) / opts.numFrames)
       }
-      compatToBlob(canvas, opts.format, opts.quality, function(blob) {
+      compatToBlob(canvas, opts.format, opts.quality, function (blob) {
         frames[i] = blob
         awaitingSave--
         maybeDone()

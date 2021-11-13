@@ -1,6 +1,6 @@
 const supported = !!Date.prototype.toLocaleTimeString
 
-module.exports = function(date) {
+module.exports = function (date) {
   if (supported) {
     return date.toLocaleTimeString(navigator.language, { hour: 'numeric', minute: '2-digit' })
   }

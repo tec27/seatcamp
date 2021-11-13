@@ -1,6 +1,6 @@
 import content from './about.htm'
 
-export default function() {
+export default function () {
   const scrim = document.createElement('div')
   scrim.className = 'dialog-scrim entering'
 

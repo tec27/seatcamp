@@ -77,9 +77,7 @@ class SvgIcon extends LitElement {
     }
 
     return html`
-      <div class="${className}" aria-hidden="true" style="${style}">
-        ${ICONS[this.icon]}
-      </div>
+      <div class="${className}" aria-hidden="true" style="${style}">${ICONS[this.icon]}</div>
     `
   }
 }

@@ -44,10 +44,10 @@ for (const t in possibleEvents) {
 }
 
 let active = 0
-io.on('connect', function() {
+io.on('connect', function () {
   io.emit('fingerprint', getFingerprint())
   io.emit('join', 'mp4')
-}).on('disconnect', function() {
+}).on('disconnect', function () {
   active = 0
   updateActiveUsers()
 })
@@ -59,7 +59,7 @@ io.on('protocolVersion', version => {
   }
 })
 
-io.on('userid', function(id) {
+io.on('userid', function (id) {
   messageList.myId = id
 })
 
@@ -164,7 +164,7 @@ const sendButton = document.querySelector('#send')
 
 createCharCounter(messageInput, document.querySelector('#char-counter'), 250)
 
-document.querySelector('form').addEventListener('submit', function(event) {
+document.querySelector('form').addEventListener('submit', function (event) {
   event.preventDefault()
 
   const messageText = messageInput.value
@@ -179,7 +179,7 @@ document.querySelector('form').addEventListener('submit', function(event) {
       width: 400,
       height: 300,
     },
-    function(err, frames) {
+    function (err, frames) {
       setTimeout(() => {
         progressSpinner.hide()
         setTimeout(() => progressSpinner.setValue(0), 400)
