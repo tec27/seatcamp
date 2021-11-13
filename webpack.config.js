@@ -30,6 +30,9 @@ export default {
             options: {
               babelrc: false,
               cacheDirectory: true,
+              assumptions: {
+                setPublicClassFields: true,
+              },
               plugins: ['@babel/plugin-proposal-class-properties'],
               presets: [
                 [

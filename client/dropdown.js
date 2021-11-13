@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit'
 import { SHADOW_2 } from './styles'
 
 class DropdownElement extends LitElement {

@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit-element'
-import { repeat } from 'lit-html/directives/repeat'
+import { LitElement, html, css } from 'lit'
+import { repeat } from 'lit/directives/repeat.js'
 
 import localeTime from './locale-time'
 import { videoToGif } from './gif'

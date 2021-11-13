@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit'
 import sha1 from 'sha1'
 import { RESET } from './styles'
 
