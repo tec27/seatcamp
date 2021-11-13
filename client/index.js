@@ -145,15 +145,29 @@ document.querySelector('#options-dropdown').actions = {
     tracker.onChangeTheme(newTheme)
   },
   about: () => {
-    showAbout()
+    showDialog(createAbout())
     tracker.onShowAbout()
   },
 }
 
 const updateTheme = newTheme => {
-  document.body.classList.toggle('dark', newTheme === 'dark')
-  const otherTheme = newTheme === 'light' ? 'dark' : 'light'
+  let curTheme
+  if (document.body.classList.contains('dark')) {
+    curTheme = 'dark'
+    document.body.classList.remove('dark')
+  } else if (document.body.classList.contains('light')) {
+    curTheme = 'light'
+    document.body.classList.remove('light')
+  } else {
+    curTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
+  const otherTheme = (newTheme || curTheme) === 'light' ? 'dark' : 'light'
   document.querySelector('#change-theme').textContent = `Use ${otherTheme} theme`
+
+  if ((newTheme && newTheme === 'light') || newTheme === 'dark') {
+    document.body.classList.add(newTheme)
+  }
 }
 
 theme.on('themeChange', updateTheme)
@@ -251,8 +265,7 @@ function updateNotificationCount() {
   }
 }
 
-function showAbout() {
-  const { scrim, container, dialog } = createAbout()
+function showDialog({ scrim, container, dialog }) {
   document.body.appendChild(scrim)
   document.body.appendChild(container)
 

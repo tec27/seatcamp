@@ -14,14 +14,16 @@ class ThemeManager extends EventEmitter {
 
   loadTheme() {
     const oldTheme = this.theme
-    this.theme = window.localStorage.getItem('theme') || 'light'
+    this.theme = window.localStorage.getItem('theme')
     if (this.theme !== oldTheme) {
       this.emit('themeChange', this.theme)
     }
   }
 
   isDark() {
-    return this.theme === 'dark'
+    return this.theme
+      ? this.theme === 'dark'
+      : window.matchMedia('(prefers-color-scheme: dark)').matches
   }
 
   setTheme(theme) {
@@ -35,7 +37,7 @@ class ThemeManager extends EventEmitter {
     }
   }
 
-  getTheme(theme) {
+  getTheme() {
     return this.theme
   }
 }
