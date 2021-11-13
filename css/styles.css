@@ -50,7 +50,7 @@ body.light {
   padding: 56px 0 158px;
   background-color: var(--colorBackground);
   color: var(--colorTextPrimary);
-  font-family: 'Roboto', 'sans-serif';
+  font-family: 'Inter', 'sans-serif';
   font-size: 16px;
   font-weight: normal;
   line-height: 1.4;
@@ -184,7 +184,7 @@ a:active {
 
 button {
   background-color: transparent;
-  font-family: 'Roboto', 'sans-serif';
+  font-family: 'Inter', 'sans-serif';
   outline: none;
   border: none;
 }
@@ -374,7 +374,7 @@ form {
   border: var(--colorBorder, none);
   border-bottom: 1px solid rgba(0, 0, 0, 0.26);
   color: var(--colorTextPrimary, #212121);
-  font-family: 'Roboto', 'sans-serif';
+  font-family: 'Inter', 'sans-serif';
   font-size: 16px;
   flex: 1;
   margin-bottom: 4px;
