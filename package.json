@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Web-based video chat with friends!",
   "engines": {
-    "node": ">=6.0.0"
+    "node": ">=16.0.0"
   },
   "main": "index.js",
   "scripts": {
