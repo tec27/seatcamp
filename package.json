@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "Web-based video chat with friends!",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "main": "index.js",
   "scripts": {
     "autotest": "mocha --watch -R spec --require @babel/register --recursive test/",
     "lint": "eslint --ext .js ./ && echo Hooray || echo Please fix",
     "lintfix": "eslint --fix --ext .js ./ && echo Hooray || echo Please fix",
-    "prepublish": "npm run test",
+    "prepublishOnly": "npm run test",
     "start": "node index.js",
     "test": "mocha -R spec --require @babel/register --recursive test/"
   },

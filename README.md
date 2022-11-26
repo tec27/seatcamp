@@ -39,9 +39,17 @@ The offical server can be found at [https://chat.meatspac.es](https://chat.meats
 
 ## Running a server
 
+### Docker
+
+The easiest way to run your own server is via Docker. There are official Docker images maintained on
+[DockerHub](https://hub.docker.com/repository/docker/tec27/seatcamp). These include all the
+necessary dependencies, and can be configured similarly to running the server locally. See the
+`deployment/` directory for `docker-compose` files that will also set up the necessary SSL
+certificates.
+
 ### Required software
 
-seatcamp requires [node](https://nodejs.org) >=10.0.0 and ffmpeg in order to
+If not using Docker, seatcamp requires [node](https://nodejs.org) >=18.0.0 and ffmpeg in order to
 work. Node can be downloaded its [official site](https://nodejs.org). ffmpeg can
 generally be installed from your OS's package manager, or from source.
 Examples of installing it:

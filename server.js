@@ -2,7 +2,6 @@ import express from 'express'
 import http from 'http'
 import thenify from 'thenify'
 import socketIo from 'socket.io'
-import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpack from 'webpack'
 import compression from 'compression'
 import serveStatic from 'serve-static'
@@ -24,13 +23,33 @@ app.set('x-powered-by', false).set('view engine', 'pug')
 const httpServer = http.Server(app)
 const listenPort = process.env.SEATCAMP_PORT ?? 3456
 const listenHost = process.env.SEATCAMP_HOST
+const canonicalHost = process.env.SEATCAMP_CANONICAL_HOST
 
 const io = socketIo(httpServer)
 
+if (process.env.SEATCAMP_TRUST_PROXY === '1') {
+  app.set('trust proxy', true)
+}
+
 app.use(require('cookie-parser')())
+
+if (canonicalHost) {
+  const asUrl = new URL(canonicalHost)
+  const toCompare = asUrl.host.toLowerCase()
+
+  app.use((req, res, next) => {
+    const host = req.hostname.toLowerCase()
+    if (host !== toCompare) {
+      res.redirect(308, `${canonicalHost}${req.url}`)
+    } else {
+      next()
+    }
+  })
+}
 
 const compiler = webpack(webpackConfig)
 if (process.env.NODE_ENV !== 'production') {
+  const webpackDevMiddleware = require('webpack-dev-middleware')
   app.use(
     webpackDevMiddleware(compiler, {
       publicPath: webpackConfig.output.publicPath,
