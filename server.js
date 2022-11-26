@@ -12,19 +12,18 @@ import createFfmpegRunner from './lib/ffmpeg-runner'
 import ChatSockets from './lib/chat-sockets'
 
 import webpackConfig from './webpack.config'
-import config from './conf.json'
 
-const userIdKey = config.idKey
+const userIdKey = process.env.SEATCAMP_ID_KEY
 if (!userIdKey) {
-  throw new Error('idKey must be specified in conf.json!')
+  throw new Error('SEATCAMP_ID_KEY must be specified!')
 }
 
 const app = express()
 app.set('x-powered-by', false).set('view engine', 'pug')
 
 const httpServer = http.Server(app)
-const listenPort = config.port
-const listenHost = config.host
+const listenPort = process.env.SEATCAMP_PORT ?? 3456
+const listenHost = process.env.SEATCAMP_HOST
 
 const io = socketIo(httpServer)
 
@@ -44,7 +43,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(compression())
 app
   .get('/', (req, res) =>
-    res.render('index', { theme: req.cookies.theme, trackingId: config.gaTrackingId }),
+    res.render('index', { theme: req.cookies.theme, trackingId: process.env.SEATCAMP_GA_ID }),
   )
   .get('/styles.css', serveCss(__dirname + '/css/styles.css'))
 
@@ -81,7 +80,7 @@ const readyPromise = compilePromise.then(async stats => {
   await new Promise(resolve => httpServer.listen(listenPort, listenHost, resolve))
   const host = httpServer.address().address
   const port = httpServer.address().port
-  console.log('Listening at http%s://%s:%s', config.sslCert ? 's' : '', host, port)
+  console.log('Listening at http://%s:%s', host, port)
 })
 
 export default {

@@ -60,57 +60,21 @@ $ sudo apt-get install ffmpeg
 
 ### Configuring your server
 
-Server configuration is handled through a JSON file: `conf.json`.
+Server configuration is handled through a `.env` file. See `sample.env` for the available options.
 
-`conf.json-example` in the main directory will often provide all you need
-for a development server, so for most developers, you can simply do:
+For a local development server you can likely just do:
 
 ```bash
-$ cp conf.json-example conf.json
+$ cp sample.env .env
 ```
 
-This will set you up with a server running on port `3456` over HTTP.
+This will set you up with a server running on port `3456`.
 
 The server can then be run with:
 
 ```bash
 $ npm start
 ```
-
-If you are running a production seatcamp server, or simply want to
-customize your development environment, you can change a few options in
-`conf.json`. The options are:
-
-### Normal options
-
-#### port
-
-The port to run the HTTP server on for this instance.
-
-**Ex:** `"port": 3000`
-
-#### host
-
-The host or IP to run the HTTP server on for this instance. If left unspecified, it will listen on all interfaces.
-
-**Ex:** `"host": "127.0.0.1"`
-
-#### idKey
-
-The key to use for hashing user ID's. This allows users to be given a
-stable, unique ID per browser, but not expose their actual fingerprint
-to other users on the server or be able to track users across seatcamp
-instances. This value should be unique to the server you're running it
-on and sufficiently long (10+ characters recommended).
-
-**Ex:** `"idKey": "thisServerIsGreat123"`
-
-#### gaTrackingId
-
-The tracking ID to use for Google Analytics tracking. If this isn't
-specified (or is a falsy value), Analytics will not be utilized.
-
-**Ex:** `"gaTrackingId": "UA-9999999-1"`
 
 ## Requirements for production servers
 
@@ -145,7 +109,7 @@ which should be saved so that a client can recognize which messages are its own.
 constant for the lifetime of the websocket connection. An example of handling the message would be:
 
 ```javascript
-io.on('userid', function(userId) {
+io.on('userid', function (userId) {
   myId = userId
 })
 ```
@@ -223,7 +187,7 @@ to be known. These are all handled through seperate messages, which are:
 Specifies how many users are currently connected.
 
 ```javascript
-io.on('active', function(numActive) {
+io.on('active', function (numActive) {
   alert('There are ' + numActive + ' active seatcamp users!')
 })
 ```

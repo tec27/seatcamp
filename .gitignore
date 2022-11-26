@@ -6,3 +6,4 @@ npm-debug.log
 *.swp
 public/client.js
 public/serviceworker.js
+.env
