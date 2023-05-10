@@ -1,6 +1,6 @@
 {
   "name": "seatcamp",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Web-based video chat with friends!",
   "engines": {
     "node": ">=18.0.0"
