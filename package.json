@@ -61,7 +61,7 @@
     "thenify": "^3.3.1",
     "tokenthrottle": "^1.1.0",
     "twitter-text": "^3.1.0",
-    "webpack": "^5.64.0",
+    "webpack": "^5.94.0",
     "workbox-cacheable-response": "^6.3.0",
     "workbox-expiration": "^6.3.0",
     "workbox-google-analytics": "^6.3.0",
