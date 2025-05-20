@@ -70,7 +70,10 @@ class MessageElement extends LitElement {
         opacity: 0;
         visibility: hidden;
 
-        transition: visibility 0.4s, opacity 0.4s, background-color 0.4s;
+        transition:
+          visibility 0.4s,
+          opacity 0.4s,
+          background-color 0.4s;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
       }
 
@@ -411,20 +414,19 @@ export class MessageListElement extends LitElement {
         ${repeat(
           this._messages,
           m => m.key,
-          (m, index) =>
-            html`
-              <sc-message
-                key="${m.key}"
-                .owner="${this}"
-                my-id="${this.myId}"
-                sent="${m.sent}"
-                text="${m.text}"
-                user-id="${m.userId}"
-                .video="${m.video}"
-                videoMime="${m.videoMime}"
-                ?is-first="${index === 0}"
-                ?is-last="${index === this._messages.length - 1}"></sc-message>
-            `,
+          (m, index) => html`
+            <sc-message
+              key="${m.key}"
+              .owner="${this}"
+              my-id="${this.myId}"
+              sent="${m.sent}"
+              text="${m.text}"
+              user-id="${m.userId}"
+              .video="${m.video}"
+              videoMime="${m.videoMime}"
+              ?is-first="${index === 0}"
+              ?is-last="${index === this._messages.length - 1}"></sc-message>
+          `,
         )}
       </div>
     `

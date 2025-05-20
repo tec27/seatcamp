@@ -47,8 +47,13 @@ class DropdownElement extends LitElement {
         transform: scale(0);
         transform-origin: 100% 0%;
 
-        transition: visibility 0.2s, opacity 0.2s, transform 0.3s;
-        transition-timing-function: visibility linear, opacity linear,
+        transition:
+          visibility 0.2s,
+          opacity 0.2s,
+          transform 0.3s;
+        transition-timing-function:
+          visibility linear,
+          opacity linear,
           transform cubic-bezier(0.4, 0, 0.2, 1);
       }
 
