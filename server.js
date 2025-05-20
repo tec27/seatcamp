@@ -61,9 +61,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(compression())
 app
-  .get('/', (req, res) =>
-    res.render('index', { theme: req.cookies.theme, trackingId: process.env.SEATCAMP_GA_ID }),
-  )
+  .get('/', (req, res) => res.render('index', { theme: req.cookies.theme }))
   .get('/styles.css', serveCss(__dirname + '/css/styles.css'))
 
 app.use(serveStatic('public'))

@@ -10,7 +10,6 @@ import createCharCounter from './char-counter'
 import initProgressSpinner from './progress'
 import theme from './theme'
 import createAbout from './about'
-import Tracker from './analytics'
 import { PROTOCOL_VERSION } from '../protocol-version'
 
 if ('serviceWorker' in navigator) {
@@ -22,11 +21,9 @@ if ('serviceWorker' in navigator) {
 const io = createSocketIoClient()
 const muteSet = new StoredSet('mutes')
 const progressSpinner = initProgressSpinner(document.querySelector('.progress'))
-const tracker = new Tracker()
 const messageList = document.querySelector('#message-list')
 
 messageList.muteSet = muteSet
-messageList.tracker = tracker
 
 const possibleEvents = {
   transition: 'transitionend',
@@ -137,16 +134,13 @@ function updateActiveUsers() {
 document.querySelector('#options-dropdown').actions = {
   unmute: () => {
     muteSet.clear()
-    tracker.onUnmute()
   },
   changeTheme: () => {
     const newTheme = theme.isDark() ? 'light' : 'dark'
     theme.setTheme(newTheme)
-    tracker.onChangeTheme(newTheme)
   },
   about: () => {
     showDialog(createAbout())
-    tracker.onShowAbout()
   },
 }
 
@@ -205,7 +199,6 @@ document.querySelector('form').addEventListener('submit', function (event) {
 
       if (err) {
         // TODO(tec27): show to user
-        tracker.onMessageCaptureError(err.message)
         console.error(err)
         return
       }
@@ -218,7 +211,6 @@ document.querySelector('form').addEventListener('submit', function (event) {
         formData.append('frames', frame)
       }
 
-      const sendTime = Date.now()
       fetch('/message', {
         method: 'POST',
         body: formData,
@@ -227,15 +219,10 @@ document.querySelector('form').addEventListener('submit', function (event) {
           if (!res.ok) {
             throw new Error(`Failed to post message: ${res.status} ${res.statusText}`)
           }
-
-          const timing = Date.now() - sendTime
-          tracker.onMessageSent(timing)
         })
         .catch(err => {
           // TODO(tec27): display to user
-          const timing = Date.now() - sendTime
           console.error('Error: ' + err)
-          tracker.onMessageSendError('' + err, timing)
         })
 
       // fire 'change'
@@ -246,7 +233,7 @@ document.querySelector('form').addEventListener('submit', function (event) {
   ).on('progress', percentDone => progressSpinner.setValue(percentDone))
 })
 
-cameraPreview(document.querySelector('#preview').parentNode, tracker)
+cameraPreview(document.querySelector('#preview').parentNode)
 
 document.addEventListener('visibilitychange', () => {
   document.body.classList.toggle('backgrounded', document.hidden)

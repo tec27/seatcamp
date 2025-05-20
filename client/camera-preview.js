@@ -5,13 +5,12 @@ class CancelToken {
 }
 
 class CameraPreview {
-  constructor(previewContainer, tracker) {
+  constructor(previewContainer) {
     this.container = previewContainer
     this.videoElem = previewContainer.querySelector('video')
     this.facing = null
     this.switchButton = null
     this.videoStream = null
-    this.tracker = tracker
     this.initCancelToken = new CancelToken()
 
     this.switchButtonListener = () => this.onSwitchCamera()
@@ -93,7 +92,6 @@ class CameraPreview {
       this.container.classList.remove('camera-enabled')
       console.log('error initializing camera preview:')
       console.dir(err)
-      this.tracker.onCameraError(err.name || err.message)
       return
     }
 
@@ -103,7 +101,6 @@ class CameraPreview {
     }
 
     this.container.classList.add('camera-enabled')
-    this.tracker.onCameraInitialized()
 
     this.videoStream = stream
     this.applyScaling()
@@ -163,7 +160,6 @@ class CameraPreview {
   onSwitchCamera() {
     this.facing = this.facing === 'user' ? 'environment' : 'user'
     window.localStorage.setItem('cameraFacing', this.facing)
-    this.tracker.onCameraFacingChange(this.facing)
     this.initializeCamera()
   }
 }

@@ -3,10 +3,8 @@ import { registerRoute } from 'workbox-routing'
 import { CacheFirst, NetworkFirst, StaleWhileRevalidate } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { ExpirationPlugin } from 'workbox-expiration'
-import { initialize as initGoogleAnalytics } from 'workbox-google-analytics'
 
 precacheAndRoute(self.__WB_MANIFEST || [])
-initGoogleAnalytics()
 
 registerRoute(
   /^https:\/\/fonts\.googleapis\.com/,

@@ -71,10 +71,4 @@ html
         p#char-counter 0 / 250
         button#send(type='submit', title="Send")
           sc-svg-icon(invert='true', icon='send')
-    if trackingId
-      script(type='text/javascript').
-        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date
-        ga('create', '!{trackingId}', 'auto')
-        ga('send', 'pageview')
-      script(type='text/javascript', async, src='//www.google-analytics.com/analytics.js')
     script(type='text/javascript', async, src='client.js?20200403')

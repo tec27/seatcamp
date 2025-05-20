@@ -264,7 +264,6 @@ class MessageElement extends LitElement {
 
   saveGif() {
     this.shadowRoot.querySelector('.save').disabled = true
-    this.owner.trackSaveGif()
 
     videoToGif({ videoElem: this.shadowRoot.querySelector('.message-video'), numFrames: 10 })
       .then(gifBlob => {
@@ -389,13 +388,11 @@ export class MessageListElement extends LitElement {
     return {
       myId: { type: String, attribute: 'my-id' },
       muteSet: { attribute: false },
-      tracker: { attribute: false },
     }
   }
 
   myId = ''
   muteSet = new Set()
-  tracker = null
 
   _intersectionObserver = new IntersectionObserver(entries => {
     for (const { target, isIntersecting } of entries) {
@@ -484,14 +481,9 @@ export class MessageListElement extends LitElement {
       return
     }
     this.muteSet.add(userId)
-    this.tracker.onUserMuted()
 
     this._messages = this._messages.filter(m => m.userId !== userId)
     this.requestUpdate()
-  }
-
-  trackSaveGif() {
-    this.tracker.onSaveGif()
   }
 }
 
