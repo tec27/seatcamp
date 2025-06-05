@@ -48,7 +48,7 @@
     "express": "^5.0.1",
     "html-loader": "^5.1.0",
     "lit": "^3.3.0",
-    "multer": "^2.0.0",
+    "multer": "^2.0.1",
     "postcss": "^8.4.31",
     "prepare-response": "^2.0.0",
     "pug": "^3.0.3",
