@@ -1,4 +1,4 @@
-import cuid from 'cuid'
+import { nanoid } from 'nanoid'
 
 const KEY = 'fingerprint'
 const VERSION = 1
@@ -24,7 +24,7 @@ export default function getFingerprint() {
 }
 
 function generateAndSave() {
-  const fingerprint = cuid()
+  const fingerprint = nanoid()
   const toSave = { version: VERSION, value: fingerprint }
   window.localStorage.setItem(KEY, JSON.stringify(toSave))
   return fingerprint
