@@ -44,7 +44,7 @@
     "core-js": "^3.19.1",
     "data-uri-to-blob": "0.0.4",
     "dotenv": "^17.2.0",
-    "express": "^5.0.1",
+    "express": "^5.2.0",
     "html-loader": "^5.1.0",
     "lit": "^3.3.0",
     "multer": "^2.0.2",
