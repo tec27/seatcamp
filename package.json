@@ -60,7 +60,7 @@
     "thenify": "^3.3.1",
     "tokenthrottle": "^1.1.0",
     "twitter-text": "^3.1.0",
-    "webpack": "^5.99.9",
+    "webpack": "^5.105.0",
     "workbox-cacheable-response": "^7.3.0",
     "workbox-expiration": "^7.3.0",
     "workbox-precaching": "^7.3.0",
