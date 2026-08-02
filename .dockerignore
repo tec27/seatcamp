@@ -1,0 +1,45 @@
+# Docker's build context is filtered by this file only -- it does not read
+# .gitignore. Anything not listed here gets sent to the daemon and picked up by
+# `COPY . .`, so keep this in sync when adding large or sensitive paths.
+
+# Version control (the biggest offender: sending .git also busts the npm layer
+# cache on every commit)
+.git
+.gitattributes
+.gitignore
+.github
+
+# Reinstalled from the lockfile in the builder stage
+node_modules
+
+# Local secrets and certs
+.env
+cert
+conf.json
+
+# Webpack output -- rebuilt inside the image
+public/client.js
+public/serviceworker.js
+
+# Scratch space for frame conversion. Keep the directory itself: lib/frame-converter.js
+# mkdir's into it without `recursive: true`, so it must already exist.
+tmp/*
+!tmp/.gitignore
+
+# Docker + deployment tooling, not needed inside the image
+Dockerfile
+.dockerignore
+deploy.bat
+deployment
+
+# Dev-only tooling and docs
+test
+.editorconfig
+.eslintignore
+.eslintrc
+.prettierrc
+README.md
+LICENSE
+npm-debug.log
+.DS_Store
+*.swp
