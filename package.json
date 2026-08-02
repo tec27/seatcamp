@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/tec27/seatcamp",
   "dependencies": {
-    "@babel/core": "^7.27.1",
+    "@babel/core": "^7.29.6",
     "@babel/plugin-transform-class-properties": "^7.16.0",
     "@babel/preset-env": "^7.27.2",
     "@babel/register": "^7.27.1",
