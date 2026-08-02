@@ -215,7 +215,7 @@ the way the community uses the site.
 
 ## Special thanks to
 
-- [ednapiranha](https://github.com/ednapiranha) for creating meatspace
+- [operatorjen](https://github.com/operatorjen) for creating meatspace
 - [thethp](https://github.com/thethp) for [whosthatmeat](https://github.com/thethp/whosthatmeat)
   which inspired the identicons feature
 - [llkats](https://github.com/llkats) for [meatdelay](https://github.com/llkats/meatdelay) which
