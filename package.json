@@ -48,7 +48,7 @@
     "html-loader": "^5.1.0",
     "lit": "^3.3.0",
     "multer": "^2.2.0",
-    "nanoid": "^5.1.5",
+    "nanoid": "^5.1.16",
     "postcss": "^8.5.25",
     "prepare-response": "^2.0.0",
     "pug": "^3.0.3",
